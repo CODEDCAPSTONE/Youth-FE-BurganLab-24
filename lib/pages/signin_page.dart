@@ -144,7 +144,7 @@ class SignInPage extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        context.go('/signup');
+                        context.go('/register');
                       },
                       child: const Text(
                         "Don't have an account?",

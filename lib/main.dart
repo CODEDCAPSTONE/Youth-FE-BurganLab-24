@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/pages/register_page.dart';
 import 'package:frontend/pages/signin_page.dart';
-import 'package:frontend/pages/signup_page.dart';
+import 'package:frontend/pages/steps_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +36,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/signin', // Main page
+    initialLocation: '/home', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -46,12 +47,18 @@ class MainApp extends StatelessWidget {
         builder: (context, state) => HomePage(),
       ),
       GoRoute(
-        path: '/signup',
-        builder: (context, state) => SignUpPage(),
-      ),
-      GoRoute(
         path: '/signin',
         builder: (context, state) => SignInPage(),
+      ),
+      GoRoute(
+        path: '/register',
+        builder: (context, state) => const RegisterPage(),
+      ),
+      GoRoute(
+        path: '/steps',
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: StepsPage()
+        ),
       ),
       // GoRoute(
       //   path: '/main',
@@ -63,9 +70,6 @@ class MainApp extends StatelessWidget {
       //     index: state.extra as int,
       //   ),
       // ),
-      // GoRoute(path: '/profile', builder: (context, state) => Profile()),
-      // GoRoute(path: '/help', builder: (context, state) => HelpPage()),
-      // GoRoute(path: '/branches', builder: (context, state) => BranchesPage()),
     ],
   );
 }
