@@ -4,12 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: HomePage(),
-  ));
-}
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -23,6 +17,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = View.of(context).platformDispatcher.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+    // print(isDarkMode);
+    Color titleTextColor = (isDarkMode) ? Colors.white : Colors.black;
     return Scaffold(
         backgroundColor: const Color.fromRGBO(239, 238, 238, 1),
         // drawer: Drawer(
@@ -272,18 +270,18 @@ class _HomePageState extends State<HomePage> {
                         onTap: () {
                           
                         },
-                        child: const Row(
+                        child: Row(
                           children: [
                             Text(
                               "Highlights",
                               style: TextStyle(
                                 fontSize: 25,
                                 // fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: titleTextColor,
                               ),
                             ),
-                            SizedBox(width: 10,),
-                            Icon(Icons.arrow_forward_ios)
+                            const SizedBox(width: 10,),
+                            const Icon(Icons.arrow_forward_ios)
                           ],
                         ),
                       ),
@@ -361,20 +359,20 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: GestureDetector(
                         onTap: () {
-                          
+                          context.push('/targets');
                         },
-                        child: const Row(
+                        child: Row(
                           children: [
                             Text(
                               "Targets",
                               style: TextStyle(
                                 fontSize: 25,
                                 // fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: titleTextColor,
                               ),
                             ),
-                            SizedBox(width: 10,),
-                            Icon(Icons.arrow_forward_ios)
+                            const SizedBox(width: 10,),
+                            const Icon(Icons.arrow_forward_ios)
                           ],
                         ),
                       ),

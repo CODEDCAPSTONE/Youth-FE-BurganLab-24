@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/add_target_page.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/register_page.dart';
 import 'package:frontend/pages/signin_page.dart';
 import 'package:frontend/pages/steps_page.dart';
+import 'package:frontend/pages/targets_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -28,15 +30,18 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      // themeMode: ThemeMode.light,
-      // darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.light,
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        // primaryTextTheme: TextTheme()
+      ),
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
     );
   }
 
   final _router = GoRouter(
-    initialLocation: '/home', // Main page
+    initialLocation: '/signin', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -59,6 +64,14 @@ class MainApp extends StatelessWidget {
         pageBuilder: (context, state) => const NoTransitionPage(
           child: StepsPage()
         ),
+      ),
+      GoRoute(
+        path: '/targets',
+        builder: (context, state) => TargetsPage(),
+      ),
+      GoRoute(
+        path: '/addTarget',
+        builder: (context, state) => AddTargetPage(),
       ),
       // GoRoute(
       //   path: '/main',
