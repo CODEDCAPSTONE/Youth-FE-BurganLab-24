@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/providers/card_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
+import 'package:frontend/providers/targets_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:provider/provider.dart';
@@ -161,81 +164,91 @@ class _HomePageState extends State<HomePage> {
                     // Balance Card
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0,),
-                      child: GestureDetector(
-                        onTap: () {
-                          // Handle balance card tap here
-                          GoRouter.of(context).push('/main', extra: 0);
-                        },
-                        child: Card(
-                          elevation: 5,
-                          margin: const EdgeInsets.symmetric(horizontal: 32),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.all(24.0),
-                            child: const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Current Balance",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                      ),
+                      child: FutureBuilder(
+                        future: context.read<VCardsProvider>().getVCards(),
+                        builder: (context, dataSnapshot) {
+                          if (dataSnapshot.connectionState == ConnectionState.waiting) return const CircularProgressIndicator();
+                          return Consumer<VCardsProvider>(
+                            builder: (context, provider, _) {
+                              return GestureDetector(
+                                onTap: () {
+                                  // Handle balance card tap here
+                                  GoRouter.of(context).push('/main', extra: 0);
+                                },
+                                child: Card(
+                                  elevation: 5,
+                                  margin: const EdgeInsets.symmetric(horizontal: 32),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(24.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "Current Balance",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            Text(
+                                              "0514008001",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "${provider.cards[0].balance} KWD",
+                                              style: const TextStyle(
+                                                fontSize: 28,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 50),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "${provider.cards[0].cardNumber}",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.blue,
+                                              ),
+                                            ),
+                                            Text(
+                                              provider.cards[0].expiryDate,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.blue,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      "0514008001",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                                SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "15586 KWD",
-                                      style: TextStyle(
-                                        fontSize: 28,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                  ],
-                                ),
-                                SizedBox(height: 50),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "5282 3456 7890 1289",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                    Text(
-                                      "09/25",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                              );
+                            }
+                          );
+                        }
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -262,18 +275,17 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Heading for Goals
-                  // Heading for Goals
+                    // Heading for Budget
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: GestureDetector(
                         onTap: () {
-                          
+                          GoRouter.of(context).push('/setupBudget');
                         },
                         child: Row(
                           children: [
                             Text(
-                              "Highlights",
+                              "Budget",
                               style: TextStyle(
                                 fontSize: 25,
                                 // fontWeight: FontWeight.bold,
@@ -294,62 +306,62 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(left: 10),
                     child: Consumer<GoalsProvider>(
                         builder: (context, provider, _) {
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: provider.list.length,
-                        itemBuilder: (context, index) {
-                          var goal = provider.list[index];
-                          return GestureDetector(
-                            onTap: () {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: provider.list.length,
+                            itemBuilder: (context, index) {
+                              var goal = provider.list[index];
+                              return GestureDetector(
+                                onTap: () {
 
-                            },
-                            child: Card(
-                              //color: const Color.fromARGB(255, 255, 179, 65),
-                              elevation: 5,
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 8.0),
-                              child: Container(
-                                margin: const EdgeInsets.only(bottom: 20),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 8),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Event ${index+1}",
-                                      style: const TextStyle(
-                                          //color: Colors.grey,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
+                                },
+                                child: Card(
+                                  //color: const Color.fromARGB(255, 255, 179, 65),
+                                  elevation: 5,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 8.0),
+                                  child: Container(
+                                    margin: const EdgeInsets.only(bottom: 20),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 8),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Event ${index+1}",
+                                          style: const TextStyle(
+                                              //color: Colors.grey,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          "Duration: ${goal.duration} months",
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        SizedBox(
+                                          height: 5,
+                                          width: 100,
+                                          child: LinearProgressBar(
+                                            maxSteps: 6,
+                                            progressType: LinearProgressBar
+                                                .progressTypeLinear,
+                                            currentStep: index + 1,
+                                            progressColor: Colors.red,
+                                            backgroundColor: Colors.grey,
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      "Duration: ${goal.duration} months",
-                                      style: const TextStyle(fontSize: 14),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    SizedBox(
-                                      height: 5,
-                                      width: 100,
-                                      child: LinearProgressBar(
-                                        maxSteps: 6,
-                                        progressType: LinearProgressBar
-                                            .progressTypeLinear,
-                                        currentStep: index + 1,
-                                        progressColor: Colors.red,
-                                        backgroundColor: Colors.grey,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           );
-                        },
-                      );
                     }),
                   ),
                   const SizedBox(height: 18),
@@ -377,47 +389,53 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    Consumer<GoalsProvider>(
-                      builder: (context, provider, _) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: (provider.list.length < 3) ? provider.list.length : 3,
-                          itemBuilder: (context, index) {
-                            var goal = provider.list[index];
-                            return Container(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: ListTile(
-                                leading: Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[400],
-                                    borderRadius: const BorderRadius.all(Radius.circular(10))
+                    FutureBuilder(
+                      future: context.read<TargetsProvider>().getTargets(),
+                      builder: (context, dataSnapshot) {
+                        if (dataSnapshot.connectionState == ConnectionState.waiting) return const CircularProgressIndicator();
+                        return Consumer<TargetsProvider>(
+                          builder: (context, provider, _) {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: (provider.targets.length < 3) ? provider.targets.length : 3,
+                              itemBuilder: (context, index) {
+                                var target = provider.targets[index];
+                                return Container(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: ListTile(
+                                    leading: Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[400],
+                                        borderRadius: const BorderRadius.all(Radius.circular(10))
+                                      ),
+                                      child: const Icon(Icons.control_camera),
+                                    ),
+                                    title: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(target.targetName, style: const TextStyle(fontSize: 15),),
+                                        Text('${target.totalAmount}/${target.balanceTarget}'),
+                                      ],
+                                    ),
+                                    subtitle: SizedBox(
+                                      height: 5,
+                                      width: 10,
+                                      child: LinearProgressBar(
+                                        maxSteps: 5,
+                                        progressType: LinearProgressBar
+                                            .progressTypeLinear,
+                                        currentStep: index + 1,
+                                        progressColor: const Color.fromRGBO(0, 221, 163, 1),
+                                        backgroundColor: const Color.fromRGBO(223, 222, 222, 1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
                                   ),
-                                  child: const Icon(Icons.control_camera),
-                                ),
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(goal.name, style: const TextStyle(fontSize: 15),),
-                                    Text('${goal.amount}/5000'),
-                                  ],
-                                ),
-                                subtitle: SizedBox(
-                                  height: 5,
-                                  width: 10,
-                                  child: LinearProgressBar(
-                                    maxSteps: 5,
-                                    progressType: LinearProgressBar
-                                        .progressTypeLinear,
-                                    currentStep: index + 1,
-                                    progressColor: const Color.fromRGBO(0, 221, 163, 1),
-                                    backgroundColor: const Color.fromRGBO(223, 222, 222, 1),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                              ),
+                                );
+                              },
                             );
-                          },
+                          }
                         );
                       }
                     ),

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/add_target_page.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/register_page.dart';
+import 'package:frontend/pages/setup_budget_page.dart';
 import 'package:frontend/pages/signin_page.dart';
 import 'package:frontend/pages/steps_page.dart';
 import 'package:frontend/pages/targets_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/providers/card_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
+import 'package:frontend/providers/targets_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +19,8 @@ void main() {
       providers: [
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<GoalsProvider>(create: (_) => GoalsProvider()),
+        ChangeNotifierProvider<VCardsProvider>(create: (_) => VCardsProvider()),
+        ChangeNotifierProvider<TargetsProvider>(create: (_) => TargetsProvider()),
         // ChangeNotifierProvider<RealstockProvider>(
         //     create: (_) => RealstockProvider()),
       ],
@@ -72,6 +77,10 @@ class MainApp extends StatelessWidget {
       GoRoute(
         path: '/addTarget',
         builder: (context, state) => AddTargetPage(),
+      ),
+      GoRoute(
+        path: '/setupBudget',
+        builder: (context, state) => SetupBudgetPage(),
       ),
       // GoRoute(
       //   path: '/main',

@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/target.dart';
+import 'package:frontend/pages/steps_page.dart';
 import 'package:frontend/providers/goals_provider.dart';
+import 'package:frontend/providers/targets_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class AddTargetPage extends StatelessWidget {
+class AddTargetPage extends StatefulWidget {
+  @override
+  State<AddTargetPage> createState() => _AddTargetPageState();
+}
+
+class _AddTargetPageState extends State<AddTargetPage> {
   final _formKey = GlobalKey<FormState>();
+
   final TextEditingController nameController = TextEditingController();
+
   final TextEditingController incomeController = TextEditingController();
-  final TextEditingController amountController = TextEditingController();
+
+  final TextEditingController amountController = TextEditingController(text: "0");
+
   final TextEditingController otherCategoryController = TextEditingController();
 
   int selectedDuration = 12;
+
   String? selectedCategory = 'None';
-  
+
   final List<int> durations = [3, 6, 9, 12, 18, 24, 30];
+
   final List<String> categories = ['None', 'Electronics', 'Health and fitness', 'Travel'];
 
   @override
@@ -72,35 +87,31 @@ class AddTargetPage extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 10),
-                            StatefulBuilder(
-                              builder: (context, setState) {
-                                return SizedBox(
-                                  height: 50,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: durations.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(right: 12),
-                                        child: ChoiceChip(
-                                          label: Text(durations[index].toString()),
-                                          selected: selectedDuration == durations[index],
-                                          onSelected: (selected) {
-                                            setState(() => selectedDuration = durations[index]);
-                                          },
-                                          backgroundColor: Colors.grey[200],
-                                          selectedColor: Colors.blue,
-                                          labelStyle: TextStyle(
-                                            color: selectedDuration == durations[index] 
-                                              ? Colors.white 
-                                              : Colors.grey,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              }
+                            SizedBox(
+                              height: 50,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: durations.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 12),
+                                    child: ChoiceChip(
+                                      label: Text(durations[index].toString()),
+                                      selected: selectedDuration == durations[index],
+                                      onSelected: (selected) {
+                                        setState(() => selectedDuration = durations[index]);
+                                      },
+                                      backgroundColor: Colors.grey[200],
+                                      selectedColor: Colors.blue,
+                                      labelStyle: TextStyle(
+                                        color: selectedDuration == durations[index] 
+                                          ? Colors.white 
+                                          : Colors.grey,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                             const SizedBox(height: 20),
                             const Row(
@@ -171,7 +182,7 @@ class AddTargetPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    '${int.tryParse(amountController.text)} KWD',
+                                    '${int.tryParse(amountController.text) ?? 0} KWD',
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 32,
@@ -192,16 +203,27 @@ class AddTargetPage extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(16),
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   if (!_formKey.currentState!.validate()) return;
                                   var output = {
-                                    'name': nameController.text,
-                                    'income': incomeController.text,
-                                    'amount': amountController.text,
+                                    'targetName': nameController.text,
+                                    'salary': incomeController.text,
+                                    'totalAmount': amountController.text,
                                     'duration': selectedDuration,
                                     'category': selectedCategory
                                   };
                                   print(output);
+                                  await context.read<TargetsProvider>().createTarget(
+                                    Target(
+                                      targetName: nameController.text,
+                                      balanceTarget: amountController.text, 
+                                      totalAmount: "0", 
+                                      duration: selectedDuration, 
+                                      income: incomeController.text
+                                    )
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Target Created successfully")));
+                                  context.pop();
                                 },
                                 style: ElevatedButton.styleFrom(
                                   // elevation: 12,

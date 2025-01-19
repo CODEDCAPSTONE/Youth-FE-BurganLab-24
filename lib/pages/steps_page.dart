@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -92,6 +96,7 @@ class _StepsPageState extends State<StepsPage> {
             child: Stack(
               children: [
               forms[index],
+              // createOTP(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -140,20 +145,28 @@ class _StepsPageState extends State<StepsPage> {
                                   }
                                 );
                                 Map<String, dynamic> submitedInfo = {
-                                  'nickname': info[0],
-                                  'phone': info[1],
+                                  'username': info[0],
+                                  'phoneNumber': info[1],
+                                  'password': info[4],
                                   'email': info[2],
-                                  'civilID': info[3],
-                                  'password': info[4]
+                                  // 'civilID': info[3],
                                 };
                                 print(submitedInfo);
-                              }
-                            
-                                if (index < forms.length-1) {
-                                  setState(() {
-                                    index++;
-                                  });
+
+                                var response = await context.read<AuthProvider>().signup(submitedInfo);
+                                print(response);
+                                if (response['error'] != null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['error']!)));
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sign up successfully")));
                                 }
+                              }
+
+                              if (index < forms.length-1) {
+                                setState(() {
+                                  index++;
+                                });
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF2B69C7),
@@ -357,6 +370,7 @@ Widget createPhoneNumberForm({required String title, required String subtitle, r
 }
 
 Widget createOTP() {
+  int start = 100;
   return Container(
     padding: const EdgeInsets.all(24.0),
     margin: const EdgeInsets.only(top: 150),
@@ -396,12 +410,41 @@ Widget createOTP() {
         ),
         const SizedBox(height: 16),
         const Text(
-          'Time left: 1:00',
+          'Time limit is 5 minutes',
           style: TextStyle(
             fontSize: 16,
             // fontWeight: FontWeight.bold,
           ),
         ),
+        // StatefulBuilder(
+        //   builder: (context, setState) {
+        //     Timer _timer;
+        //     _timer = Timer.periodic(
+        //       const Duration(seconds: 1), 
+        //       (Timer timer) {
+        //         if (start == 0) {
+        //           setState(() {
+        //             timer.cancel();
+        //           }
+        //           );
+        //         }
+        //         else {
+        //           setState(() {
+        //             // print(start);
+        //             start--;
+        //           });
+        //         }
+        //       }
+        //     );
+        //     return Text(
+        //       'Time left: $start',
+        //       style: const TextStyle(
+        //         fontSize: 16,
+        //         // fontWeight: FontWeight.bold,
+        //       ),
+        //     );
+        //   }
+        // ),
       ],
     ),
   );

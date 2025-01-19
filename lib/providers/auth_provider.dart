@@ -11,10 +11,17 @@ class AuthProvider extends ChangeNotifier {
   double? balance;
   List? transactions;
 
-  Future<Map<String, dynamic>> signup({required String username, required String password}) async {
-    var response = await AuthServices().signup(user: User(username: username, password: password));
+  Future<Map<String, dynamic>> signup(Map<String, dynamic> submitedInfo) async {
+    var response = await AuthServices().signup(
+      user: User(
+        username: submitedInfo['username'], 
+        password: submitedInfo['password'],
+        phoneNumber: submitedInfo['phoneNumber'],
+        email: submitedInfo['email']
+      )
+    );
     if (response['token'] != null) {
-      _setToken(username, response['token']!);
+      _setToken(submitedInfo['username'], response['token']!);
     }
     // print(response['token'] ?? 'No token');
     notifyListeners();
@@ -25,7 +32,7 @@ class AuthProvider extends ChangeNotifier {
     // print(username);
     // print(password);
     var response = await AuthServices().signin(user: User(username: username, password: password));
-    balance = double.parse(response['balance'].toString());
+    // balance = double.parse(response['balance'].toString());
     if (response['token'] != null) {
       _setToken(username, response['token']!);
     }
@@ -36,7 +43,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future getBalance() async {
     var response = await AuthServices().getBalance();
-    balance = double.parse(response['balance'].toString());
+    // balance = double.parse(response['balance'].toString());
     notifyListeners();
   }
 
