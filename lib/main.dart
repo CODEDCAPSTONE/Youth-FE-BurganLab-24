@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/add_target_page.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/register_page.dart';
+import 'package:frontend/pages/service_page.dart';
 import 'package:frontend/pages/signin_page.dart';
 import 'package:frontend/pages/steps_page.dart';
 import 'package:frontend/pages/targets_page.dart';
@@ -41,7 +42,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/signin', // Main page
+    initialLocation: '/home', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -61,9 +62,8 @@ class MainApp extends StatelessWidget {
       ),
       GoRoute(
         path: '/steps',
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: StepsPage()
-        ),
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: StepsPage()),
       ),
       GoRoute(
         path: '/targets',
@@ -73,10 +73,7 @@ class MainApp extends StatelessWidget {
         path: '/addTarget',
         builder: (context, state) => AddTargetPage(),
       ),
-      // GoRoute(
-      //   path: '/main',
-      //   builder: (context, state) => MainPage(index: state.extra as int),
-      // ),
+      GoRoute(path: '/service', builder: (context, state) => ServicePage()),
       // GoRoute(
       //   path: '/edit',
       //   builder: (context, state) => EditgoalPage(
