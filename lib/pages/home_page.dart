@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/card_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
 import 'package:frontend/providers/targets_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -17,6 +17,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // int _selectedIndex = 0;
+
+  Map<String, double> dataMap = {
+    "Flutter": 5,
+    "React": 3,
+    "Xamarin": 2,
+    "Ionic": 2,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -280,7 +287,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: GestureDetector(
                         onTap: () {
-                          GoRouter.of(context).push('/setupBudget');
+                          GoRouter.of(context).push('/budgetDetails');
                         },
                         child: Row(
                           children: [
@@ -300,70 +307,106 @@ class _HomePageState extends State<HomePage> {
                     ),
                   const SizedBox(height: 8),
 
-                  // Horizontal List of Goals
                   Container(
-                    height: 150,
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Consumer<GoalsProvider>(
-                        builder: (context, provider, _) {
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: provider.list.length,
-                            itemBuilder: (context, index) {
-                              var goal = provider.list[index];
-                              return GestureDetector(
-                                onTap: () {
-
-                                },
-                                child: Card(
-                                  //color: const Color.fromARGB(255, 255, 179, 65),
-                                  elevation: 5,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 8.0),
-                                  child: Container(
-                                    margin: const EdgeInsets.only(bottom: 20),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 8),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Event ${index+1}",
-                                          style: const TextStyle(
-                                              //color: Colors.grey,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text(
-                                          "Duration: ${goal.duration} months",
-                                          style: const TextStyle(fontSize: 14),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        SizedBox(
-                                          height: 5,
-                                          width: 100,
-                                          child: LinearProgressBar(
-                                            maxSteps: 6,
-                                            progressType: LinearProgressBar
-                                                .progressTypeLinear,
-                                            currentStep: index + 1,
-                                            progressColor: Colors.red,
-                                            backgroundColor: Colors.grey,
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                    }),
+                    margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16)
+                    ),
+                    child: PieChart(
+                      dataMap: dataMap,
+                      animationDuration: const Duration(milliseconds: 800),
+                      chartLegendSpacing: 32,
+                      chartRadius: MediaQuery.of(context).size.width / 3.2,
+                      // colorList: colorList,
+                      initialAngleInDegree: 0,
+                      chartType: ChartType.ring,
+                      ringStrokeWidth: 32,
+                      centerText: "Budget",
+                      legendOptions: LegendOptions(
+                        showLegendsInRow: false,
+                        legendPosition: LegendPosition.right,
+                        // showLegends: true,
+                        // legendShape: _BoxShape.circle,
+                        legendTextStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      chartValuesOptions: ChartValuesOptions(
+                        // showChartValueBackground: true,
+                        // showChartValues: true,
+                        showChartValuesInPercentage: false,
+                        showChartValuesOutside: false,
+                        decimalPlaces: 1,
+                      ),
+                      // gradientList: ---To add gradient colors---
+                      // emptyColorGradient: ---Empty Color gradient---
+                    ),
                   ),
+
+                  // Horizontal List of Events
+                  // Container(
+                  //   height: 150,
+                  //   padding: const EdgeInsets.only(left: 10),
+                  //   child: Consumer<GoalsProvider>(
+                  //       builder: (context, provider, _) {
+                  //         return ListView.builder(
+                  //           shrinkWrap: true,
+                  //           scrollDirection: Axis.horizontal,
+                  //           itemCount: provider.list.length,
+                  //           itemBuilder: (context, index) {
+                  //             var goal = provider.list[index];
+                  //             return GestureDetector(
+                  //               onTap: () {},
+                  //               child: Card(
+                  //                 //color: const Color.fromARGB(255, 255, 179, 65),
+                  //                 elevation: 5,
+                  //                 margin: const EdgeInsets.symmetric(
+                  //                     horizontal: 8.0, vertical: 8.0),
+                  //                 child: Container(
+                  //                   margin: const EdgeInsets.only(bottom: 20),
+                  //                   padding: const EdgeInsets.symmetric(
+                  //                       horizontal: 10, vertical: 8),
+                  //                   child: Column(
+                  //                     mainAxisAlignment:
+                  //                         MainAxisAlignment.spaceBetween,
+                  //                     children: [
+                  //                       Text(
+                  //                         "Event ${index+1}",
+                  //                         style: const TextStyle(
+                  //                             //color: Colors.grey,
+                  //                             fontSize: 16,
+                  //                             fontWeight: FontWeight.bold),
+                  //                         textAlign: TextAlign.center,
+                  //                       ),
+                  //                       Text(
+                  //                         "Duration: ${goal.duration} months",
+                  //                         style: const TextStyle(fontSize: 14),
+                  //                       ),
+                  //                       const SizedBox(height: 4),
+                  //                       SizedBox(
+                  //                         height: 5,
+                  //                         width: 100,
+                  //                         child: LinearProgressBar(
+                  //                           maxSteps: 6,
+                  //                           progressType: LinearProgressBar
+                  //                               .progressTypeLinear,
+                  //                           currentStep: index + 1,
+                  //                           progressColor: Colors.red,
+                  //                           backgroundColor: Colors.grey,
+                  //                           borderRadius: BorderRadius.circular(10),
+                  //                         ),
+                  //                       ),
+                  //                     ],
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             );
+                  //           },
+                  //         );
+                  //   }),
+                  // ),
                   const SizedBox(height: 18),
                             
                     // Heading for Goals
@@ -389,6 +432,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                    
+                    // List of Goals
                     FutureBuilder(
                       future: context.read<TargetsProvider>().getTargets(),
                       builder: (context, dataSnapshot) {
@@ -478,7 +523,9 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            context.push('/transfer');
+          },
           shape: const CircleBorder(),
           backgroundColor: Colors.blue,
           // foregroundColor: Colors.black,
@@ -487,3 +534,4 @@ class _HomePageState extends State<HomePage> {
       );
   }
 }
+// We are with you brother, all the way. From: your brothers, we will always stand beside you.

@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/AccountDropdown.dart';
+import 'package:frontend/widgets/TabSwitcher.dart';
 
-class SetupBudgetPage extends StatelessWidget {
+class TransferPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController incomeController = TextEditingController();
-  List<TextEditingController> budgetControllers = List.generate(6, (index) => TextEditingController());
+  final TextEditingController budget1Controller = TextEditingController();
+  final TextEditingController budget2Controller = TextEditingController();
+
   @override
-    Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     var brightness = View.of(context).platformDispatcher.platformBrightness;
     bool isDarkMode = brightness == Brightness.dark;
     // print(isDarkMode);
     Color titleTextColor = (isDarkMode) ? Colors.white : Colors.black;
+    var dropdown = AccountDropdown();
     return Scaffold(
       backgroundColor: const Color.fromRGBO(239, 238, 238, 1),
       body: DecoratedBox(
@@ -25,16 +30,18 @@ class SetupBudgetPage extends StatelessWidget {
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // const SizedBox(height: 100,),
-                  AppBar(
-                    forceMaterialTransparency: true,
-                    title: const Text(
-                          "Setup Budget",
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromRGBO(1, 104, 170, 1),
-                          ),
-                        ),
+                  AppBar(forceMaterialTransparency: true,),
+                  // Heading for Goals
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 32.0),
+                    child: Text(
+                      "Transfer",
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromRGBO(1, 104, 170, 1),
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -42,7 +49,50 @@ class SetupBudgetPage extends StatelessWidget {
                       key: _formKey,
                       child: Column(
                         children: [
-                          createInput(title: "Monthly Income", hintText: "Income", controller: incomeController),
+                          TabSwitcher(),
+                          const SizedBox(height: 30,),
+                          dropdown,
+                          // AccountDropdown(),
+                          // Container(
+                          //   margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                          //   padding: const EdgeInsets.symmetric(vertical: 24),
+                          //   decoration: BoxDecoration(
+                          //     color: Colors.white,
+                          //     borderRadius: BorderRadius.circular(16)
+                          //   ),
+                          //   child: Stack(
+                          //     children: [
+                          //       const Row(
+                          //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          //         children: [
+                          //           Text("Local"),
+                          //           Text("International")
+                          //         ],
+                          //       ),
+                          //       Row(
+                          //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          //         children: [
+                          //           Container(
+                          //             padding: const EdgeInsets.all(8),
+                          //             decoration: BoxDecoration(
+                          //               color: Colors.blue,
+                          //               borderRadius: BorderRadius.circular(16)
+                          //             ),
+                          //             child: const Text("Local", style: TextStyle(color: Colors.white),)
+                          //           ),
+                          //           Container(
+                          //             padding: const EdgeInsets.all(8),
+                          //             // decoration: BoxDecoration(
+                          //             //   // color: Colors.blue,
+                          //             //   borderRadius: BorderRadius.circular(16)
+                          //             // ),
+                          //             child: const Text("International", style: TextStyle(color: Colors.black),)
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: Row(
@@ -57,13 +107,9 @@ class SetupBudgetPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          createInput(title: "Shopping", hintText: "Budget", controller: budgetControllers[0]),
-                          createInput(title: "Online Shopping", hintText: "Budget", controller: budgetControllers[1]),
-                          createInput(title: "Dining", hintText: "Budget", controller: budgetControllers[2]),
-                          createInput(title: "Fuel", hintText: "Budget", controller: budgetControllers[3]),
-                          createInput(title: "Super Market", hintText: "Budget", controller: budgetControllers[4]),
-                          createInput(title: "Dining", hintText: "Budget", controller: budgetControllers[5]),
-                          const SizedBox(height: 10),
+                          createInput(title: "IBAN", hintText: "Iban", controller: budget1Controller),
+                          createInput(title: "Amount", hintText: "amount", controller: budget1Controller),
+                          const SizedBox(height: 140,),
                           Padding(
                             padding: const EdgeInsets.all(16),
                             child: ElevatedButton(
@@ -110,7 +156,6 @@ Widget createInput({required String title, required String hintText, required Te
       children: [
         Row(
           children: [
-            const Icon(Icons.check_box_outlined),
             Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
           ],
         ),

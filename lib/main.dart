@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/add_target_page.dart';
+import 'package:frontend/pages/budget_details.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/register_page.dart';
 import 'package:frontend/pages/setup_budget_page.dart';
 import 'package:frontend/pages/signin_page.dart';
 import 'package:frontend/pages/steps_page.dart';
 import 'package:frontend/pages/targets_page.dart';
+import 'package:frontend/pages/transfer_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/card_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
@@ -46,7 +48,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/signin', // Main page
+    initialLocation: '/home', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -81,6 +83,14 @@ class MainApp extends StatelessWidget {
       GoRoute(
         path: '/setupBudget',
         builder: (context, state) => SetupBudgetPage(),
+      ),
+      GoRoute(
+        path: '/transfer',
+        builder: (context, state) => TransferPage(),
+      ),
+      GoRoute(
+        path: '/budgetDetails',
+        builder: (context, state) => BudgetDetails(),
       ),
       // GoRoute(
       //   path: '/main',
