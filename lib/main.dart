@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/add_target_page.dart';
+import 'package:frontend/pages/card_details_page.dart';
 import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/pages/loyalty_page.dart';
+import 'package:frontend/pages/more_page.dart';
 import 'package:frontend/pages/register_page.dart';
 import 'package:frontend/pages/service_page.dart';
 import 'package:frontend/pages/signin_page.dart';
@@ -42,7 +45,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/home', // Main page
+    initialLocation: '/cardDetails', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -74,7 +77,30 @@ class MainApp extends StatelessWidget {
         builder: (context, state) => AddTargetPage(),
       ),
       GoRoute(path: '/service', builder: (context, state) => ServicePage()),
-      // GoRoute(
+      GoRoute(path: '/more', builder: (context, state) => SettingsPage()),
+
+      GoRoute(path: '/loyalty', builder: (context, state) => LoyaltyPage()),
+
+      GoRoute(
+          path: '/cardDetails', builder: (context, state) => CardDetailsPage())
+      //  GoRoute(
+      //   path: '/edit',
+      //   builder: (context, state) => EditgoalPage()
+
+      // ),
+      //  GoRoute(
+      //   path: '/edit',
+      //   builder: (context, state) => EditgoalPage(
+      //     index: state.extra as int,
+      //   ),
+      // ),
+      //  GoRoute(
+      //   path: '/edit',
+      //   builder: (context, state) => EditgoalPage(
+      //     index: state.extra as int,
+      //   ),
+      // ),
+      //  GoRoute(
       //   path: '/edit',
       //   builder: (context, state) => EditgoalPage(
       //     index: state.extra as int,

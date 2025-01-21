@@ -458,10 +458,20 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      const SizedBox(
+                          height:
+                              100), // Adjust this value to move the buttons up or down
                       ElevatedButton(
                         onPressed: () {
                           // Handle Send Via WAMD button tap
                         },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
                         child: const Text('Send Via WAMD'),
                       ),
                       const SizedBox(height: 16),
@@ -469,8 +479,16 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           // Handle Transfer button tap
                         },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
                         child: const Text('Transfer'),
                       ),
+                      const SizedBox(height: 80),
                     ],
                   ),
                 ),
@@ -511,7 +529,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
             icon: const Icon(Icons.home_filled),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.go("/loyalty");
+            },
             iconSize: 30,
             icon: const Icon(Icons.discount),
           ),
@@ -526,7 +546,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
             icon: const Icon(Icons.category_outlined),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.go("/more");
+            },
             iconSize: 30,
             icon: const Icon(Icons.more_horiz_rounded),
           ),
