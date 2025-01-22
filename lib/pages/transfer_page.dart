@@ -93,20 +93,6 @@ class TransferPage extends StatelessWidget {
                           //     ],
                           //   ),
                           // ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Choose your categories, and set a budget", 
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                           createInput(title: "IBAN", hintText: "Iban", controller: budget1Controller),
                           createInput(title: "Amount", hintText: "amount", controller: budget1Controller),
                           const SizedBox(height: 140,),

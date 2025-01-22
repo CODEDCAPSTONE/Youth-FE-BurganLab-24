@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/main.dart';
+import 'package:frontend/providers/budget_provider.dart';
+import 'package:frontend/providers/targets_provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class SetupBudgetPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -6,10 +11,6 @@ class SetupBudgetPage extends StatelessWidget {
   List<TextEditingController> budgetControllers = List.generate(6, (index) => TextEditingController());
   @override
     Widget build(BuildContext context) {
-    var brightness = View.of(context).platformDispatcher.platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
-    // print(isDarkMode);
-    Color titleTextColor = (isDarkMode) ? Colors.white : Colors.black;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(239, 238, 238, 1),
       body: DecoratedBox(
@@ -57,26 +58,26 @@ class SetupBudgetPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          createInput(title: "Shopping", hintText: "Budget", controller: budgetControllers[0]),
-                          createInput(title: "Online Shopping", hintText: "Budget", controller: budgetControllers[1]),
-                          createInput(title: "Dining", hintText: "Budget", controller: budgetControllers[2]),
-                          createInput(title: "Fuel", hintText: "Budget", controller: budgetControllers[3]),
-                          createInput(title: "Super Market", hintText: "Budget", controller: budgetControllers[4]),
-                          createInput(title: "Dining", hintText: "Budget", controller: budgetControllers[5]),
-                          const SizedBox(height: 10),
+                          createInput(title: "Online Shopping", hintText: "Budget", controller: budgetControllers[0]),
+                          createInput(title: "Restaurant", hintText: "Budget", controller: budgetControllers[1]),
+                          createInput(title: "Fuel", hintText: "Budget", controller: budgetControllers[2]),
+                          createInput(title: "Entertainment", hintText: "Budget", controller: budgetControllers[3]),
+                          const SizedBox(height: 50),
                           Padding(
                             padding: const EdgeInsets.all(16),
                             child: ElevatedButton(
-                              onPressed: () {
-                                // if (!_formKey.currentState!.validate()) return;
-                                // var output = {
-                                //   'name': nameController.text,
-                                //   'salary': incomeController.text,
-                                //   'totalAmount': amountController.text,
-                                //   'duration': selectedDuration,
-                                //   'category': selectedCategory
-                                // };
+                              onPressed: () async {
+                                if (!_formKey.currentState!.validate()) return;
+                                var output = {
+                                  'Online Shopping': int.parse(budgetControllers[0].text),
+                                  'Restaurant': int.parse(budgetControllers[1].text),
+                                  'Fuel': int.parse(budgetControllers[2].text),
+                                  'Entertainment': int.parse(budgetControllers[3].text),
+                                };
                                 // print(output);
+                                var response = await context.read<BudgetProvider>().setBudget(output);
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['message'])));
+                                context.pop();
                               },
                               style: ElevatedButton.styleFrom(
                                 // elevation: 12,

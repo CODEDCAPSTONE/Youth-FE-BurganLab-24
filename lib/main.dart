@@ -9,6 +9,7 @@ import 'package:frontend/pages/steps_page.dart';
 import 'package:frontend/pages/targets_page.dart';
 import 'package:frontend/pages/transfer_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/providers/budget_provider.dart';
 import 'package:frontend/providers/card_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
 import 'package:frontend/providers/targets_provider.dart';
@@ -23,6 +24,7 @@ void main() {
         ChangeNotifierProvider<GoalsProvider>(create: (_) => GoalsProvider()),
         ChangeNotifierProvider<VCardsProvider>(create: (_) => VCardsProvider()),
         ChangeNotifierProvider<TargetsProvider>(create: (_) => TargetsProvider()),
+        ChangeNotifierProvider<BudgetProvider>(create: (_) => BudgetProvider()),
         // ChangeNotifierProvider<RealstockProvider>(
         //     create: (_) => RealstockProvider()),
       ],
@@ -48,7 +50,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/home', // Main page
+    initialLocation: '/signin', // Main page
     routes: [
       // GoRoute(
       //   path: '/',

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
+import 'package:frontend/providers/budget_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:provider/provider.dart';
 
 class BudgetDetails extends StatelessWidget {
 
   Map<String, double> dataMap = {
-    "Shopping": 5,
     "Online Shopping": 3,
     "Dining": 3,
     "Fuel": 3,
-    "Super Market": 2,
     "Entertainment": 2,
   };
   
@@ -61,73 +61,87 @@ class BudgetDetails extends StatelessWidget {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16)
                           ),
-                          child: Column(
-                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              PieChart(
-                                dataMap: dataMap,
-                                animationDuration: const Duration(milliseconds: 800),
-                                chartLegendSpacing: 32,
-                                chartRadius: MediaQuery.of(context).size.width / 3.2,
-                                // colorList: colorList,
-                                initialAngleInDegree: 0,
-                                chartType: ChartType.ring,
-                                ringStrokeWidth: 32,
-                                centerText: "Budget",
-                                legendOptions: const LegendOptions(
-                                  showLegendsInRow: false,
-                                  legendPosition: LegendPosition.right,
-                                  // showLegends: true,
-                                  // legendShape: _BoxShape.circle,
-                                  legendTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                chartValuesOptions: const ChartValuesOptions(
-                                  // showChartValueBackground: true,
-                                  // showChartValues: true,
-                                  showChartValuesInPercentage: false,
-                                  showChartValuesOutside: false,
-                                  decimalPlaces: 1,
-                                ),
-                                // gradientList: ---To add gradient colors---
-                                // emptyColorGradient: ---Empty Color gradient---
-                              ),
-                              const SizedBox(height: 50,),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Details",
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromRGBO(1, 104, 170, 1),
+                          child: FutureBuilder(
+                            future: context.read<BudgetProvider>().getBudget(),
+                            builder: (context, dataSnapshot) {
+                              if (dataSnapshot.connectionState == ConnectionState.waiting) return const CircularProgressIndicator();
+                              return Consumer<BudgetProvider>(
+                                builder: (context, provider, _) {
+                                  return Column(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      PieChart(
+                                        dataMap: {
+                                          "Online Shopping": provider.budget[0]["limit"].toDouble(),
+                                          "Dining": provider.budget[1]["limit"].toDouble(),
+                                          "Fuel": provider.budget[2]["limit"].toDouble(),
+                                          "Entertainment": provider.budget[3]["limit"].toDouble(),
+                                        },
+                                        animationDuration: const Duration(milliseconds: 800),
+                                        chartLegendSpacing: 32,
+                                        chartRadius: MediaQuery.of(context).size.width / 3.2,
+                                        // colorList: colorList,
+                                        initialAngleInDegree: 0,
+                                        chartType: ChartType.ring,
+                                        ringStrokeWidth: 32,
+                                        centerText: "Budget",
+                                        legendOptions: const LegendOptions(
+                                          showLegendsInRow: false,
+                                          legendPosition: LegendPosition.right,
+                                          // showLegends: true,
+                                          // legendShape: _BoxShape.circle,
+                                          legendTextStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        chartValuesOptions: const ChartValuesOptions(
+                                          // showChartValueBackground: true,
+                                          // showChartValues: true,
+                                          showChartValuesInPercentage: false,
+                                          showChartValuesOutside: false,
+                                          decimalPlaces: 1,
+                                        ),
+                                        // gradientList: ---To add gradient colors---
+                                        // emptyColorGradient: ---Empty Color gradient---
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 8),
-                                child: ListView(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  children: [
-                                    createTile(title: "Shopping", limit: 50, amountLeft: 27),
-                                    createTile(title: "Online Shopping", limit: 50, amountLeft: 27),
-                                    createTile(title: "Dining", limit: 70, amountLeft: 10),
-                                    createTile(title: "Fuel", limit: 30, amountLeft: 12.9),
-                                    createTile(title: "Super Market", limit: 100, amountLeft: 45.5),
-                                    createTile(title: "Entertainment", limit: 50, amountLeft: 18),
-                                  ],
-                                ),
-                              ),
-                            ],
+                                      const SizedBox(height: 50,),
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Details",
+                                              style: TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromRGBO(1, 104, 170, 1),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: provider.budget.length,
+                                          itemBuilder: (context, index) {
+                                            return createTile(
+                                              title: provider.budget[index]["category"], 
+                                              total: provider.budget[index]["total"], 
+                                              limit: provider.budget[index]["limit"]
+                                            );
+                                          }
+                                        )
+                                      ),
+                                    ],
+                                  );
+                                }
+                              );
+                            }
                           ),
                         ),
-                        const SizedBox(height: 10,)
+                        const SizedBox(height: 130,)
                       ],
                     ),
                   ),
@@ -140,7 +154,7 @@ class BudgetDetails extends StatelessWidget {
   }
 }
 
-Widget createTile({required String title, required int limit, required double amountLeft}) {
+Widget createTile({required String title, required int total, required int limit}) {
   return ListTile(
     title: Text(title, style: const TextStyle(fontSize: 15),),
     subtitle: SizedBox(
@@ -150,7 +164,7 @@ Widget createTile({required String title, required int limit, required double am
         maxSteps: 100,
         progressType: LinearProgressBar
             .progressTypeLinear,
-        currentStep: (amountLeft / limit * 100).toInt(),
+        currentStep: (total / limit * 100).toInt(),
         progressColor: Colors.blue.shade800,
         backgroundColor: const Color.fromRGBO(223, 222, 222, 1),
         borderRadius: BorderRadius.circular(10),
@@ -160,8 +174,8 @@ Widget createTile({required String title, required int limit, required double am
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text('$limit KD', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),),
-        Text('Left $amountLeft KD', style: const TextStyle(fontSize: 12),)
+        Text('$total KD', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),),
+        Text('Limit $limit KD', style: const TextStyle(fontSize: 12),)
       ],
     ),
   );

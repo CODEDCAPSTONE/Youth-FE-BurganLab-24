@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/services/client.dart';

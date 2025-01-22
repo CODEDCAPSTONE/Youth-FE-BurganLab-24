@@ -14,7 +14,7 @@ class _TabSwitcherState extends State<TabSwitcher> with SingleTickerProviderStat
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
     _animation = Tween<double>(begin: 0, end: 1.1).animate(

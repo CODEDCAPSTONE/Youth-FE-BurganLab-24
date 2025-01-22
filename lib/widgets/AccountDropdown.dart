@@ -55,7 +55,7 @@ class _AccountDropdownState extends State<AccountDropdown> with SingleTickerProv
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
                 child: Container(
-                  color: Colors.black.withOpacity(0.1),
+                  // color: Colors.black.withOpacity(1),
                 ),
               ),
             ),
@@ -70,7 +70,7 @@ class _AccountDropdownState extends State<AccountDropdown> with SingleTickerProv
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Color(0xFFdfdede)),
+                  border: Border.all(color: const Color(0xFFdfdede)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

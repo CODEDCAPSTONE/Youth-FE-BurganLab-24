@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:frontend/models/target.dart';
-import 'package:frontend/models/user.dart';
-import 'package:frontend/providers/goals_provider.dart';
 import 'package:frontend/services/client.dart';
 
 class TargetServices {

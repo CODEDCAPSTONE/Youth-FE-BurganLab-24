@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/budget_provider.dart';
 import 'package:frontend/providers/card_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
 import 'package:frontend/providers/targets_provider.dart';
@@ -19,10 +20,10 @@ class _HomePageState extends State<HomePage> {
   // int _selectedIndex = 0;
 
   Map<String, double> dataMap = {
-    "Flutter": 5,
-    "React": 3,
-    "Xamarin": 2,
-    "Ionic": 2,
+    "Online Shopping": 3,
+    "Dining": 3,
+    "Fuel": 3,
+    "Entertainment": 2,
   };
 
   @override
@@ -314,34 +315,50 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16)
                     ),
-                    child: PieChart(
-                      dataMap: dataMap,
-                      animationDuration: const Duration(milliseconds: 800),
-                      chartLegendSpacing: 32,
-                      chartRadius: MediaQuery.of(context).size.width / 3.2,
-                      // colorList: colorList,
-                      initialAngleInDegree: 0,
-                      chartType: ChartType.ring,
-                      ringStrokeWidth: 32,
-                      centerText: "Budget",
-                      legendOptions: LegendOptions(
-                        showLegendsInRow: false,
-                        legendPosition: LegendPosition.right,
-                        // showLegends: true,
-                        // legendShape: _BoxShape.circle,
-                        legendTextStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      chartValuesOptions: ChartValuesOptions(
-                        // showChartValueBackground: true,
-                        // showChartValues: true,
-                        showChartValuesInPercentage: false,
-                        showChartValuesOutside: false,
-                        decimalPlaces: 1,
-                      ),
-                      // gradientList: ---To add gradient colors---
-                      // emptyColorGradient: ---Empty Color gradient---
+                    child: FutureBuilder(
+                      future: context.read<BudgetProvider>().getBudget(),
+                      builder: (context, dataSnapshot) {
+                        if (dataSnapshot.connectionState == ConnectionState.waiting) return const CircularProgressIndicator();
+                        return Consumer<BudgetProvider>(
+                          builder: (context, provider, _) {
+                            if (provider.budget.length == 0) return const Text("Nothing");
+                            return PieChart(
+                              dataMap: {
+                                "Online Shopping": provider.budget[0]["limit"].toDouble(),
+                                "Dining": provider.budget[1]["limit"].toDouble(),
+                                "Fuel": provider.budget[2]["limit"].toDouble(),
+                                "Entertainment": provider.budget[3]["limit"].toDouble(),
+                              },
+                              animationDuration: const Duration(milliseconds: 800),
+                              chartLegendSpacing: 32,
+                              chartRadius: MediaQuery.of(context).size.width / 3.2,
+                              // colorList: colorList,
+                              initialAngleInDegree: 0,
+                              chartType: ChartType.ring,
+                              ringStrokeWidth: 32,
+                              centerText: "Budget",
+                              legendOptions: const LegendOptions(
+                                showLegendsInRow: false,
+                                legendPosition: LegendPosition.right,
+                                // showLegends: true,
+                                // legendShape: _BoxShape.circle,
+                                legendTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              chartValuesOptions: const ChartValuesOptions(
+                                // showChartValueBackground: true,
+                                // showChartValues: true,
+                                showChartValuesInPercentage: false,
+                                showChartValuesOutside: false,
+                                decimalPlaces: 1,
+                              ),
+                              // gradientList: ---To add gradient colors---
+                              // emptyColorGradient: ---Empty Color gradient---
+                            );
+                          }
+                        );
+                      }
                     ),
                   ),
 
@@ -467,10 +484,10 @@ class _HomePageState extends State<HomePage> {
                                       height: 5,
                                       width: 10,
                                       child: LinearProgressBar(
-                                        maxSteps: 5,
+                                        maxSteps: int.parse(target.balanceTarget),
                                         progressType: LinearProgressBar
                                             .progressTypeLinear,
-                                        currentStep: index + 1,
+                                        currentStep: int.parse(target.totalAmount),
                                         progressColor: const Color.fromRGBO(0, 221, 163, 1),
                                         backgroundColor: const Color.fromRGBO(223, 222, 222, 1),
                                         borderRadius: BorderRadius.circular(10),
