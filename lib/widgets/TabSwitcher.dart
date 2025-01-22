@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
 
+class SwitchModel with ChangeNotifier {
+  bool _isLocal = true;
+  bool get isLocal => _isLocal;
+
+  void change(bool state) {
+    _isLocal = state;
+    notifyListeners();
+  }
+}
+
 class TabSwitcher extends StatefulWidget {
+  final SwitchModel switchModel;
+  const TabSwitcher({super.key, required this.switchModel});
+
   @override
-  _TabSwitcherState createState() => _TabSwitcherState();
+  _TabSwitcherState createState() => _TabSwitcherState(switchModel);
 }
 
 class _TabSwitcherState extends State<TabSwitcher> with SingleTickerProviderStateMixin {
   bool isLocal = true;
   late AnimationController _controller;
   late Animation<double> _animation;
+  final SwitchModel switchModel;
+  
+  _TabSwitcherState(this.switchModel);
 
   @override
   void initState() {
@@ -31,6 +47,7 @@ class _TabSwitcherState extends State<TabSwitcher> with SingleTickerProviderStat
   void _toggleTab() {
     setState(() {
       isLocal = !isLocal;
+      switchModel.change(isLocal);
       if (isLocal) {
         _controller.reverse();
       } else {

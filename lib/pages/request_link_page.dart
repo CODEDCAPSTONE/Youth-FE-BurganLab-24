@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/main.dart';
 import 'package:frontend/widgets/AccountDropdown.dart';
-import 'package:frontend/widgets/TabSwitcher.dart';
 import 'package:go_router/go_router.dart';
 
-class TransferPage extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController ibanController = TextEditingController();
-  final TextEditingController amountController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController beneficiaryController = TextEditingController();
+final _formKey = GlobalKey<FormState>();
 
-  final SwitchModel notifier = SwitchModel();
+class RequestLinkPage extends StatelessWidget {
+  
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
+  final TextEditingController purposeController = TextEditingController();
+
   final dropdown = AccountDropdown();
 
   @override
@@ -39,7 +40,7 @@ class TransferPage extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 32.0),
                   child: Text(
-                    "Transfer",
+                    "Request Link",
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -53,27 +54,12 @@ class TransferPage extends StatelessWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        TabSwitcher(switchModel: notifier,),
                         const SizedBox(height: 30,),
                         dropdown,
-                        createInput(title: "IBAN", hintText: "Iban", controller: ibanController),
-                        createInput(title: "Amount", hintText: "amount", controller: amountController),
-                        ListenableBuilder(
-                          listenable: notifier, 
-                          builder: (BuildContext context, Widget? child) {
-                            if (!notifier.isLocal) {
-                              return Column(
-                                children: [
-                                  createInput(title: "Address", hintText: "address", controller: addressController),
-                                  createInput(title: "Beneficiary Name", hintText: "name", controller: beneficiaryController),
-                                ],
-                              );
-                            }
-                            else {
-                              return const SizedBox();
-                            }
-                          }
-                        ),
+                        createInput(title: "Payer Name", hintText: "name", controller: nameController),
+                        createAmountInput(title: "Amount", hintText: "amount", controller: amountController),
+                        createPhoneNumberForm(title: "Phone Number", input: "number", controller: numberController),
+                        createPurposeInput(title: "Link Purpose", hintText: "Select", controller: purposeController),
                         const SizedBox(height: 30,),
                         FormField(
                           // forceErrorText: "please check the box",
@@ -111,14 +97,12 @@ class TransferPage extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (!_formKey.currentState!.validate()) return;
-                              Map<String, dynamic> output = {
-                                'iban': ibanController.text,
-                                'amount': amountController.text
+                              var output = {
+                                'name': nameController.text,
+                                'amount': amountController.text,
+                                'phone number': numberController.text,
+                                'purpose': purposeController.text
                               };
-                              if (!notifier.isLocal) {
-                                output['address'] = addressController.text;
-                                output['beneficiary'] = beneficiaryController.text;
-                              }
                               print(output);
                               await showDialog(
                                 context: context,
@@ -175,7 +159,7 @@ class TransferPage extends StatelessWidget {
           )
         ]
       ),
-        );
+    );
   }
 }
 
@@ -222,6 +206,171 @@ Widget createInput({required String title, required String hintText, required Te
           //   password = newValue!;
           // },
         )
+      ],
+    ),
+  );
+}
+
+Widget createAmountInput({required String title, required String hintText, required TextEditingController controller}) {
+  return Container(
+    margin: const EdgeInsets.symmetric(vertical: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+          ],
+        ),
+        const SizedBox(height: 10,),
+        TextFormField(
+          controller: controller,
+          cursorColor: Colors.black,
+          decoration: InputDecoration(
+            suffixIcon: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text('KWD', style: TextStyle(fontSize: 16, color: Colors.black),)
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color.fromRGBO(223, 222, 222, 1)),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            hintText: hintText,
+          ),
+          validator: (value) {
+            if (value!.isEmpty) return "fill the blank";
+            return null;
+          },
+          // onSaved: (newValue) {
+          //   password = newValue!;
+          // },
+        )
+      ],
+    ),
+  );
+}
+
+Widget createPhoneNumberForm({required String title, required String input, required TextEditingController controller}) {
+  return Container(
+    margin: const EdgeInsets.symmetric(vertical: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+          ],
+        ),
+        const SizedBox(height: 10,),
+        TextFormField(
+          controller: controller,
+          cursorColor: Colors.black,
+          decoration: InputDecoration(
+            prefixIcon: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text('+965', style: TextStyle(fontSize: 16, color: Colors.grey),)
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color.fromRGBO(223, 222, 222, 1)),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            hintText: input,
+          ),
+          validator: (value) {
+            if (value!.isEmpty) return "fill the blank";
+            return null;
+          },
+          // onSaved: (newValue) {
+          //   password = newValue!;
+          // },
+        )
+      ],
+    ),
+  );
+}
+
+Widget createPurposeInput({required String title, required String hintText, required TextEditingController controller}) {
+  return Container(
+    margin: const EdgeInsets.symmetric(vertical: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+          ],
+        ),
+        const SizedBox(height: 10,),
+        DropdownButtonFormField(
+          hint: const Text("Select"),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color.fromRGBO(223, 222, 222, 1)),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            hintText: hintText,
+          ),
+          items: const  [
+            DropdownMenuItem(
+              value: "first",
+              child: Text("first")
+            ),
+            DropdownMenuItem(
+              value: "seconds",
+              child: Text("seconds")
+            ),
+            DropdownMenuItem(
+              value: "third",
+              child: Text("third")
+            )
+          ], 
+          onChanged: (newValue) {
+            controller.text = newValue!;
+          },
+          validator: (value) {
+            if (value == null) return "fill the blank";
+            return null;
+          },
+        ),
       ],
     ),
   );

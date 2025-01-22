@@ -6,8 +6,10 @@ class BudgetProvider extends ChangeNotifier {
 
   Future getBudget() async {
     try {
-      var response = await BudgetServices().getBudget();
-      budget = response;
+      if (budget.isEmpty) {
+        var response = await BudgetServices().getBudget();
+        budget = response;
+      }
       // print(budget);
       return budget;
 

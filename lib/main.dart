@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/WAMD_page.dart';
 import 'package:frontend/pages/add_target_page.dart';
 import 'package:frontend/pages/budget_details.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/register_page.dart';
+import 'package:frontend/pages/request_link_page.dart';
 import 'package:frontend/pages/setup_budget_page.dart';
 import 'package:frontend/pages/signin_page.dart';
 import 'package:frontend/pages/steps_page.dart';
@@ -50,7 +52,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/signin', // Main page
+    initialLocation: '/steps', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -93,6 +95,14 @@ class MainApp extends StatelessWidget {
       GoRoute(
         path: '/budgetDetails',
         builder: (context, state) => BudgetDetails(),
+      ),
+      GoRoute(
+        path: '/link',
+        builder: (context, state) => RequestLinkPage(),
+      ),
+      GoRoute(
+        path: '/wamd',
+        builder: (context, state) => WamdPage(),
       ),
       // GoRoute(
       //   path: '/main',
