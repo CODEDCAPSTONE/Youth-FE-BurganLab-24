@@ -8,6 +8,7 @@ import 'package:frontend/pages/register_page.dart';
 import 'package:frontend/pages/service_page.dart';
 import 'package:frontend/pages/signin_page.dart';
 import 'package:frontend/pages/steps_page.dart';
+import 'package:frontend/pages/students_form.dart';
 import 'package:frontend/pages/targets_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
@@ -45,7 +46,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/cardDetails', // Main page
+    initialLocation: '/home', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -82,11 +83,10 @@ class MainApp extends StatelessWidget {
       GoRoute(path: '/loyalty', builder: (context, state) => LoyaltyPage()),
 
       GoRoute(
-          path: '/cardDetails', builder: (context, state) => CardDetailsPage())
-      //  GoRoute(
-      //   path: '/edit',
-      //   builder: (context, state) => EditgoalPage()
-
+          path: '/cardDetails', builder: (context, state) => CardDetailsPage()),
+      GoRoute(
+          path: '/student_form',
+          builder: (context, state) => UniversitySelectionPage())
       // ),
       //  GoRoute(
       //   path: '/edit',

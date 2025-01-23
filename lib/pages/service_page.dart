@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/home_page.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 class ServicePage extends StatelessWidget {
   const ServicePage({Key? key}) : super(key: key);
@@ -54,7 +54,12 @@ class ServicePage extends StatelessWidget {
                         subtitle: 'between accounts',
                         titleColor: Colors.black,
                         onTap: () {
-                          // Handle Transfer card tap
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => TransferModal(),
+                          );
                         },
                       ),
 
@@ -213,7 +218,7 @@ class ServicePage extends StatelessWidget {
   }
 }
 
-class ServiceCard extends StatelessWidget {
+class ServiceCard extends StatefulWidget {
   final Color backgroundColor;
   final String icon;
   final String title;
@@ -232,36 +237,89 @@ class ServiceCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _ServiceCardState createState() => _ServiceCardState();
+}
+
+class _ServiceCardState extends State<ServiceCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 150),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleTapDown(TapDownDetails details) {
+    _controller.forward();
+  }
+
+  void _handleTapUp(TapUpDetails details) {
+    _controller.reverse();
+  }
+
+  void _handleTapCancel() {
+    _controller.reverse();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(30),
-        ),
+      onTapDown: _handleTapDown,
+      onTapUp: _handleTapUp,
+      onTapCancel: _handleTapCancel,
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              decoration: BoxDecoration(
+                color: widget.backgroundColor,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: child,
+            ),
+          );
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.network(
-              icon,
-              width: 64,
-              height: 64,
+            Center(
+              child: Image.network(
+                widget.icon,
+                width: 64,
+                height: 64,
+              ),
             ),
             const SizedBox(height: 16),
             Text(
-              title,
+              widget.title,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400,
-                color: titleColor,
+                color: widget.titleColor,
               ),
             ),
-            if (subtitle != null)
+            if (widget.subtitle != null)
               Text(
-                subtitle!,
+                widget.subtitle!,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 12,
@@ -273,6 +331,230 @@ class ServiceCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class TransferModal extends StatefulWidget {
+  @override
+  _TransferModalState createState() => _TransferModalState();
+}
+
+class _TransferModalState extends State<TransferModal>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _slideAnimation;
+  late Animation<double> _fadeAnimation;
+
+  String? _selectedFromCard;
+  String? _selectedToCard;
+  final TextEditingController _amountController = TextEditingController();
+
+  final List<String> cards = ['Card ending in 1234', 'Card ending in 5678'];
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _slideAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(
+              0, MediaQuery.of(context).size.height * _slideAnimation.value),
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: Container(
+              padding: EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Transfer Between Cards',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0168AA),
+                      fontFamily: 'Inter',
+                    ),
+                  ),
+                  SizedBox(height: 24),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: 'From Card',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    value: _selectedFromCard,
+                    items: cards.map((card) {
+                      return DropdownMenuItem(
+                        value: card,
+                        child: Text(card),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedFromCard = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: 'To Card',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    value: _selectedToCard,
+                    items: cards.map((card) {
+                      return DropdownMenuItem(
+                        value: card,
+                        child: Text(card),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedToCard = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextField(
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Amount (KWD)',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Implement transfer logic
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF0168AA),
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Transfer',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class CustomBottomNavigationBar extends StatelessWidget {
+  const CustomBottomNavigationBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      color: Colors.white,
+      shape: const CircularNotchedRectangle(),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () {
+              context.go("/home");
+            },
+            iconSize: 30,
+            icon: const Icon(Icons.home_filled),
+          ),
+          IconButton(
+            onPressed: () {},
+            iconSize: 30,
+            icon: const Icon(Icons.discount),
+          ),
+          const SizedBox(
+            width: 80,
+          ),
+          IconButton(
+            onPressed: () {
+              context.go("/service");
+            },
+            iconSize: 30,
+            icon: const Icon(Icons.category_outlined),
+          ),
+          IconButton(
+            onPressed: () {
+              context.go("/more");
+            },
+            iconSize: 30,
+            icon: const Icon(Icons.more_horiz_rounded),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomFloatingActionButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const CustomFloatingActionButton({Key? key, required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: onPressed,
+      shape: const CircleBorder(),
+      backgroundColor: Colors.blue,
+      child: const Icon(Icons.send, color: Colors.white),
     );
   }
 }

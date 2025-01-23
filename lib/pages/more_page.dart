@@ -14,6 +14,40 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isBiometricEnabled = false;
   String selectedLanguage = 'English';
 
+  void _showTermsAndConditions() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Terms and conditions'),
+          content: const SingleChildScrollView(
+            child: Text(
+              '1. Account Terms\n'
+              'Account Opening: By opening an account, you agree to provide accurate information and keep it up to date.\n'
+              'Account Usage: Your account is for personal use unless explicitly stated. Unauthorized or illegal activities are strictly prohibited.\n'
+              'Fees and Charges: Applicable fees for account maintenance, transactions, or other services will be outlined in the fee schedule.\n'
+              'Account Closure: The bank reserves the right to close your account for inactivity, fraud, or violation of terms with prior notice.\n\n'
+              '2. Transfers\n'
+              'Internal Transfers: Transfers between accounts within the bank are processed instantly unless otherwise specified.\n'
+              'External Transfers: Transfers to accounts outside the bank are subject to processing times, fees, and currency conversion rates.\n'
+              'Limits: Daily and monthly transfer limits apply. These limits may vary based on your account type or verification status.\n'
+              'Errors and Disputes: If you notice an error in a transfer, you must notify the bank within 30 days. The bank will investigate and resolve the issue per regulatory guidelines.\n'
+              'Reversal Policy: The bank may reverse unauthorized or incorrect transactions upon investigation.',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +84,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 const SizedBox(height: 15),
                 _buildNavigationItem(
                   'Student allowance form',
-                  onTap: () {},
+                  onTap: () {
+                    context.push("/student_form");
+                  },
                   showArrow: true,
                 ),
                 const Divider(color: Color(0xFFE8E8E8)),
@@ -84,26 +120,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 _buildLanguageSelector(),
                 const Divider(color: Color(0xFFE8E8E8)),
                 _buildNavigationItem(
-                  'Agreement',
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Agreement'),
-                          content: const Text('This is the agreement content.'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
+                  'Terms and conditions',
+                  onTap: _showTermsAndConditions,
                   showArrow: true,
                 ),
                 const Divider(color: Color(0xFFE8E8E8)),
@@ -166,10 +184,43 @@ class _SettingsPageState extends State<SettingsPage> {
               fontWeight: FontWeight.w400,
             ),
           ),
-          Image.network(
-            'https://dashboard.codeparrot.ai/api/assets/Z43pUXTr0Kgj1uYg',
-            width: 24,
-            height: 24,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: DropdownButton<String>(
+              value: selectedLanguage,
+              underline: const SizedBox(),
+              items: ['English', 'Arabic'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: const TextStyle(
+                      color: Color(0xFF1E1E1E),
+                      fontSize: 16,
+                      fontFamily: 'Inter',
+                    ),
+                  ),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    selectedLanguage = newValue;
+                  });
+                }
+              },
+              style: const TextStyle(
+                color: Color(0xFF1E1E1E),
+                fontSize: 16,
+                fontFamily: 'Inter',
+              ),
+              dropdownColor: Colors.white,
+              icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF1E1E1E)),
+            ),
           ),
         ],
       ),

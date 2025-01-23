@@ -16,6 +16,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool _isFabClicked = false;
 
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Good Morning';
+    } else if (hour < 17) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var brightness = View.of(context).platformDispatcher.platformBrightness;
@@ -151,22 +162,22 @@ class _HomePageState extends State<HomePage> {
                       //app bar
                       Container(
                         padding: const EdgeInsets.only(left: 10),
-                        child: const ListTile(
-                          leading: Icon(Icons.person),
+                        child: ListTile(
+                          leading: const Icon(Icons.person),
                           title: Text(
-                            "Good Morning",
-                            style: TextStyle(
+                            _getGreeting(),
+                            style: const TextStyle(
                                 fontSize: 10,
                                 color: Color.fromRGBO(1, 104, 170, 1)),
                           ),
-                          subtitle: Text(
+                          subtitle: const Text(
                             "Hussain",
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Color.fromRGBO(1, 104, 170, 1),
                                 fontWeight: FontWeight.bold),
                           ),
-                          trailing: Icon(Icons.notifications),
+                          trailing: const Icon(Icons.notifications),
                         ),
                       ),
 

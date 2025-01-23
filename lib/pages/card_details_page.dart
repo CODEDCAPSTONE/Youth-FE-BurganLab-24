@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:math' as math;
+import 'package:local_auth/local_auth.dart';
 
 class CardDetailsPage extends StatefulWidget {
   @override
@@ -9,6 +11,7 @@ class CardDetailsPage extends StatefulWidget {
 class _CardDetailsPageState extends State<CardDetailsPage> {
   bool _showCardBack = false;
   String _searchQuery = '';
+  final LocalAuthentication auth = LocalAuthentication();
 
   final List<Transaction> _transactions = [
     Transaction('Talabat transaction', 'March 31, 2022', -100.00),
@@ -81,11 +84,20 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildActionButton('Transfer', Icons.swap_horiz),
-                    _buildActionButton('Lock', Icons.lock),
-                    _buildActionButton('Change Pen', Icons.edit),
-                    _buildActionButton(
-                        'Withdraw', Icons.account_balance_wallet),
+                    _buildActionButton('Transfer', Icons.swap_horiz, () {
+                      // Handle Transfer action
+                    }),
+                    _buildActionButton('Lock', Icons.lock, () {
+                      _authenticateAndShowLockDialog();
+                      print("jjjjjjjj");
+                    }),
+                    _buildActionButton('Change Pen', Icons.edit, () {
+                      // Handle Change Pen action
+                    }),
+                    _buildActionButton('Withdraw', Icons.account_balance_wallet,
+                        () {
+                      // Handle Withdraw action
+                    }),
                   ],
                 ),
               ),
@@ -165,6 +177,55 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _authenticateAndShowLockDialog() async {
+    bool authenticated = false;
+    try {
+      authenticated = await auth.authenticate(
+        localizedReason: 'Please authenticate to lock your card',
+        options: const AuthenticationOptions(
+          useErrorDialogs: true,
+          stickyAuth: true,
+        ),
+      );
+    } on PlatformException catch (e) {
+      print('Error during authentication: $e');
+      return;
+    }
+
+    if (authenticated) {
+      _showLockDialog();
+    } else {
+      print('Authentication failed');
+    }
+  }
+
+  void _showLockDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Lock Card'),
+          content: Text('Are you sure you want to lock your card?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Handle lock card action
+                Navigator.of(context).pop();
+              },
+              child: Text('Lock'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -287,33 +348,36 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
     );
   }
 
-  Widget _buildActionButton(String label, IconData icon) {
-    return Column(
-      children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.blue.shade300, Colors.blue.shade100],
+  Widget _buildActionButton(String label, IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.blue.shade300, Colors.blue.shade100],
+              ),
+              borderRadius: BorderRadius.circular(15),
             ),
-            borderRadius: BorderRadius.circular(15),
+            child: Icon(icon, color: Colors.blue.shade900),
           ),
-          child: Icon(icon, color: Colors.blue.shade900),
-        ),
-        SizedBox(height: 8),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.blue.shade900,
-            fontWeight: FontWeight.w500,
+          SizedBox(height: 8),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.blue.shade900,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
