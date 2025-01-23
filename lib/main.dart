@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/WAMD_page.dart';
 import 'package:frontend/pages/add_target_page.dart';
+import 'package:frontend/pages/card_details_page.dart';
 import 'package:frontend/pages/budget_details.dart';
 import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/pages/loyalty_page.dart';
+import 'package:frontend/pages/more_page.dart';
 import 'package:frontend/pages/register_page.dart';
+import 'package:frontend/pages/service_page.dart';
 import 'package:frontend/pages/request_link_page.dart';
 import 'package:frontend/pages/setup_budget_page.dart';
 import 'package:frontend/pages/signin_page.dart';
 import 'package:frontend/pages/steps_page.dart';
+import 'package:frontend/pages/students_form.dart';
 import 'package:frontend/pages/targets_page.dart';
 import 'package:frontend/pages/transfer_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
@@ -52,7 +57,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/signin', // Main page
+    initialLocation: '/home', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -72,9 +77,8 @@ class MainApp extends StatelessWidget {
       ),
       GoRoute(
         path: '/steps',
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: StepsPage()
-        ),
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: StepsPage()),
       ),
       GoRoute(
         path: '/targets',
@@ -84,6 +88,16 @@ class MainApp extends StatelessWidget {
         path: '/addTarget',
         builder: (context, state) => AddTargetPage(),
       ),
+      GoRoute(path: '/service', builder: (context, state) => ServicePage()),
+      GoRoute(path: '/more', builder: (context, state) => SettingsPage()),
+
+      GoRoute(path: '/loyalty', builder: (context, state) => LoyaltyPage()),
+
+      GoRoute(
+          path: '/cardDetails', builder: (context, state) => CardDetailsPage()),
+      GoRoute(
+          path: '/student_form',
+          builder: (context, state) => UniversitySelectionPage())
       GoRoute(
         path: '/setupBudget',
         builder: (context, state) => SetupBudgetPage(),
@@ -108,7 +122,19 @@ class MainApp extends StatelessWidget {
       //   path: '/main',
       //   builder: (context, state) => MainPage(index: state.extra as int),
       // ),
-      // GoRoute(
+      //  GoRoute(
+      //   path: '/edit',
+      //   builder: (context, state) => EditgoalPage(
+      //     index: state.extra as int,
+      //   ),
+      // ),
+      //  GoRoute(
+      //   path: '/edit',
+      //   builder: (context, state) => EditgoalPage(
+      //     index: state.extra as int,
+      //   ),
+      // ),
+      //  GoRoute(
       //   path: '/edit',
       //   builder: (context, state) => EditgoalPage(
       //     index: state.extra as int,
