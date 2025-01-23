@@ -45,9 +45,5 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>NSFaceIDUsageDescription</key>
-	<string>We need to use your Face ID to authenticate</string>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>We need to use your local network to authenticate</string>
 </dict>
 </plist>

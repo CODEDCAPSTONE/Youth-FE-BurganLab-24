@@ -57,7 +57,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/home', // Main page
+    initialLocation: '/signin', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -97,7 +97,7 @@ class MainApp extends StatelessWidget {
           path: '/cardDetails', builder: (context, state) => CardDetailsPage()),
       GoRoute(
           path: '/student_form',
-          builder: (context, state) => UniversitySelectionPage())
+          builder: (context, state) => UniversitySelectionPage()),
       GoRoute(
         path: '/setupBudget',
         builder: (context, state) => SetupBudgetPage(),
