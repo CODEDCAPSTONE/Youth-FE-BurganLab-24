@@ -7,7 +7,7 @@ class AuthServices {
   Future<Map<String, dynamic>> signup({required User user}) async {
     try {
       Response response = await Client.dio.post('/auth/signup', data: user.toJson());
-      return {'token': response.data["token"]};
+      return response.data;
     } on DioException catch (error) {
       print(error.response!.data);
       return {'errors': error.response!.data["errors"]};
@@ -19,10 +19,10 @@ class AuthServices {
       // print(user.toJson());
       Response response =
           await Client.dio.post('/auth/signin', data: user.toJson());
-      return {'token': response.data["token"], 'balance': response.data["balance"]};
+      return {'token': response.data["token"]};
       // print(token);
     } on DioException catch (error) {
-      print(error.response!.data);
+      // print(error.response!);
       return {'errors': error.response!.data["errors"]};
     }
   }
@@ -33,6 +33,19 @@ class AuthServices {
       Response response =
           await Client.dio.get('/balance');
       return {'balance': response.data["balance"]};
+      // print(token);
+    } on DioException catch (error) {
+      print(error.response!.data);
+      return {'errors': error.response!.data["errors"]};
+    }
+  }
+
+  Future getCards() async {
+    try {
+      // print(user.toJson());
+      Response response =
+          await Client.dio.get('/cards');
+      return response.data;
       // print(token);
     } on DioException catch (error) {
       print(error.response!.data);

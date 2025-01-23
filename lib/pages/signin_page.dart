@@ -4,13 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class SignInPage extends StatelessWidget {
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController(text: "username");
+  final TextEditingController passwordController = TextEditingController(text: "password");
 
   SignInPage({super.key});
   final _formKey = GlobalKey<FormState>();
-  String username = "";
-  String password = "";
+  String username = "username";
+  String password = "password";
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class SignInPage extends StatelessWidget {
                 TextFormField(
                   controller: usernameController,
                   decoration: InputDecoration(
-                    labelText: 'Username',
+                    hintText: 'Username',
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.9),
                     border: OutlineInputBorder(
@@ -72,7 +72,7 @@ class SignInPage extends StatelessWidget {
                 TextFormField(
                   controller: passwordController,
                   decoration: InputDecoration(
-                    labelText: 'Password',
+                    hintText: 'Password',
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.9),
                     border: OutlineInputBorder(
@@ -125,7 +125,8 @@ class SignInPage extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['error']!)));
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sign in successfully")));
-                        GoRouter.of(context).go('/mainscreen');
+                        // await context.read<AuthProvider>().initAuth();
+                        GoRouter.of(context).go('/home');
                       }
                     },
                     child: const Text(

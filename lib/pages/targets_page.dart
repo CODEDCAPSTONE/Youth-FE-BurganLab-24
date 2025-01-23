@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/goals_provider.dart';
+import 'package:frontend/providers/targets_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' as math;
 
 class TargetsPage extends StatelessWidget {
 
@@ -46,18 +48,19 @@ class TargetsPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Consumer<GoalsProvider>(
+                        Consumer<TargetsProvider>(
                           builder: (context, provider, _) {
                             return ListView.builder(
                               shrinkWrap: true,
-                              itemCount: 3, //provider.list.length
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: provider.targets.length,
                               itemBuilder: (context, index) {
-                                var goal = provider.list[index];
+                                var target = provider.targets[index];
                                 return Container(
                                   padding: const EdgeInsets.all(10),
                                   margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                                   decoration: BoxDecoration(
-                                    color: Colors.amber,
+                                    color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
                                     borderRadius: BorderRadius.circular(16)
                                   ),
                                   child: Column(
@@ -67,7 +70,7 @@ class TargetsPage extends StatelessWidget {
                                         child: Row(
                                           children: [
                                             Text(
-                                              goal.name,
+                                              target.targetName,
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
@@ -85,8 +88,8 @@ class TargetsPage extends StatelessWidget {
                                               title: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  const Text("Balance", style: const TextStyle(fontSize: 12),),
-                                                  Text('${goal.amount/5000 * 100}%', style: const TextStyle(fontSize: 12),),
+                                                  const Text("Balance", style: TextStyle(fontSize: 12),),
+                                                  Text('${int.parse(target.totalAmount)/int.parse(target.balanceTarget) * 100}%', style: const TextStyle(fontSize: 12),),
                                                 ],
                                               ),
                                               subtitle: Column(
@@ -99,7 +102,7 @@ class TargetsPage extends StatelessWidget {
                                                       maxSteps: 5,
                                                       progressType: LinearProgressBar
                                                           .progressTypeLinear,
-                                                      currentStep: index + 1,
+                                                      currentStep: 1,
                                                       progressColor: Colors.black,
                                                       backgroundColor: const Color.fromRGBO(223, 222, 222, 1),
                                                       borderRadius: BorderRadius.circular(10),
@@ -110,8 +113,8 @@ class TargetsPage extends StatelessWidget {
                                                     children: [
                                                       Row(
                                                         children: [
-                                                          Text('${goal.amount} KWD '),
-                                                          const Text('of 50000 KWD', style: TextStyle(fontSize: 12),),
+                                                          Text('${target.totalAmount} KWD '),
+                                                          Text('of ${target.balanceTarget} KWD', style: const TextStyle(fontSize: 12),),
                                                         ],
                                                       ),
                                                       const Text('3 Months left', style: TextStyle(fontSize: 12),),
@@ -124,7 +127,7 @@ class TargetsPage extends StatelessWidget {
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Icon(Icons.abc),
-                                                const Text('50 KWD'),
+                                                Text('50 KWD/mo', style: TextStyle(fontWeight: FontWeight.bold),),
                                               ],
                                             ),
                                           ],
@@ -145,7 +148,7 @@ class TargetsPage extends StatelessWidget {
                             );
                           }
                         ),
-                        const SizedBox(height: 500,),
+                        const SizedBox(height: 100,),
                       ],
                     ),
                     )
