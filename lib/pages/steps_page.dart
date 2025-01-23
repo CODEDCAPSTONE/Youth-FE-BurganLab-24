@@ -95,7 +95,13 @@ class _StepsPageState extends State<StepsPage> {
             ),
             child: Stack(
               children: [
-              forms[index],
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                child: Container(
+                  key: ValueKey(index),
+                  child: forms[index],
+                )
+              ),
               // createOTP(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,

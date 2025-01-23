@@ -14,6 +14,8 @@ class RequestLinkPage extends StatelessWidget {
 
   final dropdown = AccountDropdown();
 
+  bool clicked = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +72,7 @@ class RequestLinkPage extends StatelessWidget {
                               title: const Row(
                                 children: [
                                   Text('Agree to ', style: TextStyle(fontSize: 16),),
-                                  Text('Terms & Conditions above', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                                  Text('Terms & Conditions above', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),),
                                 ],
                               ),
                               value: state.value,
@@ -113,7 +115,41 @@ class RequestLinkPage extends StatelessWidget {
                                     children: [
                                       const Padding(
                                         padding: EdgeInsets.all(10),
-                                        child: Icon(Icons.check_circle_outline, size: 100,),
+                                        child: Icon(Icons.check_circle_outline, size: 100, color: Colors.green,),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 20),
+                                        child:
+                                        StatefulBuilder(
+                                          builder: (BuildContext context, setState) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                // print(clicked);
+                                                setState(() {
+                                                  clicked = true;
+                                                }
+                                                );
+                                              },
+                                              child: (!clicked) ? const Text(
+                                                "Copy Link", 
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Color.fromRGBO(1, 104, 170, 1), 
+                                                  decoration: TextDecoration.underline
+                                                ),
+                                              ) 
+                                              // ignore: dead_code
+                                              : const Text(
+                                                "Link Copied", 
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black, 
+                                                  decoration: TextDecoration.underline
+                                                ),
+                                              ) 
+                                            );
+                                          }
+                                        ),
                                       ),
                                       Container(
                                         margin: const EdgeInsets.symmetric(horizontal: 10),

@@ -22,7 +22,7 @@ class AuthServices {
       return {'token': response.data["token"]};
       // print(token);
     } on DioException catch (error) {
-      print(error.response!.data);
+      // print(error.response!);
       return {'errors': error.response!.data["errors"]};
     }
   }

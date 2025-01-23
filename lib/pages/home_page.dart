@@ -321,7 +321,8 @@ class _HomePageState extends State<HomePage> {
                         if (dataSnapshot.connectionState == ConnectionState.waiting) return const CircularProgressIndicator();
                         return Consumer<BudgetProvider>(
                           builder: (context, provider, _) {
-                            if (provider.budget.length == 0) return const Text("Nothing");
+                            // print(provider.budget);
+                            if (provider.budget.isEmpty) return const Text("Nothing");
                             return PieChart(
                               dataMap: {
                                 "Online Shopping": provider.budget[0]["limit"].toDouble(),
@@ -541,7 +542,35 @@ class _HomePageState extends State<HomePage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            context.push('/transfer');
+            showDialog(
+              context: context, 
+              builder: (context) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        context.push('/transfer');
+                      }, 
+                      child: const Text("Transfer")
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.push('/link');
+                      }, 
+                      child: const Text("Request Link")
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.push('/wamd');
+                      }, 
+                      child: const Text("WAMD")
+                    ),
+                    const SizedBox(height: 150,),
+                  ],
+                );
+              }
+            );
           },
           shape: const CircleBorder(),
           backgroundColor: Colors.blue,

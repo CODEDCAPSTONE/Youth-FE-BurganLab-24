@@ -82,7 +82,7 @@ class WamdPage extends StatelessWidget {
                               title: const Row(
                                 children: [
                                   Text('Agree to ', style: TextStyle(fontSize: 16),),
-                                  Text('Terms & Conditions above', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                                  Text('Terms & Conditions above', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),),
                                 ],
                               ),
                               value: state.value,
@@ -123,7 +123,7 @@ class WamdPage extends StatelessWidget {
                                     children: [
                                       const Padding(
                                         padding: EdgeInsets.all(10),
-                                        child: Icon(Icons.check_circle_outline, size: 100,),
+                                        child: Icon(Icons.check_circle_outline, size: 100, color: Colors.green),
                                       ),
                                       Container(
                                         margin: const EdgeInsets.symmetric(horizontal: 10),

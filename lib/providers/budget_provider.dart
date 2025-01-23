@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/services/budget.dart';
 
 class BudgetProvider extends ChangeNotifier {
@@ -7,6 +8,7 @@ class BudgetProvider extends ChangeNotifier {
   Future getBudget() async {
     try {
       if (budget.isEmpty) {
+        await AuthProvider().initAuth();
         var response = await BudgetServices().getBudget();
         budget = response;
       }

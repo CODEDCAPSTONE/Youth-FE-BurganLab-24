@@ -52,7 +52,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/steps', // Main page
+    initialLocation: '/signin', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
