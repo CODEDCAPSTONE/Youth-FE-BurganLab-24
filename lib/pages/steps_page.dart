@@ -254,6 +254,40 @@ Widget createForm({required String title, required String subtitle, required Str
   );
 }
 
+void _showTermsAndConditions(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Terms and conditions'),
+        content: const SingleChildScrollView(
+          child: Text(
+            '1. Account Terms\n'
+            'Account Opening: By opening an account, you agree to provide accurate information and keep it up to date.\n'
+            'Account Usage: Your account is for personal use unless explicitly stated. Unauthorized or illegal activities are strictly prohibited.\n'
+            'Fees and Charges: Applicable fees for account maintenance, transactions, or other services will be outlined in the fee schedule.\n'
+            'Account Closure: The bank reserves the right to close your account for inactivity, fraud, or violation of terms with prior notice.\n\n'
+            '2. Transfers\n'
+            'Internal Transfers: Transfers between accounts within the bank are processed instantly unless otherwise specified.\n'
+            'External Transfers: Transfers to accounts outside the bank are subject to processing times, fees, and currency conversion rates.\n'
+            'Limits: Daily and monthly transfer limits apply. These limits may vary based on your account type or verification status.\n'
+            'Errors and Disputes: If you notice an error in a transfer, you must notify the bank within 30 days. The bank will investigate and resolve the issue per regulatory guidelines.\n'
+            'Reversal Policy: The bank may reverse unauthorized or incorrect transactions upon investigation.',
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 Widget createInfo() {
   bool v = false;
   return Padding(

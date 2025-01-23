@@ -14,8 +14,8 @@ class ServicePage extends StatelessWidget {
           children: [
             // Background pattern
             Positioned.fill(
-              child: Image.network(
-                'https://dashboard.codeparrot.ai/api/assets/Z4y-br9JV5SvYOjo',
+              child: Image.asset(
+                'assets/images/background.png',
                 fit: BoxFit.cover,
               ),
             ),
@@ -49,7 +49,7 @@ class ServicePage extends StatelessWidget {
                       ServiceCard(
                         backgroundColor: const Color(0x40000000),
                         icon:
-                            'https://dashboard.codeparrot.ai/api/assets/Z4y-br9JV5SvYOjq',
+                            'assets/images/transfer.png',
                         title: 'Transfer',
                         subtitle: 'between accounts',
                         titleColor: Colors.black,
@@ -66,8 +66,7 @@ class ServicePage extends StatelessWidget {
                       // Budget Card
                       ServiceCard(
                         backgroundColor: const Color(0x401593E4),
-                        icon:
-                            'https://dashboard.codeparrot.ai/api/assets/Z4y-br9JV5SvYOjr',
+                        icon: 'assets/images/budget.png',
                         title: 'Budget',
                         titleColor: const Color(0xFF1593E4),
                         onTap: () {
@@ -79,7 +78,7 @@ class ServicePage extends StatelessWidget {
                       ServiceCard(
                         backgroundColor: const Color(0x409E59FF),
                         icon:
-                            'https://dashboard.codeparrot.ai/api/assets/Z4y-br9JV5SvYOjs',
+                            'assets/images/friend.png',
                         title: 'Get 10 KD by\nreferring a friend',
                         titleColor: const Color(0xFF9E59FF),
                         onTap: () {
@@ -118,7 +117,7 @@ class ServicePage extends StatelessWidget {
                       ServiceCard(
                         backgroundColor: const Color(0x40F78F1E),
                         icon:
-                            'https://dashboard.codeparrot.ai/api/assets/Z4y-br9JV5SvYOjt',
+                            'assets/images/contact.png',
                         title: 'Contact us',
                         titleColor: const Color(0xFFF78F1E),
                         onTap: () {
@@ -300,7 +299,7 @@ class _ServiceCardState extends State<ServiceCard>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
-              child: Image.network(
+              child: Image.asset(
                 widget.icon,
                 width: 64,
                 height: 64,

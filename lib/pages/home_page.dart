@@ -64,11 +64,11 @@ class _HomePageState extends State<HomePage> {
                     //app bar
                     Container(
                       padding: const EdgeInsets.only(left: 10),
-                      child: const ListTile(
-                        leading: Icon(Icons.person),
-                        title: Text("Good Morning", style: TextStyle(fontSize: 10, color: Color.fromRGBO(1, 104, 170, 1)),),
-                        subtitle: Text("Hussain", style: TextStyle(fontSize: 20, color: Color.fromRGBO(1, 104, 170, 1), fontWeight: FontWeight.bold),),
-                        trailing: Icon(Icons.notifications),
+                      child: ListTile(
+                        leading: const Icon(Icons.person),
+                        title: Text(_getGreeting(), style: const TextStyle(fontSize: 10, color: Color.fromRGBO(1, 104, 170, 1)),),
+                        subtitle: const Text("Hussain", style: TextStyle(fontSize: 20, color: Color.fromRGBO(1, 104, 170, 1), fontWeight: FontWeight.bold),),
+                        trailing: const Icon(Icons.notifications),
                       ),
                     ),
                             
@@ -81,6 +81,12 @@ class _HomePageState extends State<HomePage> {
                           if (dataSnapshot.connectionState == ConnectionState.waiting) return const CircularProgressIndicator();
                           return Consumer<VCardsProvider>(
                             builder: (context, provider, _) {
+                              if (provider.cards.isEmpty) {
+                                return const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text("No Cards found"),
+                                );
+                              }
                               return GestureDetector(
                                 onTap: () {
                                   // Handle balance card tap here
@@ -202,7 +208,17 @@ class _HomePageState extends State<HomePage> {
                           return Consumer<BudgetProvider>(
                             builder: (context, provider, _) {
                               // print(provider.budget);
-                              if (provider.budget.isEmpty) return const Text("Nothing");
+                              if (provider.budget.isEmpty) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 100),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      context.push('/setupBudget');
+                                    }, 
+                                    child: const Text("Setup Budget")
+                                  ),
+                                );
+                              }
                               return PieChart(
                                 dataMap: {
                                   "Online Shopping": provider.budget[0]["limit"].toDouble(),
@@ -320,51 +336,7 @@ class _HomePageState extends State<HomePage> {
                     }
                   ),
                   const SizedBox(height: 50,),
-                  if (_isFabClicked)
-                    BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                      child: Container(
-                        color: Colors.black.withOpacity(0.5),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const SizedBox(
-                                  height:
-                                      100), // Adjust this value to move the buttons up or down
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Handle Send Via WAMD button tap
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 12),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                ),
-                                child: const Text('Send Via WAMD'),
-                              ),
-                              const SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Handle Transfer button tap
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 12),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                ),
-                                child: const Text('Transfer'),
-                              ),
-                              const SizedBox(height: 80),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                  
                   ],
                 )
               )
@@ -373,13 +345,42 @@ class _HomePageState extends State<HomePage> {
         ),
         bottomNavigationBar: const CustomBottomNavigationBar(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: CustomFloatingActionButton(
+        floatingActionButton: FloatingActionButton(
           onPressed: () {
-            setState(() {
-              _isFabClicked = !_isFabClicked;
-            });
+            showDialog(
+              context: context, 
+              builder: (context) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        context.push('/transfer');
+                      }, 
+                      child: const Text("Transfer")
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.push('/link');
+                      }, 
+                      child: const Text("Request Link")
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.push('/wamd');
+                      }, 
+                      child: const Text("WAMD")
+                    ),
+                    const SizedBox(height: 150,),
+                  ],
+                );
+              }
+            );
           },
-        ),
+          shape: const CircleBorder(),
+          backgroundColor: Colors.blue,
+          child: const Icon(Icons.send, color: Colors.white),
+        )
     );
   }
 }
