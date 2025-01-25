@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend/models/card.dart';
+import 'package:frontend/models/transaction.dart';
+import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/providers/card_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
 import 'package:local_auth/local_auth.dart';
+import 'package:provider/provider.dart';
 
 class CardDetailsPage extends StatefulWidget {
   @override
@@ -14,10 +20,10 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
   final LocalAuthentication auth = LocalAuthentication();
 
   final List<Transaction> _transactions = [
-    Transaction('Talabat transaction', 'March 31, 2022', -100.00),
-    Transaction('Salary Deposit', 'March 30, 2022', 1500.00),
-    Transaction('Grocery Store', 'March 29, 2022', -45.00),
-    Transaction('Online Shopping', 'March 28, 2022', -120.00),
+    Transaction(name: 'Talabat transaction', date: 'March 31, 2022', amount: -100.00, category: ""),
+    Transaction(name: 'Salary Deposit', date: 'March 30, 2022', amount:  1500.00, category: ""),
+    Transaction(name: 'Grocery Store', date: 'March 29, 2022', amount: -45.00, category: ""),
+    Transaction(name: 'Online Shopping', date: 'March 28, 2022', amount: -120.00, category: ""),
   ];
 
   List<Transaction> get filteredTransactions {
@@ -32,13 +38,14 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
           ),
         ),
         child: SafeArea(
+          bottom: false,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -46,36 +53,40 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios, color: Colors.blue),
+                  icon: const Icon(Icons.arrow_back_ios, color: Colors.blue),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
 
               // Card Section
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _showCardBack = !_showCardBack;
-                    });
-                  },
-                  child: TweenAnimationBuilder(
-                    tween:
-                        Tween<double>(begin: 0, end: _showCardBack ? 180 : 0),
-                    duration: Duration(milliseconds: 300),
-                    builder: (context, double value, child) {
-                      return Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.identity()
-                          ..setEntry(3, 2, 0.001)
-                          ..rotateY(value * math.pi / 180),
-                        child:
-                            value < 90 ? _buildCardFront() : _buildCardBack(),
-                      );
-                    },
-                  ),
-                ),
+              Consumer<VCardsProvider>(
+                builder: (context, provider, _) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _showCardBack = !_showCardBack;
+                        });
+                      },
+                      child: TweenAnimationBuilder(
+                        tween:
+                            Tween<double>(begin: 0, end: _showCardBack ? 180 : 0),
+                        duration: const Duration(milliseconds: 300),
+                        builder: (context, double value, child) {
+                          return Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.identity()
+                              ..setEntry(3, 2, 0.001)
+                              ..rotateY(value * math.pi / 180),
+                            child:
+                                value < 90 ? _buildCardFront(card: provider.cards[0]) : _buildCardBack(cvv: provider.cards[0].cvv),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                }
               ),
 
               // Action Buttons
@@ -86,12 +97,13 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                   children: [
                     _buildActionButton('Transfer', Icons.swap_horiz, () {
                       // Handle Transfer action
+                      context.push('/transfer');
                     }),
                     _buildActionButton('Lock', Icons.lock, () {
                       _authenticateAndShowLockDialog();
-                      print("jjjjjjjj");
+                      // print("jjjjjjjj");
                     }),
-                    _buildActionButton('Change Pen', Icons.edit, () {
+                    _buildActionButton('Change Pin', Icons.edit, () {
                       // Handle Change Pen action
                     }),
                     _buildActionButton('Withdraw', Icons.account_balance_wallet,
@@ -111,7 +123,7 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                       end: Alignment.bottomCenter,
                       colors: [Colors.blue.shade400, Colors.blue.shade700],
                     ),
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
                     ),
@@ -119,8 +131,8 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
                         child: Text(
                           'TRANSACTIONS',
                           style: TextStyle(
@@ -138,8 +150,8 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: TextField(
-                            style: TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
+                            style: const TextStyle(color: Colors.white),
+                            decoration: const InputDecoration(
                               hintText: 'Search',
                               hintStyle: TextStyle(color: Colors.white70),
                               prefixIcon:
@@ -207,21 +219,21 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Lock Card'),
-          content: Text('Are you sure you want to lock your card?'),
+          title: const Text('Lock Card'),
+          content: const Text('Are you sure you want to lock your card?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
                 // Handle lock card action
                 Navigator.of(context).pop();
               },
-              child: Text('Lock'),
+              child: const Text('Lock'),
             ),
           ],
         );
@@ -229,7 +241,7 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
     );
   }
 
-  Widget _buildCardFront() {
+  Widget _buildCardFront({required VCard card}) {
     return Container(
       width: double.infinity,
       height: 220,
@@ -246,37 +258,37 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
-              '100 KWD',
-              style: TextStyle(
+              '${card.balance} KWD',
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Hussain Alqallaf',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
-              '**** **** **** ****',
-              style: TextStyle(
+              card.cardNumber.toString(),
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 letterSpacing: 2,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                const Row(
                   children: [
                     Icon(Icons.crop_free, color: Colors.white),
                     SizedBox(width: 8),
@@ -290,8 +302,8 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                   ],
                 ),
                 Text(
-                  '**/**',
-                  style: TextStyle(
+                  card.expiryDate,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                   ),
@@ -304,7 +316,7 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
     );
   }
 
-  Widget _buildCardBack() {
+  Widget _buildCardBack({required int cvv}) {
     return Transform(
       alignment: Alignment.center,
       transform: Matrix4.identity()..rotateY(math.pi),
@@ -312,7 +324,7 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
         width: double.infinity,
         height: 220,
         decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color: Colors.grey[300],
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -321,19 +333,19 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
             Container(
               color: Colors.black,
               height: 50,
-              margin: EdgeInsets.symmetric(vertical: 20),
+              margin: const EdgeInsets.symmetric(vertical: 20),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     color: Colors.white,
                     child: Text(
-                      'CVV: 123',
-                      style: TextStyle(
+                      'CVV: $cvv',
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -380,14 +392,6 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
       ),
     );
   }
-}
-
-class Transaction {
-  final String name;
-  final String date;
-  final double amount;
-
-  Transaction(this.name, this.date, this.amount);
 }
 
 class TransactionCard extends StatelessWidget {

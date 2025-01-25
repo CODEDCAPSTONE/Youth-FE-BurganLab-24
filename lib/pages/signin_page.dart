@@ -121,8 +121,10 @@ class SignInPage extends StatelessWidget {
                       _formKey.currentState!.save();
                       var response = await context.read<AuthProvider>().signin(username: username, password: password);
                       print(response);
-                      if (response['error'] != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['error']!)));
+                      if (response['errors'] != null) {
+                        for (var error in response['errors']) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error['message'])));
+                        }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sign in successfully")));
                         // await context.read<AuthProvider>().initAuth();

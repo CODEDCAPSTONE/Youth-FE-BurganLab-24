@@ -14,35 +14,42 @@ void main() {
   ));
 }
 
-List<Widget> forms = [
-  createInfo(),
+final TextEditingController nameController = TextEditingController();
+final TextEditingController phoneController = TextEditingController();
+final TextEditingController emailController = TextEditingController();
+final TextEditingController otpController = TextEditingController();
+final TextEditingController civilController = TextEditingController();
+final TextEditingController confirmPasswordController = TextEditingController();
+
+List<Widget> forms(BuildContext context) => [
+  createInfo(context),
   createForm(
     title: 'What\'s your name?',
     subtitle: 'Tell us your prefered name',
-    input: 'Name'
+    input: 'Name',
+    controller: nameController
   ),
   createPhoneNumberForm(
     title: 'What’s your phone number?',
     subtitle: 'We’ll send you an OTP code to verify it',
-    input: 'XXXXXXXX'
+    input: 'XXXXXXXX',
   ),
   createForm(
     title: 'What\'s your email address?',
     subtitle: 'We’ll send you an OTP code to verify it',
-    input: 'Email'
+    input: 'Email',
+    controller: emailController
   ),
   createOTP(),
   createForm(
     title: 'Enter Civil ID number',
     subtitle: 'We’ll send a request in Kuwait Mobile ID \nPlease Approve it ',
-    input: 'Civil ID Number'
+    input: 'Civil ID Number',
+    controller: civilController
   ),
   createPasswordForm(),
   createComplete()
 ];
-
-final _formKey = GlobalKey<FormState>();
-final TextEditingController inputController = TextEditingController();
 
 List<String> info = [];
 
@@ -53,17 +60,26 @@ class StepsPage extends StatefulWidget{
   State<StepsPage> createState() => _StepsPageState();
 }
 
-class _StepsPageState extends State<StepsPage> {
+class _StepsPageState extends State<StepsPage> with SingleTickerProviderStateMixin {
   int index = 0;
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: const Color(0xFF2B69C7),
       appBar: AppBar(
         forceMaterialTransparency: true,
         leading: IconButton(
-          onPressed: () {}, 
+          onPressed: () {
+            setState(() {
+              if (index > 0) {
+                index--;
+              } else {
+                context.pop();
+              }
+            });
+          }, 
           icon: const Icon(Icons.arrow_back_ios),
           color: Colors.white,
         ),
@@ -96,10 +112,24 @@ class _StepsPageState extends State<StepsPage> {
             child: Stack(
               children: [
               AnimatedSwitcher(
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  final offsetAnimation = Tween<Offset>(
+                    begin: const Offset(-1.0, 0.0),
+                    end: const Offset(0.0, 0.0),
+                  ).animate(animation);
+
+                  return SlideTransition(
+                    position: offsetAnimation,
+                    child: child,
+                  );
+                },
                 duration: const Duration(milliseconds: 500),
                 child: Container(
                   key: ValueKey(index),
-                  child: forms[index],
+                  child: Form(
+                    key: formKey,
+                    child: forms(context)[index]
+                  ),
                 )
               ),
               // createOTP(),
@@ -113,10 +143,10 @@ class _StepsPageState extends State<StepsPage> {
                           height: 56,
                           child: ElevatedButton(
                             onPressed: () async {
-                              if (index == forms.length-1) GoRouter.of(context).go('/home');
-                              if (!_formKey.currentState!.validate()) return;
-                              _formKey.currentState!.save();
-                              inputController.clear();
+                              if (index == forms(context).length-1) GoRouter.of(context).go('/home');
+                              if (!formKey.currentState!.validate()) return;
+                              formKey.currentState!.save();
+                              // inputController.clear();
                               if (index == 5) {
                                 await showDialog(
                                   context: context,
@@ -168,7 +198,7 @@ class _StepsPageState extends State<StepsPage> {
                                 }
                               }
 
-                              if (index < forms.length-1) {
+                              if (index < forms(context).length-1) {
                                 setState(() {
                                   index++;
                                 });
@@ -203,7 +233,7 @@ class _StepsPageState extends State<StepsPage> {
 }
 
 
-Widget createForm({required String title, required String subtitle, required String input}) {
+Widget createForm({required String title, required String subtitle, required String input, required TextEditingController controller}) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
     child: Column(
@@ -225,29 +255,26 @@ Widget createForm({required String title, required String subtitle, required Str
           ),
         ),
         const SizedBox(height: 8),
-        Form(
-          key: _formKey,
-          child: TextFormField(
-            controller: inputController,
-            decoration: InputDecoration(
-              hintText: input,  //'Name'
-              // filled: true,
-              // fillColor: Colors.grey,
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade100),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
+        TextFormField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: input,  //'Name'
+            // filled: true,
+            // fillColor: Colors.grey,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey.shade100),
+              borderRadius: BorderRadius.circular(12.0),
             ),
-            keyboardType: TextInputType.text,
-            validator: (value) {
-              if (value!.isEmpty) return "fill the blank";
-              return null;
-            },
-            onSaved: (newValue) {
-              info.add(newValue!);
-              // print(newValue);
-            },
           ),
+          keyboardType: TextInputType.text,
+          validator: (value) {
+            if (value!.isEmpty) return "fill the blank";
+            return null;
+          },
+          onSaved: (newValue) {
+            info.add(newValue!);
+            // print(newValue);
+          },
         ),
       ],
     ),
@@ -288,7 +315,7 @@ void _showTermsAndConditions(BuildContext context) {
   );
 }
 
-Widget createInfo() {
+Widget createInfo(BuildContext context) {
   bool v = false;
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -315,39 +342,48 @@ Widget createInfo() {
         const Divider(),
         const Text('I not politically exposed person', style: TextStyle(fontSize: 16),),
         const SizedBox(height: 300,),
-        Form(
-          key: _formKey,
-          child: FormField(
-            // forceErrorText: "please check the box",
-            initialValue: false,
-            builder: (FormFieldState<bool> state) { 
-              return CheckboxListTile(
-                dense: state.hasError,
-                title: const Row(
-                  children: [
-                    Text('Agree to ', style: TextStyle(fontSize: 16),),
-                    Text('Terms & Conditions above', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                  ],
-                ),
-                value: state.value,
-                onChanged: state.didChange,
-                subtitle: state.hasError
-                    ? Builder(
-                        builder: (BuildContext context) => Text(
-                          state.errorText ?? "",
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.error),
-                        ),
-                      )
-                    : null,
-                controlAffinity: ListTileControlAffinity.leading,
-              );
-            },
-            validator: (value) {
-              if (value != true) return("please check the box");
-              return null;
-            },
-          )
+        FormField(
+          // forceErrorText: "please check the box",
+          initialValue: false,
+          builder: (FormFieldState<bool> state) { 
+            return CheckboxListTile(
+              dense: state.hasError,
+              title: Row(
+                children: [
+                  const Text('Agree to ', style: TextStyle(fontSize: 16),),
+                  GestureDetector(
+                    onTap: () {
+                      _showTermsAndConditions(context);
+                    },
+                    child: const Text(
+                      'Terms & Conditions above', 
+                      style: TextStyle(
+                        fontSize: 16, 
+                        fontWeight: FontWeight.bold, 
+                        decoration: TextDecoration.underline
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              value: state.value,
+              onChanged: state.didChange,
+              subtitle: state.hasError
+                  ? Builder(
+                      builder: (BuildContext context) => Text(
+                        state.errorText ?? "",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error),
+                      ),
+                    )
+                  : null,
+              controlAffinity: ListTileControlAffinity.leading,
+            );
+          },
+          validator: (value) {
+            if (value != true) return("please check the box");
+            return null;
+          },
         ),
       ],
     ),
@@ -356,7 +392,7 @@ Widget createInfo() {
 
 Widget createPhoneNumberForm({required String title, required String subtitle, required String input}) {
   return Padding(
-    padding: const EdgeInsets.all(24.0),
+    padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -376,33 +412,30 @@ Widget createPhoneNumberForm({required String title, required String subtitle, r
           ),
         ),
         const SizedBox(height: 8),
-        Form(
-          key: _formKey,
-          child: TextFormField(
-            controller: inputController,
-            decoration: InputDecoration(
-              hintText: input,
-              // filled: true,
-              // fillColor: Colors.grey,
-              prefixIcon: Container(
-                padding: const EdgeInsets.all(16.0),
-                child: const Text('+965', style: TextStyle(fontSize: 16, color: Colors.grey),)
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade100),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
+        TextFormField(
+          controller: phoneController,
+          decoration: InputDecoration(
+            hintText: input,
+            // filled: true,
+            // fillColor: Colors.grey,
+            prefixIcon: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: const Text('+965', style: TextStyle(fontSize: 16, color: Colors.grey),)
             ),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value!.isEmpty) return "fill the blank";
-              return null;
-            },
-            onSaved: (newValue) {
-              info.add(newValue!);
-              // print(newValue);
-            },
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey.shade100),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
           ),
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value!.isEmpty) return "fill the blank";
+            return null;
+          },
+          onSaved: (newValue) {
+            info.add(newValue!);
+            // print(newValue);
+          },
         ),
       ],
     ),
@@ -425,28 +458,25 @@ Widget createOTP() {
           ),
         ),
         const SizedBox(height: 8),
-        Form(
-          key: _formKey,
-          child: TextFormField(
-            controller: inputController,
-            decoration: InputDecoration(
-              hintText: 'OTP',
-              // filled: true,
-              // fillColor: Colors.grey,
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade100),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
+        TextFormField(
+          controller: otpController,
+          decoration: InputDecoration(
+            hintText: 'OTP',
+            // filled: true,
+            // fillColor: Colors.grey,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey.shade100),
+              borderRadius: BorderRadius.circular(12.0),
             ),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value!.isEmpty) return "fill the blank";
-              return null;
-            },
-            onSaved: (newValue) {
-              // username = newValue!;
-            },
           ),
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value!.isEmpty) return "fill the blank";
+            return null;
+          },
+          onSaved: (newValue) {
+            // username = newValue!;
+          },
         ),
         const SizedBox(height: 16),
         const Text(
@@ -494,64 +524,61 @@ Widget createPasswordForm() {
   final TextEditingController passwordController = TextEditingController();
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
-    child: Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Set a password',  //title  'What\'s your name?'
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Set a password',  //title  'What\'s your name?'
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: passwordController,
+          decoration: InputDecoration(
+            hintText: 'Password',
+            // filled: true,
+            // fillColor: Colors.grey,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey.shade100),
+              borderRadius: BorderRadius.circular(12.0),
             ),
           ),
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: passwordController,
-            decoration: InputDecoration(
-              hintText: 'Password',
-              // filled: true,
-              // fillColor: Colors.grey,
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade100),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
+          keyboardType: TextInputType.text,
+          validator: (value) {
+            if (value!.isEmpty) return "fill the blank";
+            return null;
+          },
+          onSaved: (newValue) {
+            // username = newValue!;
+          },
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          controller: confirmPasswordController,
+          decoration: InputDecoration(
+            hintText: 'Confirm password',  //'Name'
+            // filled: true,
+            // fillColor: Colors.grey,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey.shade100),
+              borderRadius: BorderRadius.circular(12.0),
             ),
-            keyboardType: TextInputType.text,
-            validator: (value) {
-              if (value!.isEmpty) return "fill the blank";
-              return null;
-            },
-            onSaved: (newValue) {
-              // username = newValue!;
-            },
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: inputController,
-            decoration: InputDecoration(
-              hintText: 'Confirm password',  //'Name'
-              // filled: true,
-              // fillColor: Colors.grey,
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade100),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-            ),
-            keyboardType: TextInputType.text,
-            validator: (value) {
-              if (value!.isEmpty) return "fill the blank";
-              else if (value != passwordController.text) return "Password does not match";
-              return null;
-            },
-            onSaved: (newValue) {
-              // username = newValue!;
-              info.add(newValue!);
-            },
-          ),
-        ],
-      ),
+          keyboardType: TextInputType.text,
+          validator: (value) {
+            if (value!.isEmpty) return "fill the blank";
+            else if (value != passwordController.text) return "Password does not match";
+            return null;
+          },
+          onSaved: (newValue) {
+            // username = newValue!;
+            info.add(newValue!);
+          },
+        ),
+      ],
     ),
   );
 }

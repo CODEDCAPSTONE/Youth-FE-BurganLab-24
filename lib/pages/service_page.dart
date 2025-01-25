@@ -22,8 +22,8 @@ class ServicePage extends StatelessWidget {
             Column(
               children: [
                 // Services title
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
+                const Padding(
+                  padding: EdgeInsets.only(top: 50),
                   child: Text(
                     'Services',
                     style: TextStyle(
@@ -226,14 +226,14 @@ class ServiceCard extends StatefulWidget {
   final VoidCallback onTap;
 
   const ServiceCard({
-    Key? key,
+    super.key,
     required this.backgroundColor,
     required this.icon,
     required this.title,
     this.subtitle,
     required this.titleColor,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   _ServiceCardState createState() => _ServiceCardState();

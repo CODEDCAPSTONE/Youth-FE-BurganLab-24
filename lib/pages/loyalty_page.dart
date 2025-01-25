@@ -21,10 +21,10 @@ class LoyaltyPage extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(
-                'https://dashboard.codeparrot.ai/api/assets/Z44rHHTr0Kgj1ua-'),
+            image: AssetImage(
+                'assets/images/background.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -37,7 +37,7 @@ class LoyaltyPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
+                    const Center(
                       child: Text(
                         'Loyalty',
                         style: TextStyle(
@@ -48,8 +48,8 @@ class LoyaltyPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Exclusive Offers',
                       style: TextStyle(
                         fontFamily: 'Inter',
@@ -58,10 +58,10 @@ class LoyaltyPage extends StatelessWidget {
                         color: Color(0xFF0168aa),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    ExclusiveOffersSection(),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 10),
+                    const ExclusiveOffersSection(),
+                    const SizedBox(height: 20),
+                    const Text(
                       'Part-Time Job Offers',
                       style: TextStyle(
                         fontFamily: 'Inter',
@@ -70,10 +70,10 @@ class LoyaltyPage extends StatelessWidget {
                         color: Color(0xFF0168aa),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    PartTimeJobOffersSection(),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 10),
+                    const PartTimeJobOffersSection(),
+                    const SizedBox(height: 20),
+                    const Text(
                       'Upcoming Events',
                       style: TextStyle(
                         fontFamily: 'Inter',
@@ -82,7 +82,7 @@ class LoyaltyPage extends StatelessWidget {
                         color: Color(0xFF0168aa),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     UpcomingEventsSection(),
                   ],
                 ),
@@ -106,7 +106,7 @@ class ExclusiveOffersSection extends StatefulWidget {
   final List<Map<String, String>> offers;
 
   const ExclusiveOffersSection({
-    Key? key,
+    super.key,
     this.offers = const [
       {
         'imageUrl':
@@ -119,7 +119,7 @@ class ExclusiveOffersSection extends StatefulWidget {
         'discount': '10% off',
       },
     ],
-  }) : super(key: key);
+  });
 
   @override
   _ExclusiveOffersSectionState createState() => _ExclusiveOffersSectionState();
@@ -188,7 +188,7 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
             color: Colors.black.withOpacity(0.1),
             spreadRadius: 1,
             blurRadius: 10,
-            offset: Offset(0, 5),
+            offset: const Offset(0, 5),
           ),
         ],
       ),
@@ -257,7 +257,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minWidth: 360,
       ),
       child: Column(
@@ -268,14 +268,14 @@ class PartTimeJobOffersSection extends StatelessWidget {
             title: 'Burgan HQ',
             details: 'Details',
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildJobCard(
             image:
                 'https://dashboard.codeparrot.ai/api/assets/Z44smHTr0Kgj1ubD',
             title: 'Burgan HQ',
             details: 'Details',
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildJobCard(
             image:
                 'https://dashboard.codeparrot.ai/api/assets/Z44smHTr0Kgj1ubE',
@@ -311,23 +311,23 @@ class PartTimeJobOffersSection extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF242424),
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
                 details,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -336,7 +336,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
               ),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
@@ -346,7 +346,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
-            child: Text(
+            child: const Text(
               'Read more',
               style: TextStyle(
                 fontFamily: 'Inter',

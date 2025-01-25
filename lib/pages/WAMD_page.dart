@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/widgets/AccountDropdown.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -121,9 +122,16 @@ class WamdPage extends StatelessWidget {
                                   return SimpleDialog(
                                     title: const Text('Success', style: TextStyle(fontSize: 30),),
                                     children: [
-                                      const Padding(
-                                        padding: EdgeInsets.all(10),
-                                        child: Icon(Icons.check_circle_outline, size: 100, color: Colors.green),
+                                      Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Lottie.network(
+                                          'https://assets10.lottiefiles.com/packages/lf20_xlkxtmul.json',
+                                          width: 250,
+                                          height: 250,
+                                          fit: BoxFit.cover,
+                                          repeat: false,
+                                        ),
+                                        // Icon(Icons.check_circle_outline, size: 100, color: Colors.green),
                                       ),
                                       Container(
                                         margin: const EdgeInsets.symmetric(horizontal: 10),

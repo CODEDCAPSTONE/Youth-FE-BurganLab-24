@@ -28,7 +28,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
-        ChangeNotifierProvider<GoalsProvider>(create: (_) => GoalsProvider()),
+        // ChangeNotifierProvider<GoalsProvider>(create: (_) => GoalsProvider()),
         ChangeNotifierProvider<VCardsProvider>(create: (_) => VCardsProvider()),
         ChangeNotifierProvider<TargetsProvider>(create: (_) => TargetsProvider()),
         ChangeNotifierProvider<BudgetProvider>(create: (_) => BudgetProvider()),
@@ -88,8 +88,8 @@ class MainApp extends StatelessWidget {
         path: '/addTarget',
         builder: (context, state) => AddTargetPage(),
       ),
-      GoRoute(path: '/service', builder: (context, state) => ServicePage()),
-      GoRoute(path: '/more', builder: (context, state) => SettingsPage()),
+      GoRoute(path: '/service', builder: (context, state) => const ServicePage()),
+      GoRoute(path: '/more', builder: (context, state) => const SettingsPage()),
 
       GoRoute(path: '/loyalty', builder: (context, state) => LoyaltyPage()),
 

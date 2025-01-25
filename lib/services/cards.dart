@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:frontend/models/card.dart';
+import 'package:frontend/models/transaction.dart';
 import 'package:frontend/services/client.dart';
 
 class DioClient {
@@ -28,10 +29,6 @@ class DioClient {
   Future<VCard> createVCard({required VCard card}) async {
     late VCard retrievedVCard;
     try {
-      FormData data = FormData.fromMap({
-        "name": card.name,
-        // "amount": card.amount,
-      });
       // print(data.fields);
       Response response = await Client.dio.post('/cards', data: {"name": card.name, "limit": card.limit});
       // print(response.data);
@@ -65,5 +62,26 @@ class DioClient {
     } on DioException catch (error) {
       print(error);
     }
+  }
+
+  Future<List<Transaction>> getTransactions() async {
+    List<Transaction> transactions = [];
+
+    try {
+      Response response = await Client.dio.get('/cards');
+      // print((response.data as List));
+      transactions = (response.data as List).map((card) {
+        // print(VCard.fromJson(card).name);
+        return Transaction.fromJson(card);
+      }).toList();
+      // print(cards[0].name);
+    } on DioException catch (error) {
+      print(error.type);
+      if (error.response?.statusCode == 404 || error.type == DioExceptionType.connectionError) {
+        throw("No Connection");
+      }
+      throw(error.response?.data['errors'][0]["message"]);
+    }
+    return transactions;
   }
 }

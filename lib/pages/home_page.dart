@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                               return GestureDetector(
                                 onTap: () {
                                   // Handle balance card tap here
-                                  GoRouter.of(context).push('/main', extra: 0);
+                                  GoRouter.of(context).push('/cardDetails');
                                 },
                                 child: Card(
                                   elevation: 5,
@@ -356,18 +356,21 @@ class _HomePageState extends State<HomePage> {
                     ElevatedButton(
                       onPressed: () {
                         context.push('/transfer');
+                        Navigator.pop(context);
                       }, 
                       child: const Text("Transfer")
                     ),
                     ElevatedButton(
                       onPressed: () {
                         context.push('/link');
+                        Navigator.pop(context);
                       }, 
                       child: const Text("Request Link")
                     ),
                     ElevatedButton(
                       onPressed: () {
                         context.push('/wamd');
+                        Navigator.pop(context);
                       }, 
                       child: const Text("WAMD")
                     ),
