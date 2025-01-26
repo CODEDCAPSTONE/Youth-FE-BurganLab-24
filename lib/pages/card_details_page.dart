@@ -19,20 +19,22 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
   String _searchQuery = '';
   final LocalAuthentication auth = LocalAuthentication();
 
-  final List<Transaction> _transactions = [
-    Transaction(name: 'Talabat transaction', date: 'March 31, 2022', amount: -100.00, category: ""),
-    Transaction(name: 'Salary Deposit', date: 'March 30, 2022', amount:  1500.00, category: ""),
-    Transaction(name: 'Grocery Store', date: 'March 29, 2022', amount: -45.00, category: ""),
-    Transaction(name: 'Online Shopping', date: 'March 28, 2022', amount: -120.00, category: ""),
-  ];
+  // final List<Transaction> _transactions = [
+  //   Transaction(name: 'Talabat transaction', date: 'March 31, 2024', amount: -100.00, category: ""),
+  //   Transaction(name: 'Salary Deposit', date: 'March 30, 2024', amount:  1500.00, category: ""),
+  //   Transaction(name: 'Grocery Store', date: 'March 29, 2024', amount: -45.00, category: ""),
+  //   Transaction(name: 'Online Shopping', date: 'March 28, 2024', amount: -120.00, category: ""),
+  // ];
 
-  List<Transaction> get filteredTransactions {
-    return _transactions.where((transaction) {
-      return transaction.name
-          .toLowerCase()
-          .contains(_searchQuery.toLowerCase());
-    }).toList();
-  }
+  // final List<Transaction> _transactions = VCardsProvider().transactions;
+
+  // List<Transaction> get filteredTransactions {
+  //   return _transactions.where((transaction) {
+  //     return transaction.name
+  //         .toLowerCase()
+  //         .contains(_searchQuery.toLowerCase());
+  //   }).toList();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -171,13 +173,22 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: ListView.builder(
-                            itemCount: filteredTransactions.length,
-                            itemBuilder: (context, index) {
-                              return TransactionCard(
-                                transaction: filteredTransactions[index],
+                          child: Consumer<VCardsProvider>(
+                            builder: (context, provider, _) {
+                              List transactions = provider.transactions.where((transaction) {
+                                return transaction.name
+                                    .toLowerCase()
+                                    .contains(_searchQuery.toLowerCase());
+                              }).toList();
+                              return ListView.builder(
+                                itemCount: transactions.length,
+                                itemBuilder: (context, index) {
+                                  return TransactionCard(
+                                    transaction: transactions[index],
+                                  );
+                                },
                               );
-                            },
+                            }
                           ),
                         ),
                       ),

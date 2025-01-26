@@ -8,12 +8,16 @@ import 'package:frontend/services/offers_and_jobs.dart';
 class ExtraProvider extends ChangeNotifier {
   List<Offer> offers = [];
   List<Job> jobs = [];
+  bool already = false;
 
   Future<List<Offer>> getOffers() async {
+    // print("Getting offers");
     try {
-      offers = await ExtraServices().getOffers();
-      // print(cards[0].name);
-      // print(cards[0].expiryDate);
+      if (!already) {
+        offers = await ExtraServices().getOffers();
+        already = true;
+      }
+      // print(offers);
     } on Exception catch (_) {
       rethrow;
     }

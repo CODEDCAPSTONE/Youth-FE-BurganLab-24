@@ -4,6 +4,7 @@ import 'package:frontend/pages/add_target_page.dart';
 import 'package:frontend/pages/card_details_page.dart';
 import 'package:frontend/pages/budget_details.dart';
 import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/pages/job_details_page.dart';
 import 'package:frontend/pages/loyalty_page.dart';
 import 'package:frontend/pages/more_page.dart';
 import 'package:frontend/pages/register_page.dart';
@@ -18,7 +19,8 @@ import 'package:frontend/pages/transfer_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/budget_provider.dart';
 import 'package:frontend/providers/card_provider.dart';
-import 'package:frontend/providers/goals_provider.dart';
+import 'package:frontend/providers/extra_provider.dart';
+// import 'package:frontend/providers/goals_provider.dart';
 import 'package:frontend/providers/targets_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +34,7 @@ void main() {
         ChangeNotifierProvider<VCardsProvider>(create: (_) => VCardsProvider()),
         ChangeNotifierProvider<TargetsProvider>(create: (_) => TargetsProvider()),
         ChangeNotifierProvider<BudgetProvider>(create: (_) => BudgetProvider()),
+        ChangeNotifierProvider<ExtraProvider>(create: (_) => ExtraProvider()),
         // ChangeNotifierProvider<RealstockProvider>(
         //     create: (_) => RealstockProvider()),
       ],
@@ -117,6 +120,10 @@ class MainApp extends StatelessWidget {
       GoRoute(
         path: '/wamd',
         builder: (context, state) => WamdPage(),
+      ),
+      GoRoute(
+        path: '/jobDetails',
+        builder: (context, state) => JobDetailsPage(),
       ),
       // GoRoute(
       //   path: '/main',

@@ -216,8 +216,8 @@ class _AddTargetPageState extends State<AddTargetPage> {
                                   await context.read<TargetsProvider>().createTarget(
                                     Target(
                                       targetName: nameController.text,
-                                      balanceTarget: amountController.text, 
-                                      totalAmount: "0", 
+                                      balanceTarget: int.parse(amountController.text), 
+                                      totalAmount: 0, 
                                       duration: selectedDuration, 
                                       income: incomeController.text
                                     )

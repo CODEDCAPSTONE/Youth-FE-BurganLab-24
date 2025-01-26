@@ -117,6 +117,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 ),
                 const Divider(color: Color(0xFFE8E8E8)),
+                _buildNavigationItem(
+                  'Income',
+                  onTap: _showTermsAndConditions,
+                  showArrow: true,
+                ),
+                const Divider(color: Color(0xFFE8E8E8)),
                 _buildLanguageSelector(),
                 const Divider(color: Color(0xFFE8E8E8)),
                 _buildNavigationItem(

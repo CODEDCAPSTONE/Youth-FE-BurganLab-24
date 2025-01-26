@@ -89,7 +89,7 @@ class TargetsPage extends StatelessWidget {
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   const Text("Balance", style: TextStyle(fontSize: 12),),
-                                                  Text('${int.parse(target.totalAmount)/int.parse(target.balanceTarget) * 100}%', style: const TextStyle(fontSize: 12),),
+                                                  Text('${target.totalAmount/target.balanceTarget * 100}%', style: const TextStyle(fontSize: 12),),
                                                 ],
                                               ),
                                               subtitle: Column(

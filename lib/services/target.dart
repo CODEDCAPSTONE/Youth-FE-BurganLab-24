@@ -5,12 +5,15 @@ import 'package:frontend/services/client.dart';
 class TargetServices {
 
   Future getTargets() async {
+    // print("getting Targets");
     List<Target> targets;
     try {
       Response response = await Client.dio.get('/targets');
+      // print(response);
       targets = (response.data as List).map((target) {
         return Target.fromJson(target);
       }).toList();
+      // print(targets);
 
     } on DioException catch (_) {
       rethrow;

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/main.dart';
+import 'package:frontend/models/offer.dart';
+import 'package:frontend/providers/extra_provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,7 +32,7 @@ class LoyaltyPage extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Stack(
+        child: const Stack(
           children: [
             SingleChildScrollView(
               child: Padding(
@@ -70,20 +74,20 @@ class LoyaltyPage extends StatelessWidget {
                         color: Color(0xFF0168aa),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    // const SizedBox(height: 10),
                     const PartTimeJobOffersSection(),
                     const SizedBox(height: 20),
-                    const Text(
-                      'Upcoming Events',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 28,
-                        color: Color(0xFF0168aa),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    UpcomingEventsSection(),
+                    // const Text(
+                    //   'Upcoming Events',
+                    //   style: TextStyle(
+                    //     fontFamily: 'Inter',
+                    //     fontWeight: FontWeight.w700,
+                    //     fontSize: 28,
+                    //     color: Color(0xFF0168aa),
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 10),
+                    // UpcomingEventsSection(),
                   ],
                 ),
               ),
@@ -161,13 +165,22 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
           offset: Offset(0, 50 * (1 - _animation.value)),
           child: Opacity(
             opacity: _animation.value,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: widget.offers
-                    .map((offer) => _buildOfferCard(offer))
-                    .toList(),
-              ),
+            child: FutureBuilder(
+              future: context.read<ExtraProvider>().getOffers(),
+              builder: (context, dataSnapshot) {
+                return Consumer<ExtraProvider>(
+                  builder: (context, provider, _) {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: provider.offers
+                            .map((offer) => _buildOfferCard(offer))
+                            .toList(),
+                      ),
+                    );
+                  }
+                );
+              }
             ),
           ),
         );
@@ -175,7 +188,7 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
     );
   }
 
-  Widget _buildOfferCard(Map<String, String> offer) {
+  Widget _buildOfferCard(Offer offer) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 5.0),
       width: 254,
@@ -200,8 +213,8 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
-            child: Image.network(
-              offer['imageUrl']!,
+            child: Image.asset(
+              'assets/images/image_placeholder.png',
               width: 254,
               height: 128,
               fit: BoxFit.cover,
@@ -214,7 +227,43 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await showDialog(
+                      context: context,
+                      barrierDismissible: false, 
+                      builder: (BuildContext context) {
+                        return SimpleDialog(
+                          title: const Text('Offer claimed', style: TextStyle(fontSize: 30),),
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Icon(Icons.check_circle_outline, size: 100, color: Colors.green),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 10),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  // elevation: 12,
+                                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                                  backgroundColor: const Color.fromRGBO(1, 104, 170, 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                ),  
+                                child: const Text("Dismiss", style: TextStyle(color: Colors.white, fontSize: 16),)
+                              ),
+                            )
+                          ],
+                        );
+                      }
+                    );
+                    // context.read<ExtraProvider>().offers.remove(offer);
+                    // print(context.read<ExtraProvider>().offers.length);
+                    // setState(() {});
+                  },
                   child: const Text(
                     'Claim',
                     style: TextStyle(
@@ -233,7 +282,7 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    offer['discount']!,
+                    "${offer.discount.toString()}% off",
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18,
@@ -256,34 +305,38 @@ class PartTimeJobOffersSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(
-        minWidth: 360,
-      ),
-      child: Column(
-        children: [
-          _buildJobCard(
-            image:
-                'https://dashboard.codeparrot.ai/api/assets/Z44sl3Tr0Kgj1ubC',
-            title: 'Burgan HQ',
-            details: 'Details',
-          ),
-          const SizedBox(height: 16),
-          _buildJobCard(
-            image:
-                'https://dashboard.codeparrot.ai/api/assets/Z44smHTr0Kgj1ubD',
-            title: 'Burgan HQ',
-            details: 'Details',
-          ),
-          const SizedBox(height: 16),
-          _buildJobCard(
-            image:
-                'https://dashboard.codeparrot.ai/api/assets/Z44smHTr0Kgj1ubE',
-            title: 'Burgan HQ',
-            details: 'Details',
-          ),
-        ],
-      ),
+    return FutureBuilder(
+      future: context.read<ExtraProvider>().getJobs(),
+      builder: (context, dataSnapshot) {
+        return Consumer<ExtraProvider>(
+          builder: (context, provider, _) {
+            return Container(
+              height: 310,
+              child: ListView.builder(
+                // shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: provider.jobs.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    // mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildJobCard(
+                        image:
+                            'https://dashboard.codeparrot.ai/api/assets/Z44sl3Tr0Kgj1ubC',  //image_placeholder
+                        title: provider.jobs[index].titleJob,
+                        details: provider.jobs[index].description,
+                        context: context
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  );
+                }
+              ),
+            );
+          }
+        );
+      }
     );
   }
 
@@ -291,6 +344,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
     required String image,
     required String title,
     required String details,
+    required BuildContext context
   }) {
     return Container(
       width: double.infinity,
@@ -301,16 +355,16 @@ class PartTimeJobOffersSection extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(image),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          // Container(
+          //   width: 40,
+          //   height: 40,
+          //   decoration: BoxDecoration(
+          //     image: DecorationImage(
+          //       image: NetworkImage(image),
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          // ),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -338,7 +392,9 @@ class PartTimeJobOffersSection extends StatelessWidget {
           ),
           const Spacer(),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              GoRouter.of(context).push('/jobDetails');
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF0168aa),
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),

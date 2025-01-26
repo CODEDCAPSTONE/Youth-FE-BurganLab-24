@@ -88,8 +88,10 @@ class _HomePageState extends State<HomePage> {
                                 );
                               }
                               return GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   // Handle balance card tap here
+                                  print(provider.cards[0].cardNumber);
+                                  await Provider.of<VCardsProvider>(context, listen: false).getTransactions(cardNumber: provider.cards[0].cardNumber);
                                   GoRouter.of(context).push('/cardDetails');
                                 },
                                 child: Card(
@@ -318,10 +320,10 @@ class _HomePageState extends State<HomePage> {
                                     height: 5,
                                     width: 10,
                                     child: LinearProgressBar(
-                                      maxSteps: int.parse(target.balanceTarget),
+                                      maxSteps: target.balanceTarget,
                                       progressType: LinearProgressBar
                                           .progressTypeLinear,
-                                      currentStep: int.parse(target.totalAmount),
+                                      currentStep: target.totalAmount,
                                       progressColor: const Color.fromRGBO(0, 221, 163, 1),
                                       backgroundColor: const Color.fromRGBO(223, 222, 222, 1),
                                       borderRadius: BorderRadius.circular(10),

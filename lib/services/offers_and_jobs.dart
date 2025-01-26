@@ -8,7 +8,9 @@ class ExtraServices {
     List<Offer> offers;
     try {
       Response response = await Client.dio.get('/offer');
+      // print(response);
       offers = (response.data as List).map((offer) {
+        // print(offer);
         return Offer.fromJson(offer);
       }).toList();
 

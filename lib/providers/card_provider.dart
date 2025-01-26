@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/card.dart';
+import 'package:frontend/models/transaction.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/services/cards.dart';
 
 class VCardsProvider extends ChangeNotifier {
   List<VCard> cards = [];
+  List<Transaction> transactions = [];
 
   Future<List<VCard>> getVCards() async {
     // print("getting cards");
@@ -40,5 +42,22 @@ class VCardsProvider extends ChangeNotifier {
     await DioClient().deleteVCard(cardId: cardId);
     cards.removeWhere((card) => card.id == cardId);
     notifyListeners();
+  }
+
+  Future<List<Transaction>> getTransactions({required int cardNumber}) async {
+    // print("getting cards");
+    // print(cards[0].isExpired);
+    try {
+      // await AuthProvider().initAuth();
+      transactions = await DioClient().getTransactions(cardNumber);
+      // print(transactions[0].category);
+      // print(cards[0].name);
+      // print(cards[0].expiryDate);
+    } on Exception catch (_) {
+      rethrow;
+    }
+    if (transactions.isEmpty) throw("No transactions");
+
+    return transactions;
   }
 }
