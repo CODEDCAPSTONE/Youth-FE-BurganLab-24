@@ -10,6 +10,7 @@ class AuthProvider extends ChangeNotifier {
   User? user;
   double? balance;
   List? transactions;
+  int? income;
 
   Future<Map<String, dynamic>> signup(Map<String, dynamic> submitedInfo) async {
     var response = await AuthServices().signup(
@@ -50,6 +51,18 @@ class AuthProvider extends ChangeNotifier {
   Future getTransactions() async {
     var response = await AuthServices().getTransactions();
     transactions = response["transactions"];
+    notifyListeners();
+  }
+
+  Future getIncome() async {
+    var response = await AuthServices().getIncome();
+    income = response["income"];
+    notifyListeners();
+  }
+
+  Future setIncome(int income) async {
+    var response = await AuthServices().setIncome(income);
+    this.income = income;
     notifyListeners();
   }
 

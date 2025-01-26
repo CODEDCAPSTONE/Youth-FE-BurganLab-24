@@ -8,6 +8,13 @@ import 'dart:math' as math;
 
 class TargetsPage extends StatelessWidget {
 
+  List colors = [
+    Colors.blueAccent,
+    Colors.redAccent,
+    Colors.cyanAccent,
+    Colors.accents
+  ];
+
   @override
   Widget build(BuildContext context) {
     var brightness = View.of(context).platformDispatcher.platformBrightness;
@@ -52,7 +59,7 @@ class TargetsPage extends StatelessWidget {
                           builder: (context, provider, _) {
                             return ListView.builder(
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: provider.targets.length,
                               itemBuilder: (context, index) {
                                 var target = provider.targets[index];
@@ -60,7 +67,7 @@ class TargetsPage extends StatelessWidget {
                                   padding: const EdgeInsets.all(10),
                                   margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                                   decoration: BoxDecoration(
-                                    color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
+                                    color: Colors.accents[math.Random().nextInt(10)],
                                     borderRadius: BorderRadius.circular(16)
                                   ),
                                   child: Column(
@@ -99,10 +106,10 @@ class TargetsPage extends StatelessWidget {
                                                     height: 5,
                                                     // width: 10,
                                                     child: LinearProgressBar(
-                                                      maxSteps: 5,
+                                                      maxSteps: target.balanceTarget,
                                                       progressType: LinearProgressBar
                                                           .progressTypeLinear,
-                                                      currentStep: 1,
+                                                      currentStep: target.totalAmount,
                                                       progressColor: Colors.black,
                                                       backgroundColor: const Color.fromRGBO(223, 222, 222, 1),
                                                       borderRadius: BorderRadius.circular(10),
@@ -123,11 +130,37 @@ class TargetsPage extends StatelessWidget {
                                                 ],
                                               ),
                                             ),
-                                            const Row(
+                                            Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Icon(Icons.abc),
-                                                Text('50 KWD/mo', style: TextStyle(fontWeight: FontWeight.bold),),
+                                                CloseButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context, 
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          title: const Text("Cancel Target"),
+                                                          content: const Text("Are you sure?"),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.pop(context);
+                                                              }, 
+                                                              child: const Text("Yes")
+                                                            ),
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.pop(context);
+                                                              }, 
+                                                              child: const Text("No")
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }
+                                                    );
+                                                  },
+                                                ),
+                                                Text('${target.monthlyDeduction?.round()} KWD/mo', style: const TextStyle(fontWeight: FontWeight.bold),),
                                               ],
                                             ),
                                           ],

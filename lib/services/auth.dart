@@ -65,4 +65,30 @@ class AuthServices {
       return {'errors': error.response!.data["errors"]};
     }
   }
+
+  Future getIncome() async {
+    try {
+      // print(user.toJson());
+      Response response =
+          await Client.dio.get('/user/income');
+      return response.data;
+      // print(token);
+    } on DioException catch (error) {
+      print(error.response!.data);
+      return {'errors': error.response!.data["errors"]};
+    }
+  }
+
+  Future setIncome(int income) async {
+    try {
+      // print("Setting income");
+      Response response =
+          await Client.dio.post('/user/income', data: {"income": income});
+      return response.data;
+      // print(token);
+    } on DioException catch (error) {
+      print(error.response!.data);
+      return {'errors': error.response!.data["errors"]};
+    }
+  }
 }

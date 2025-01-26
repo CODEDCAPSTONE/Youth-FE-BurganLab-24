@@ -10,7 +10,7 @@ class TargetServices {
     try {
       Response response = await Client.dio.get('/targets');
       // print(response);
-      targets = (response.data as List).map((target) {
+      targets = (response.data["targets"] as List).map((target) {
         return Target.fromJson(target);
       }).toList();
       // print(targets);
@@ -27,9 +27,9 @@ class TargetServices {
       var data = {
         "targetName": target.targetName,
         "balanceTarget": target.balanceTarget,
-        "totalAmount": target.totalAmount,
+        // "totalAmount": target.totalAmount,
         "duration": target.duration,
-        "income": int.parse(target.income),
+        // "income": int.parse(target.income),
         // "amount": card.amount,
       };
       // print(data.fields);

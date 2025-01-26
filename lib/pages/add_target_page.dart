@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/target.dart';
 import 'package:frontend/pages/steps_page.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
 import 'package:frontend/providers/targets_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -24,9 +25,11 @@ class _AddTargetPageState extends State<AddTargetPage> {
 
   int selectedDuration = 12;
 
+  int monthlyDeduction = 0;
+
   String? selectedCategory = 'None';
 
-  final List<int> durations = [3, 6, 9, 12, 18, 24, 30];
+  final List<int> durations = [3, 6, 9, 12, 18, 24];
 
   final List<String> categories = ['None', 'Electronics', 'Health and fitness', 'Travel'];
 
@@ -74,8 +77,28 @@ class _AddTargetPageState extends State<AddTargetPage> {
                         key: _formKey,
                         child: Column(
                           children: [
+                            FutureBuilder(
+                              future: context.read<AuthProvider>().getIncome(),
+                              builder: (context, dataSnapshot) {
+                                return Consumer<AuthProvider>(
+                                  builder: (context, provider, _) {
+                                    return Container(
+                                      margin: const EdgeInsets.symmetric(vertical: 15),
+                                      child: Row(
+                                        // crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Based on your Monthly Income: ${provider.income} KWD", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                                          const SizedBox(height: 10,),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                );
+                              }
+                            ),
                             createInput(title: "Target Name", hintText: "Name", controller: nameController),
-                            createInput(title: "Monthly Income", hintText: "Income", controller: incomeController),
+                            // createInput(title: "Monthly Income", hintText: "Income", controller: incomeController, readOnly: true),
+                            
                             createInput(title: "Amount", hintText: "amount", controller: amountController),
                             const SizedBox(height: 10),
                             const Row(
@@ -99,7 +122,10 @@ class _AddTargetPageState extends State<AddTargetPage> {
                                       label: Text(durations[index].toString()),
                                       selected: selectedDuration == durations[index],
                                       onSelected: (selected) {
-                                        setState(() => selectedDuration = durations[index]);
+                                        setState(() {
+                                          selectedDuration = durations[index];
+                                          monthlyDeduction = (int.parse(amountController.text) / selectedDuration).round();
+                                        });
                                       },
                                       backgroundColor: Colors.grey[200],
                                       selectedColor: Colors.blue,
@@ -182,7 +208,7 @@ class _AddTargetPageState extends State<AddTargetPage> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    '${int.tryParse(amountController.text) ?? 0} KWD',
+                                    '$monthlyDeduction KWD',
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 32,
@@ -219,7 +245,7 @@ class _AddTargetPageState extends State<AddTargetPage> {
                                       balanceTarget: int.parse(amountController.text), 
                                       totalAmount: 0, 
                                       duration: selectedDuration, 
-                                      income: incomeController.text
+                                      // income: incomeController.text
                                     )
                                   );
                                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Target Created successfully")));
@@ -249,7 +275,7 @@ class _AddTargetPageState extends State<AddTargetPage> {
   }
 }
 
-Widget createInput({required String title, required String hintText, required TextEditingController controller}) {
+Widget createInput({required String title, required String hintText, required TextEditingController controller, bool readOnly = false}) {
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 15),
     child: Column(
@@ -258,6 +284,7 @@ Widget createInput({required String title, required String hintText, required Te
         Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
         const SizedBox(height: 10,),
         TextFormField(
+          readOnly: readOnly,
           controller: controller,
           cursorColor: Colors.black,
           decoration: InputDecoration(

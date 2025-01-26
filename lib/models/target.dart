@@ -4,7 +4,8 @@ class Target {
   int balanceTarget;
   int totalAmount;
   int duration;
-  String income;
+  // String? income;
+  double? monthlyDeduction;
 
   Target({
     this.id,
@@ -12,7 +13,8 @@ class Target {
     this.balanceTarget = 0,
     required this.totalAmount,
     required this.duration,
-    required this.income
+    // this.income,
+    this.monthlyDeduction
   }); 
 
   Target.fromJson(Map<String, dynamic> json)
@@ -21,5 +23,6 @@ class Target {
       balanceTarget = json['balanceTarget'] as int,
       totalAmount = json['totalAmount'] as int,
       duration = json['duration'] as int,
-      income = json['income'] as String;
+      // income = json['income'] as String,
+      monthlyDeduction = json['monthlyDeduction'] as double;
 }

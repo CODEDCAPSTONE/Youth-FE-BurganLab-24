@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/main.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/budget_provider.dart';
-import 'package:frontend/providers/targets_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class SetupBudgetPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController incomeController = TextEditingController();
   List<TextEditingController> budgetControllers = List.generate(6, (index) => TextEditingController());
+
+  SetupBudgetPage({super.key});
   @override
     Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +45,25 @@ class SetupBudgetPage extends StatelessWidget {
                       key: _formKey,
                       child: Column(
                         children: [
-                          createInput(title: "Monthly Income", hintText: "Income", controller: incomeController),
+                          FutureBuilder(
+                            future: context.read<AuthProvider>().getIncome(),
+                            builder: (context, dataSnapshot) {
+                              return Consumer<AuthProvider>(
+                                builder: (context, provider, _) {
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 15),
+                                    child: Row(
+                                      // crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Based on your Monthly Income: ${provider.income} KWD", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                                        const SizedBox(height: 10,),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              );
+                            }
+                          ),
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: Row(

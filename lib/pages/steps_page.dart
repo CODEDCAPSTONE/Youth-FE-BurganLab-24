@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
+import 'package:frontend/models/card.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/providers/card_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:provider/provider.dart';
@@ -194,6 +196,8 @@ class _StepsPageState extends State<StepsPage> with SingleTickerProviderStateMix
                                 if (response['error'] != null) {
                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['error']!)));
                                 } else {
+                                  await context.read<AuthProvider>().initAuth();
+                                  await context.read<VCardsProvider>().createVCard(VCard(name: 'Main', cardNumber: 123, expiryDate: "", cvv: 0));
                                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sign up successfully")));
                                 }
                               }

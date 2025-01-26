@@ -29,8 +29,8 @@ class DioClient {
   Future<VCard> createVCard({required VCard card}) async {
     late VCard retrievedVCard;
     try {
-      // print(data.fields);
-      Response response = await Client.dio.post('/cards', data: {"name": card.name, "limit": card.limit});
+      print(card.name);
+      Response response = await Client.dio.post('/cards', data: {"name": card.name});
       // print(response.data);
       retrievedVCard = VCard.fromJson(response.data);
     } on DioException catch (error) {

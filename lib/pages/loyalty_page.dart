@@ -95,13 +95,6 @@ class LoyaltyPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: CustomFloatingActionButton(
-        onPressed: () {
-          // Handle FAB press
-        },
-      ),
     );
   }
 }
@@ -301,7 +294,7 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
 }
 
 class PartTimeJobOffersSection extends StatelessWidget {
-  const PartTimeJobOffersSection({Key? key}) : super(key: key);
+  const PartTimeJobOffersSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +316,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
                     children: [
                       _buildJobCard(
                         image:
-                            'https://dashboard.codeparrot.ai/api/assets/Z44sl3Tr0Kgj1ubC',  //image_placeholder
+                            'assets/images/mini_logo.png',
                         title: provider.jobs[index].titleJob,
                         details: provider.jobs[index].description,
                         context: context
@@ -348,23 +341,23 @@ class PartTimeJobOffersSection extends StatelessWidget {
   }) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
-          // Container(
-          //   width: 40,
-          //   height: 40,
-          //   decoration: BoxDecoration(
-          //     image: DecorationImage(
-          //       image: NetworkImage(image),
-          //       fit: BoxFit.cover,
-          //     ),
-          //   ),
-          // ),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(image),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,8 +389,8 @@ class PartTimeJobOffersSection extends StatelessWidget {
               GoRouter.of(context).push('/jobDetails');
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF0168aa),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              backgroundColor: const Color(0xFF0168aa),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -456,7 +449,7 @@ class UpcomingEventsSection extends StatelessWidget {
 class AnimatedEventCard extends StatefulWidget {
   final Map<String, String> event;
 
-  const AnimatedEventCard({Key? key, required this.event}) : super(key: key);
+  const AnimatedEventCard({super.key, required this.event});
 
   @override
   _AnimatedEventCardState createState() => _AnimatedEventCardState();
@@ -507,7 +500,7 @@ class _AnimatedEventCardState extends State<AnimatedEventCard>
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 3),
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -516,7 +509,7 @@ class _AnimatedEventCardState extends State<AnimatedEventCard>
                 children: [
                   ClipRRect(
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(8)),
+                        const BorderRadius.vertical(top: Radius.circular(8)),
                     child: Image.asset(
                       widget.event['imageUrl']!,
                       height: 120,
@@ -531,14 +524,14 @@ class _AnimatedEventCardState extends State<AnimatedEventCard>
                       children: [
                         Text(
                           widget.event['title']!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: Color(0xFF0168aa),
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           widget.event['date']!,
                           style: TextStyle(
@@ -555,24 +548,24 @@ class _AnimatedEventCardState extends State<AnimatedEventCard>
                             color: Colors.grey[600],
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         ElevatedButton(
                           onPressed: () {
                             // Handle button press
                           },
-                          child: Text(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF0168aa),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                          ),
+                          child: const Text(
                             'Learn More',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w500),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF0168aa),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                            ),
                           ),
                         ),
                       ],
@@ -584,71 +577,6 @@ class _AnimatedEventCardState extends State<AnimatedEventCard>
           ),
         );
       },
-    );
-  }
-}
-
-class CustomBottomNavigationBar extends StatelessWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.white,
-      shape: const CircularNotchedRectangle(),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () {
-              context.go("/home");
-            },
-            iconSize: 30,
-            icon: const Icon(Icons.home_filled),
-          ),
-          IconButton(
-            onPressed: () {
-              context.go("/loyalty");
-            },
-            iconSize: 30,
-            icon: const Icon(Icons.discount),
-          ),
-          const SizedBox(
-            width: 80,
-          ),
-          IconButton(
-            onPressed: () {
-              context.go("/service");
-            },
-            iconSize: 30,
-            icon: const Icon(Icons.category_outlined),
-          ),
-          IconButton(
-            onPressed: () {
-              context.go("/more");
-            },
-            iconSize: 30,
-            icon: const Icon(Icons.more_horiz_rounded),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CustomFloatingActionButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const CustomFloatingActionButton({Key? key, required this.onPressed})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: onPressed,
-      shape: const CircleBorder(),
-      backgroundColor: Colors.blue,
-      child: const Icon(Icons.send, color: Colors.white),
     );
   }
 }

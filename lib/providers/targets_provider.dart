@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/target.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/services/target.dart';
 
 class TargetsProvider extends ChangeNotifier {
@@ -7,6 +8,7 @@ class TargetsProvider extends ChangeNotifier {
 
   Future<List<Target>> getTargets() async {
     try {
+      await AuthProvider().initAuth();
       targets = await TargetServices().getTargets();
       // print(targets.first);
     } on Exception catch (_) {

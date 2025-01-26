@@ -126,8 +126,8 @@ class SignInPage extends StatelessWidget {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error['message'])));
                         }
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sign in successfully")));
-                        // await context.read<AuthProvider>().initAuth();
+                        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sign in successfully")));
+                        await context.read<AuthProvider>().initAuth();
                         GoRouter.of(context).go('/home');
                       }
                     },

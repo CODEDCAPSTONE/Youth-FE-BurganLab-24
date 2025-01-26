@@ -71,6 +71,7 @@ class ServicePage extends StatelessWidget {
                         titleColor: const Color(0xFF1593E4),
                         onTap: () {
                           // Handle Budget card tap
+                          context.push('/budgetDetails');
                         },
                       ),
 
@@ -205,13 +206,6 @@ class ServicePage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: CustomFloatingActionButton(
-        onPressed: () {
-          // Handle floating action button press
-        },
       ),
     );
   }

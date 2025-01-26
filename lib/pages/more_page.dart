@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/main.dart';
 import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -38,6 +41,40 @@ class _SettingsPageState extends State<SettingsPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showPrompt(BuildContext con) {
+    final TextEditingController controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Set your Income'),
+          content: TextFormField(
+            controller: controller,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: "Income"
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await Provider.of<AuthProvider>(con, listen: false).setIncome(int.parse(controller.text));
                 Navigator.of(context).pop();
               },
               child: const Text('OK'),
@@ -119,7 +156,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 const Divider(color: Color(0xFFE8E8E8)),
                 _buildNavigationItem(
                   'Income',
-                  onTap: _showTermsAndConditions,
+                  onTap: () {
+                    _showPrompt(context);
+                  },
                   showArrow: true,
                 ),
                 const Divider(color: Color(0xFFE8E8E8)),
@@ -135,13 +174,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: CustomFloatingActionButton(
-        onPressed: () {
-          // Handle FAB click
-        },
       ),
     );
   }
@@ -255,79 +287,10 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             if (showArrow)
-              Image.network(
-                'https://dashboard.codeparrot.ai/api/assets/Z43pUXTr0Kgj1uYh',
-                width: 24,
-                height: 24,
-              ),
+              const Icon(Icons.arrow_forward)
           ],
         ),
       ),
-    );
-  }
-}
-
-// New widget for the bottom navigation bar
-class CustomBottomNavigationBar extends StatelessWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.white,
-      shape: const CircularNotchedRectangle(),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () {
-              context.go("/home");
-            },
-            iconSize: 30,
-            icon: const Icon(Icons.home_filled),
-          ),
-          IconButton(
-            onPressed: () {},
-            iconSize: 30,
-            icon: const Icon(Icons.discount),
-          ),
-          const SizedBox(
-            width: 80,
-          ),
-          IconButton(
-            onPressed: () {
-              context.go("/service");
-            },
-            iconSize: 30,
-            icon: const Icon(Icons.category_outlined),
-          ),
-          IconButton(
-            onPressed: () {
-              context.go("/more");
-            },
-            iconSize: 30,
-            icon: const Icon(Icons.more_horiz_rounded),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// New widget for the floating action button
-class CustomFloatingActionButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const CustomFloatingActionButton({Key? key, required this.onPressed})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: onPressed,
-      shape: const CircleBorder(),
-      backgroundColor: Colors.blue,
-      child: const Icon(Icons.send, color: Colors.white),
     );
   }
 }

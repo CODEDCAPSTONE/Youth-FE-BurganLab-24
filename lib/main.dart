@@ -6,6 +6,7 @@ import 'package:frontend/pages/budget_details.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/pages/job_details_page.dart';
 import 'package:frontend/pages/loyalty_page.dart';
+import 'package:frontend/pages/main_page.dart';
 import 'package:frontend/pages/more_page.dart';
 import 'package:frontend/pages/register_page.dart';
 import 'package:frontend/pages/service_page.dart';
@@ -60,7 +61,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/home', // Main page
+    initialLocation: '/main', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -124,6 +125,10 @@ class MainApp extends StatelessWidget {
       GoRoute(
         path: '/jobDetails',
         builder: (context, state) => JobDetailsPage(),
+      ),
+      GoRoute(
+        path: '/main',
+        builder: (context, state) => MainPage(),
       ),
       // GoRoute(
       //   path: '/main',

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/service_page.dart';
 import 'package:frontend/providers/budget_provider.dart';
 import 'package:frontend/providers/card_provider.dart';
-import 'package:frontend/providers/goals_provider.dart';
 import 'package:frontend/providers/targets_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui';
 import 'package:pie_chart/pie_chart.dart';
 
 
@@ -19,7 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _isFabClicked = false;
+  // bool _isFabClicked = false;
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
@@ -345,47 +343,6 @@ class _HomePageState extends State<HomePage> {
             )
           )
         ),
-        bottomNavigationBar: const CustomBottomNavigationBar(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showDialog(
-              context: context, 
-              builder: (context) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        context.push('/transfer');
-                        Navigator.pop(context);
-                      }, 
-                      child: const Text("Transfer")
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.push('/link');
-                        Navigator.pop(context);
-                      }, 
-                      child: const Text("Request Link")
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.push('/wamd');
-                        Navigator.pop(context);
-                      }, 
-                      child: const Text("WAMD")
-                    ),
-                    const SizedBox(height: 150,),
-                  ],
-                );
-              }
-            );
-          },
-          shape: const CircleBorder(),
-          backgroundColor: Colors.blue,
-          child: const Icon(Icons.send, color: Colors.white),
-        )
     );
   }
 }
