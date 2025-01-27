@@ -2,7 +2,7 @@ class Target {
   String? id;
   String targetName;
   int balanceTarget;
-  int totalAmount;
+  double totalAmount;
   int duration;
   // String? income;
   double? monthlyDeduction;
@@ -21,7 +21,7 @@ class Target {
     : id = json['_id'] as String?,
       targetName = json['targetName'] as String,
       balanceTarget = json['balanceTarget'] as int,
-      totalAmount = json['totalAmount'] as int,
+      totalAmount = json['totalAmount'] as double,
       duration = json['duration'] as int,
       // income = json['income'] as String,
       monthlyDeduction = json['monthlyDeduction'] as double;

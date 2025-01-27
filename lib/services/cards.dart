@@ -11,11 +11,13 @@ class DioClient {
     try {
       Response response = await Client.dio.get('/cards');
       // print('getting cards ${response.data}');
+      // print((response.data as List).length);
       cards = (response.data as List).map((card) {
-        // print(VCard.fromJson(card));
+        print(card);
+        // print(VCard.fromJson(card).balance);
         return VCard.fromJson(card);
       }).toList();
-      // print(cards[0].name);
+      print('card length:');
     } on DioException catch (error) {
       print(error.type);
       if (error.response?.statusCode == 404 || error.type == DioExceptionType.connectionError) {

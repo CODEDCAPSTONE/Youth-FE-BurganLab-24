@@ -89,7 +89,7 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                               ..setEntry(3, 2, 0.001)
                               ..rotateY(value * math.pi / 180),
                             child:
-                                value < 90 ? _buildCardFront(card: provider.cards[0]) : _buildCardBack(cvv: provider.cards[0].cvv),
+                                value < 90 ? _buildCardFront(card: card) : _buildCardBack(cvv: card.cvv),
                           );
                         },
                       ),
@@ -283,7 +283,7 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
           children: [
             const SizedBox(height: 8),
             Text(
-              '${card.balance} KWD',
+              '${card.balance.toStringAsFixed(3)} KWD',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 32,

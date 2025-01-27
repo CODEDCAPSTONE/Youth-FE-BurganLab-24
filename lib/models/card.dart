@@ -6,7 +6,7 @@ class VCard {
   String expiryDate;
   int cvv;
   bool? typeDebit;
-  int? balance;
+  dynamic balance = 0;
   int? limit;
 
   VCard(
@@ -29,6 +29,7 @@ class VCard {
         cardNumber = json['cardNumber'] as int,
         expiryDate = json['expiryDate'] as String,
         cvv = json['cvv'] as int,
-        balance = json['balance'] as int?,
+        typeDebit = json['typeDebit'] as bool?,
+        balance = json['balance'] as dynamic,
         limit = json['limit'] as int?;
 }

@@ -96,7 +96,7 @@ class TargetsPage extends StatelessWidget {
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   const Text("Balance", style: TextStyle(fontSize: 12),),
-                                                  Text('${target.totalAmount/target.balanceTarget * 100}%', style: const TextStyle(fontSize: 12),),
+                                                  Text('${(target.totalAmount/target.balanceTarget * 100).toStringAsFixed(2)}%', style: const TextStyle(fontSize: 12),),
                                                 ],
                                               ),
                                               subtitle: Column(
@@ -109,7 +109,7 @@ class TargetsPage extends StatelessWidget {
                                                       maxSteps: target.balanceTarget,
                                                       progressType: LinearProgressBar
                                                           .progressTypeLinear,
-                                                      currentStep: target.totalAmount,
+                                                      currentStep: target.totalAmount.toInt(),
                                                       progressColor: Colors.black,
                                                       backgroundColor: const Color.fromRGBO(223, 222, 222, 1),
                                                       borderRadius: BorderRadius.circular(10),
@@ -120,7 +120,7 @@ class TargetsPage extends StatelessWidget {
                                                     children: [
                                                       Row(
                                                         children: [
-                                                          Text('${target.totalAmount} KWD '),
+                                                          Text('${target.totalAmount.toStringAsFixed(3)} KWD '),
                                                           Text('of ${target.balanceTarget} KWD', style: const TextStyle(fontSize: 12),),
                                                         ],
                                                       ),

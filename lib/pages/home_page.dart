@@ -91,91 +91,93 @@ class _HomePageState extends State<HomePage> {
                                       child: Text("No Cards found"),
                                     );
                                   }
-                                  return ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemExtent: 430,
-                                    shrinkWrap: true,
-                                    itemCount: provider.cards.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          // Handle balance card tap here
-                                          // print(provider.cards[0].cardNumber);
-                                          // await Provider.of<VCardsProvider>(context, listen: false).getTransactions(card: provider.cards[0]);
-                                          GoRouter.of(context).push('/cardDetails', extra: provider.cards[index]);
-                                        },
-                                        child: Card(
-                                          elevation: 5,
-                                          margin: const EdgeInsets.symmetric(horizontal: 32),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(30),
-                                          ),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(24.0),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                const Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      "Current Balance",
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey,
+                                  return Scrollbar(
+                                    child: PageView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      // itemExtent: 430,
+                                      // shrinkWrap: true,
+                                      itemCount: provider.cards.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            // Handle balance card tap here
+                                            // print(provider.cards[0].cardNumber);
+                                            // await Provider.of<VCardsProvider>(context, listen: false).getTransactions(card: provider.cards[0]);
+                                            GoRouter.of(context).push('/cardDetails', extra: provider.cards[index]);
+                                          },
+                                          child: Card(
+                                            elevation: 5,
+                                            margin: const EdgeInsets.symmetric(horizontal: 32),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(30),
+                                            ),
+                                            child: Container(
+                                              padding: const EdgeInsets.all(24.0),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  const Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Current Balance",
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.grey,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      "0514008001",
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey,
+                                                      Text(
+                                                        "0514008001",
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.grey,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "${provider.cards[index].balance} KWD",
-                                                      style: const TextStyle(
-                                                        fontSize: 28,
-                                                        color: Colors.black,
-                                                        fontWeight: FontWeight.bold,
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "${provider.cards[index].balance?.toStringAsFixed(3)} KWD",
+                                                        style: const TextStyle(
+                                                          fontSize: 28,
+                                                          color: Colors.black,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    const SizedBox(width: 8),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 50),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      "${provider.cards[index].cardNumber}",
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.blue,
+                                                      const SizedBox(width: 8),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 50),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "${provider.cards[index].cardNumber}",
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.blue,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      provider.cards[0].expiryDate,
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.blue,
+                                                      Text(
+                                                        provider.cards[0].expiryDate,
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.blue,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    }
+                                        );
+                                      }
+                                    ),
                                   );
                                 }
                               );
@@ -326,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(target.targetName, style: const TextStyle(fontSize: 15),),
-                                        Text('${target.totalAmount}/${target.balanceTarget}'),
+                                        Text('${target.totalAmount.toInt()}/${target.balanceTarget}'),
                                       ],
                                     ),
                                     subtitle: SizedBox(
@@ -336,7 +338,7 @@ class _HomePageState extends State<HomePage> {
                                         maxSteps: target.balanceTarget,
                                         progressType: LinearProgressBar
                                             .progressTypeLinear,
-                                        currentStep: target.totalAmount,
+                                        currentStep: target.totalAmount.toInt(),
                                         progressColor: const Color.fromRGBO(0, 221, 163, 1),
                                         backgroundColor: const Color.fromRGBO(223, 222, 222, 1),
                                         borderRadius: BorderRadius.circular(10),

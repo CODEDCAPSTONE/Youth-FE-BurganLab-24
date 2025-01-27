@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/main.dart';
 import 'package:frontend/models/job.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/extra_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class JobDetailsPage extends StatelessWidget {
@@ -139,6 +141,7 @@ class JobDetailsPage extends StatelessWidget {
                             onPressed: () async {
                               final response = await Provider.of<ExtraProvider>(context, listen: false).applyJob(jobId: job.id!);
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response as String)));
+                              context.pop();
                             },
                             style: ElevatedButton.styleFrom(
                               // elevation: 12,

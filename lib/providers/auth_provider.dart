@@ -66,6 +66,13 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future wamd(Map data) async {
+    var response = await AuthServices().wamd(data);
+    // this.income = income;
+    return response;
+    // notifyListeners();
+  }
+
   bool isAuth() {
     // print(user ?? 'No User');
     // print(token ?? 'No token');

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/widgets/AccountDropdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -111,10 +113,12 @@ class WamdPage extends StatelessWidget {
                             onPressed: () async {
                               if (!_formKey.currentState!.validate()) return;
                               var output = {
-                                'phone number': numberController.text,
-                                'amount': amountController.text,
+                                'fromPhoneNumber': 12345678,
+                                'toPhoneNumber': numberController.text,
+                                'amount': double.parse(amountController.text),
                               };
                               print(output);
+                              await context.read<AuthProvider>().wamd(output);
                               await showDialog(
                                 context: context,
                                 barrierDismissible: false, 

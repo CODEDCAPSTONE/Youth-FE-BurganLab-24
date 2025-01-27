@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/target.dart';
-import 'package:frontend/pages/steps_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
-import 'package:frontend/providers/goals_provider.dart';
 import 'package:frontend/providers/targets_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class AddTargetPage extends StatefulWidget {
+  const AddTargetPage({super.key});
+
   @override
   State<AddTargetPage> createState() => _AddTargetPageState();
 }
@@ -35,10 +35,10 @@ class _AddTargetPageState extends State<AddTargetPage> {
 
   @override
     Widget build(BuildContext context) {
-    var brightness = View.of(context).platformDispatcher.platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
+    // var brightness = View.of(context).platformDispatcher.platformBrightness;
+    // bool isDarkMode = brightness == Brightness.dark;
     // print(isDarkMode);
-    Color titleTextColor = (isDarkMode) ? Colors.white : Colors.black;
+    // Color titleTextColor = (isDarkMode) ? Colors.white : Colors.black;
     return Scaffold(
         backgroundColor: const Color.fromRGBO(239, 238, 238, 1),
         body: DecoratedBox(
@@ -164,7 +164,7 @@ class _AddTargetPageState extends State<AddTargetPage> {
                                       backgroundColor: Colors.grey[200],
                                       selectedColor: Colors.blue[100],
                                     )),
-                                    Container(
+                                    SizedBox(
                                       width: 200,
                                       child: TextField(
                                         controller: otherCategoryController,
@@ -238,7 +238,7 @@ class _AddTargetPageState extends State<AddTargetPage> {
                                     'duration': selectedDuration,
                                     'category': selectedCategory
                                   };
-                                  print(output);
+                                  // print(output);
                                   await context.read<TargetsProvider>().createTarget(
                                     Target(
                                       targetName: nameController.text,

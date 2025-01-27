@@ -91,4 +91,17 @@ class AuthServices {
       return {'errors': error.response!.data["errors"]};
     }
   }
+
+  Future wamd(Map data) async {
+    try {
+      // print("Setting income");
+      Response response =
+          await Client.dio.post('/transfer/transferByWAMD', data: data);
+      return response.data;
+      // print(token);
+    } on DioException catch (error) {
+      print(error.response!.data);
+      return {'errors': error.response!.data["errors"]};
+    }
+  }
 }
