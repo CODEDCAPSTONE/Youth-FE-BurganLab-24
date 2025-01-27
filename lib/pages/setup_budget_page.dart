@@ -8,9 +8,10 @@ import 'package:provider/provider.dart';
 class SetupBudgetPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController incomeController = TextEditingController();
-  List<TextEditingController> budgetControllers = List.generate(6, (index) => TextEditingController());
+  List<TextEditingController> budgetControllers = List.generate(6, (index) => TextEditingController(text: "0"));
+  bool edit;
 
-  SetupBudgetPage({super.key});
+  SetupBudgetPage({super.key, this.edit = false});
   @override
     Widget build(BuildContext context) {
     return Scaffold(
@@ -89,13 +90,22 @@ class SetupBudgetPage extends StatelessWidget {
                               onPressed: () async {
                                 if (!_formKey.currentState!.validate()) return;
                                 var output = {
-                                  'Online Shopping': int.parse(budgetControllers[0].text),
-                                  'Restaurant': int.parse(budgetControllers[1].text),
-                                  'Fuel': int.parse(budgetControllers[2].text),
-                                  'Entertainment': int.parse(budgetControllers[3].text),
+                                  'onlineShopping': int.parse(budgetControllers[0].text),
+                                  'dining': int.parse(budgetControllers[1].text),
+                                  'fuel': int.parse(budgetControllers[2].text),
+                                  'entertainment': int.parse(budgetControllers[3].text),
                                 };
                                 // print(output);
-                                var response = await context.read<BudgetProvider>().setBudget(output);
+                                var response;
+                                if (edit) {
+                                  print('editing budget');
+                                  response = await context.read<BudgetProvider>().editBudget(output);
+                                  context.read<BudgetProvider>().budget = null;
+                                  context.pop();
+                                } else {
+                                  response = await context.read<BudgetProvider>().setBudget(output);
+                                  context.pop();
+                                }
                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['message'])));
                                 context.pop();
                               },
@@ -120,7 +130,7 @@ class SetupBudgetPage extends StatelessWidget {
             ),
           ),
         );
-  }
+}
 }
 
 Widget createInput({required String title, required String hintText, required TextEditingController controller}) {

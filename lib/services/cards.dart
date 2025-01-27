@@ -10,9 +10,9 @@ class DioClient {
 
     try {
       Response response = await Client.dio.get('/cards');
-      // print((response.data as List));
+      // print('getting cards ${response.data}');
       cards = (response.data as List).map((card) {
-        // print(VCard.fromJson(card).name);
+        // print(VCard.fromJson(card));
         return VCard.fromJson(card);
       }).toList();
       // print(cards[0].name);
@@ -64,14 +64,14 @@ class DioClient {
     }
   }
 
-  Future<List<Transaction>> getTransactions(int cardNumber) async {
+  Future<List<Transaction>> getTransactions(VCard card) async {
     List<Transaction> transactions = [];
 
     try {
-      Response response = await Client.dio.get('/transaction/card', data: {"cardNumber": cardNumber});
-      // print((response.data["list"] as List));
-      transactions = (response.data["list"] as List).map((card) {
-        // print(Transaction.fromJson(card).category);
+      Response response = await Client.dio.get('/cards/transaction/${card.id}');
+      // print((response.data as List));
+      transactions = (response.data as List).map((card) {
+        // print(card);
         return Transaction.fromJson(card);
       }).toList();
       // print(cards[0].name);

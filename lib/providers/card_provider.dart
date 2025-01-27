@@ -11,7 +11,7 @@ class VCardsProvider extends ChangeNotifier {
   Future<List<VCard>> getVCards() async {
     // print("getting cards");
     // print(cards[0].isExpired);
-    if (true) {
+    if (cards.isEmpty) {
       try {
         await AuthProvider().initAuth();
         cards = await DioClient().getVCards();
@@ -44,12 +44,12 @@ class VCardsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Transaction>> getTransactions({required int cardNumber}) async {
+  Future<List<Transaction>> getTransactions({required VCard card}) async {
     // print("getting cards");
     // print(cards[0].isExpired);
     try {
       // await AuthProvider().initAuth();
-      transactions = await DioClient().getTransactions(cardNumber);
+      transactions = await DioClient().getTransactions(card);
       // print(transactions[0].category);
       // print(cards[0].name);
       // print(cards[0].expiryDate);

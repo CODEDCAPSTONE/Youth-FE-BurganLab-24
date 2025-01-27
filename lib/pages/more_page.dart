@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/services/auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -93,8 +94,7 @@ class _SettingsPageState extends State<SettingsPage> {
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(
-                'https://dashboard.codeparrot.ai/api/assets/Z43rOr9JV5SvYOp6'),
+            image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.white54, // Adjusted opacity for 20% more visibility
@@ -170,6 +170,30 @@ class _SettingsPageState extends State<SettingsPage> {
                   showArrow: true,
                 ),
                 const Divider(color: Color(0xFFE8E8E8)),
+                InkWell(
+                  onTap: () {
+                    context.read<AuthProvider>().logout();
+                    context.go('/signin');
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Sign out",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // const Divider(color: Color(0xFFE8E8E8)),
               ],
             ),
           ),

@@ -4,6 +4,7 @@ class User {
   String? password;
   String? phoneNumber;
   String? email;
+  List? appliedJobs;
   // double balance;
 
   User({
@@ -25,7 +26,8 @@ class User {
       'username': username, 
       'password': password,
       'phoneNumber': phoneNumber,
-      'email': email
+      'email': email,
+      'appliedJobs': appliedJobs
     };
   }
 }

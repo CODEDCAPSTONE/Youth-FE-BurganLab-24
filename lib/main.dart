@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/card.dart';
 import 'package:frontend/pages/WAMD_page.dart';
 import 'package:frontend/pages/add_target_page.dart';
 import 'package:frontend/pages/card_details_page.dart';
@@ -61,7 +62,7 @@ class MainApp extends StatelessWidget {
   }
 
   final _router = GoRouter(
-    initialLocation: '/main', // Main page
+    initialLocation: '/signin', // Main page
     routes: [
       // GoRoute(
       //   path: '/',
@@ -98,13 +99,13 @@ class MainApp extends StatelessWidget {
       GoRoute(path: '/loyalty', builder: (context, state) => LoyaltyPage()),
 
       GoRoute(
-          path: '/cardDetails', builder: (context, state) => CardDetailsPage()),
+          path: '/cardDetails', builder: (context, state) => CardDetailsPage(card: state.extra as VCard,)),
       GoRoute(
           path: '/student_form',
           builder: (context, state) => UniversitySelectionPage()),
       GoRoute(
         path: '/setupBudget',
-        builder: (context, state) => SetupBudgetPage(),
+        builder: (context, state) => SetupBudgetPage(edit: state.extra as bool,),
       ),
       GoRoute(
         path: '/transfer',
@@ -124,7 +125,7 @@ class MainApp extends StatelessWidget {
       ),
       GoRoute(
         path: '/jobDetails',
-        builder: (context, state) => JobDetailsPage(),
+        builder: (context, state) => JobDetailsPage(index: state.extra as int,),
       ),
       GoRoute(
         path: '/main',

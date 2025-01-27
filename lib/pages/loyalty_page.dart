@@ -28,7 +28,8 @@ class LoyaltyPage extends StatelessWidget {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
-                'assets/images/background.png'),
+                'assets/images/background.png'
+              ),
             fit: BoxFit.cover,
           ),
         ),
@@ -37,7 +38,7 @@ class LoyaltyPage extends StatelessWidget {
             SingleChildScrollView(
               child: Padding(
                 padding:
-                    const EdgeInsets.only(top: 50.0, left: 16.0, right: 16.0),
+                    EdgeInsets.only(top: 50.0, left: 16.0, right: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -207,7 +208,7 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
               topRight: Radius.circular(20),
             ),
             child: Image.asset(
-              'assets/images/image_placeholder.png',
+              (offer.discount == 10) ? 'assets/images/diet.jpeg' : 'assets/images/oxygen.jpeg',
               width: 254,
               height: 128,
               fit: BoxFit.cover,
@@ -315,6 +316,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
                     // mainAxisSize: MainAxisSize.min,
                     children: [
                       _buildJobCard(
+                        index: index,
                         image:
                             'assets/images/mini_logo.png',
                         title: provider.jobs[index].titleJob,
@@ -334,6 +336,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
   }
 
   Widget _buildJobCard({
+    required int index,
     required String image,
     required String title,
     required String details,
@@ -386,7 +389,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
           const Spacer(),
           ElevatedButton(
             onPressed: () {
-              GoRouter.of(context).push('/jobDetails');
+              GoRouter.of(context).push('/jobDetails', extra: index);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF0168aa),
@@ -426,7 +429,7 @@ class UpcomingEventsSection extends StatelessWidget {
       'imageUrl': 'assets/images/mini_logo.png',
     },
     {
-      'title': 'Food & Wine Expo',
+      'title': 'Food & Drinks Expo',
       'date': 'September 10, 2023',
       'location': 'City Hall',
       'imageUrl': 'assets/images/mini_logo.png',

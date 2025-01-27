@@ -33,4 +33,29 @@ class ExtraServices {
     }
     return jobs;
   }
+
+  Future getAppliedJobs() async {
+    List<Job> jobs;
+    try {
+      Response response = await Client.dio.get('/job/appliedJobs');
+      jobs = (response.data as List).map((job) {
+        return Job.fromJson(job);
+      }).toList();
+
+    } on DioException catch (_) {
+      rethrow;
+    }
+    return jobs;
+  }
+
+  Future applyJob(String id) async {
+    try {
+      Response response = await Client.dio.post('/job/apply', data: {"jobId": id});
+      return response.data["message"];
+
+    } on DioException catch (_) {
+      rethrow;
+    }
+    // return jobs;
+  }
 }

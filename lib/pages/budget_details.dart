@@ -47,7 +47,7 @@ class BudgetDetails extends StatelessWidget {
                           ),
                         ),
                     actions: [
-                      IconButton(onPressed: () => context.push('/setupBudget'), icon: const Icon(Icons.edit))
+                      IconButton(onPressed: () => context.push('/setupBudget', extra: true), icon: const Icon(Icons.edit))
                     ],
                   ),
                   Padding(
@@ -72,10 +72,10 @@ class BudgetDetails extends StatelessWidget {
                                     children: [
                                       PieChart(
                                         dataMap: {
-                                          "Online Shopping": provider.budget[0]["limit"].toDouble(),
-                                          "Dining": provider.budget[1]["limit"].toDouble(),
-                                          "Fuel": provider.budget[2]["limit"].toDouble(),
-                                          "Entertainment": provider.budget[3]["limit"].toDouble(),
+                                          "Online Shopping": provider.budget["onlineShopping"].toDouble(),
+                                          "Dining": provider.budget["dining"].toDouble(),
+                                          "Fuel": provider.budget["fuel"].toDouble(),
+                                          "Entertainment": provider.budget["entertainment"].toDouble(),
                                         },
                                         animationDuration: const Duration(milliseconds: 800),
                                         chartLegendSpacing: 32,
@@ -124,12 +124,12 @@ class BudgetDetails extends StatelessWidget {
                                         margin: const EdgeInsets.symmetric(horizontal: 8),
                                         child: ListView.builder(
                                           shrinkWrap: true,
-                                          itemCount: provider.budget.length,
+                                          itemCount: 4,
                                           itemBuilder: (context, index) {
                                             return createTile(
-                                              title: provider.budget[index]["category"], 
-                                              total: provider.budget[index]["total"], 
-                                              limit: provider.budget[index]["limit"]
+                                              title: provider.title[index], 
+                                              total: provider.spent[provider.categories[index]], 
+                                              limit: provider.budget[provider.categories[index]]
                                             );
                                           }
                                         )

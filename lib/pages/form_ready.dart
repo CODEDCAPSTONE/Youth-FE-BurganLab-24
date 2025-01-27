@@ -144,7 +144,7 @@ class _FormReadyPageState extends State<FormReadyPage>
                           opacity: _fadeInAnimation,
                           child: ElevatedButton.icon(
                             onPressed: () {
-                              context.go("/home");
+                              context.go("/main");
                             },
                             icon: const Icon(Icons.home, color: Colors.white),
                             label: const Text('Go to Home'),

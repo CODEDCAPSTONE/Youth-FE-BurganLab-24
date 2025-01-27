@@ -3,11 +3,11 @@ import 'package:frontend/services/client.dart';
 
 class BudgetServices {
 
-  Future<List> getBudget() async {
+  Future getBudget() async {
     try {
       Response response = await Client.dio.get('/budget');
-      // print(response.data["totalList"]);
-      return response.data["totalList"];
+      // print(response.data[0]);
+      return response.data;
 
     } on DioException catch (_) {
       rethrow;
@@ -17,7 +17,18 @@ class BudgetServices {
   Future setBudget(Map<String, int> request) async {
     try {
       // print(request);
-      Response response = await Client.dio.post('/budget/edit/', data: request);
+      Response response = await Client.dio.post('/budget/create', data: request);
+      return response.data;
+
+    } on DioException catch (_) {
+      rethrow;
+    }
+  }
+
+  Future editBudget(Map<String, int> request) async {
+    try {
+      // print(request);
+      Response response = await Client.dio.put('/budget/edit', data: request);
       return response.data;
 
     } on DioException catch (_) {

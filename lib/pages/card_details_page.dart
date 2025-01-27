@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:frontend/models/card.dart';
 import 'package:frontend/models/transaction.dart';
 import 'package:frontend/pages/home_page.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/card_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
@@ -10,14 +11,20 @@ import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 
 class CardDetailsPage extends StatefulWidget {
+  VCard card;
+
+  CardDetailsPage({super.key, required this.card});
   @override
-  _CardDetailsPageState createState() => _CardDetailsPageState();
+  _CardDetailsPageState createState() => _CardDetailsPageState(card);
 }
 
 class _CardDetailsPageState extends State<CardDetailsPage> {
   bool _showCardBack = false;
   String _searchQuery = '';
+  VCard card;
   final LocalAuthentication auth = LocalAuthentication();
+  
+  _CardDetailsPageState(this.card);
 
   // final List<Transaction> _transactions = [
   //   Transaction(name: 'Talabat transaction', date: 'March 31, 2024', amount: -100.00, category: ""),
@@ -173,20 +180,25 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Consumer<VCardsProvider>(
-                            builder: (context, provider, _) {
-                              List transactions = provider.transactions.where((transaction) {
-                                return transaction.name
-                                    .toLowerCase()
-                                    .contains(_searchQuery.toLowerCase());
-                              }).toList();
-                              return ListView.builder(
-                                itemCount: transactions.length,
-                                itemBuilder: (context, index) {
-                                  return TransactionCard(
-                                    transaction: transactions[index],
+                          child: FutureBuilder(
+                            future: Provider.of<VCardsProvider>(context, listen: false).getTransactions(card: card),
+                            builder: (context, dataSnapshot) {
+                              return Consumer<VCardsProvider>(
+                                builder: (context, provider, _) {
+                                  List transactions = provider.transactions.where((transaction) {
+                                    return transaction.name
+                                        .toLowerCase()
+                                        .contains(_searchQuery.toLowerCase());
+                                  }).toList();
+                                  return ListView.builder(
+                                    itemCount: transactions.length,
+                                    itemBuilder: (context, index) {
+                                      return TransactionCard(
+                                        transaction: transactions[index],
+                                      );
+                                    },
                                   );
-                                },
+                                }
                               );
                             }
                           ),
@@ -279,13 +291,13 @@ class _CardDetailsPageState extends State<CardDetailsPage> {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Hussain Alqallaf',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
+            // Text(
+            //   '${context.read<AuthProvider>().user?.username}',
+            //   style: const TextStyle(
+            //     color: Colors.white,
+            //     fontSize: 18,
+            //   ),
+            // ),
             const SizedBox(height: 8),
             Text(
               card.cardNumber.toString(),

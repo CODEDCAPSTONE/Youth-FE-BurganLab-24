@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/job.dart';
+import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/providers/extra_provider.dart';
+import 'package:provider/provider.dart';
 
 class JobDetailsPage extends StatelessWidget {
-
-  JobDetailsPage({super.key});
+  int index;
+  JobDetailsPage({super.key, required this.index});
 
   Map<String, double> dataMap = {
     "Online Shopping": 3,
@@ -14,12 +18,17 @@ class JobDetailsPage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   
+  
   @override
     Widget build(BuildContext context) {
     // var brightness = View.of(context).platformDispatcher.platformBrightness;
     // bool isDarkMode = brightness == Brightness.dark;
     // // print(isDarkMode);
     // Color titleTextColor = (isDarkMode) ? Colors.white : Colors.black;
+    Job job = context.read<ExtraProvider>().jobs[index];
+    List<Job> appliedJobs = context.read<ExtraProvider>().appliedJobs;
+    bool applied = appliedJobs.any((element) => element.id == job.id);
+    print(appliedJobs[0].id ?? "Nothing");
     return Scaffold(
       backgroundColor: const Color.fromRGBO(239, 238, 238, 1),
       body: DecoratedBox(
@@ -37,9 +46,9 @@ class JobDetailsPage extends StatelessWidget {
                   // const SizedBox(height: 100,),
                   AppBar(
                     forceMaterialTransparency: true,
-                    title: const Text(
-                          "Burgan HQ",
-                          style: TextStyle(
+                    title: Text(
+                          job.titleJob,
+                          style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
                             color: Color.fromRGBO(1, 104, 170, 1),
@@ -89,8 +98,8 @@ class JobDetailsPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10,),
-                        createInput(title: "Name", hintText: "name", controller: nameController),
-                        createPhoneNumberForm(title: "PhoneNumber", subtitle: "XXXXXXX", input: "XXXXXXX", controller: phoneController),
+                        // createInput(title: "Name", hintText: "name", controller: nameController),
+                        // createPhoneNumberForm(title: "PhoneNumber", subtitle: "XXXXXXX", input: "XXXXXXX", controller: phoneController),
                         const Row(
                           children: [
                             const Text(
@@ -126,9 +135,10 @@ class JobDetailsPage extends StatelessWidget {
                         const SizedBox(height: 50,),
                         Padding(
                           padding: const EdgeInsets.all(16),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              
+                          child: (!applied) ? ElevatedButton(
+                            onPressed: () async {
+                              final response = await Provider.of<ExtraProvider>(context, listen: false).applyJob(jobId: job.id!);
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response as String)));
                             },
                             style: ElevatedButton.styleFrom(
                               // elevation: 12,
@@ -139,7 +149,8 @@ class JobDetailsPage extends StatelessWidget {
                               ),
                             ), 
                             child: const Text("Apply", style: TextStyle(color: Colors.white, fontSize: 16),)
-                          ),
+                          ) 
+                          : const Text("Already applied")
                         ),
                       ],
                     ),
