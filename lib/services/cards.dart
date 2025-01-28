@@ -13,11 +13,11 @@ class DioClient {
       // print('getting cards ${response.data}');
       // print((response.data as List).length);
       cards = (response.data as List).map((card) {
-        print(card);
+        // print(card);
         // print(VCard.fromJson(card).balance);
         return VCard.fromJson(card);
       }).toList();
-      print('card length:');
+      // print('card length:');
     } on DioException catch (error) {
       print(error.type);
       if (error.response?.statusCode == 404 || error.type == DioExceptionType.connectionError) {
@@ -31,7 +31,7 @@ class DioClient {
   Future<VCard> createVCard({required VCard card}) async {
     late VCard retrievedVCard;
     try {
-      print(card.name);
+      // print(card.name);
       Response response = await Client.dio.post('/cards', data: {"name": card.name});
       // print(response.data);
       retrievedVCard = VCard.fromJson(response.data);
@@ -73,6 +73,27 @@ class DioClient {
       Response response = await Client.dio.get('/cards/transaction/${card.id}');
       // print((response.data as List));
       transactions = (response.data as List).map((card) {
+        // print(card);
+        return Transaction.fromJson(card);
+      }).toList();
+      // print(cards[0].name);
+    } on DioException catch (error) {
+      print(error.type);
+      if (error.response?.statusCode == 404 || error.type == DioExceptionType.connectionError) {
+        throw("No Connection");
+      }
+      throw(error.response?.data['errors'][0]["message"]);
+    }
+    return transactions;
+  }
+
+  Future<List<Transaction>> getAllTransactions() async {
+    List<Transaction> transactions = [];
+
+    try {
+      Response response = await Client.dio.get('/transaction');
+      // print((response.data as List));
+      transactions = (response.data["transactions"] as List).map((card) {
         // print(card);
         return Transaction.fromJson(card);
       }).toList();
