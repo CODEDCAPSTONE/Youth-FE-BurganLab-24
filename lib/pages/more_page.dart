@@ -62,9 +62,7 @@ class _SettingsPageState extends State<SettingsPage> {
           content: TextFormField(
             controller: controller,
             decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: "Income"
-            ),
+                border: OutlineInputBorder(), hintText: "Income"),
           ),
           actions: <Widget>[
             TextButton(
@@ -75,7 +73,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             TextButton(
               onPressed: () async {
-                await Provider.of<AuthProvider>(con, listen: false).setIncome(int.parse(controller.text));
+                await Provider.of<AuthProvider>(con, listen: false)
+                    .setIncome(int.parse(controller.text));
                 Navigator.of(context).pop();
               },
               child: const Text('OK'),
@@ -96,10 +95,6 @@ class _SettingsPageState extends State<SettingsPage> {
           image: DecorationImage(
             image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.white54, // Adjusted opacity for 20% more visibility
-              BlendMode.lighten,
-            ),
           ),
         ),
         child: SingleChildScrollView(
@@ -310,8 +305,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            if (showArrow)
-              const Icon(Icons.arrow_forward)
+            if (showArrow) const Icon(Icons.arrow_forward)
           ],
         ),
       ),
