@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class SignInPage extends StatelessWidget {
-  final TextEditingController usernameController = TextEditingController(text: "username");
-  final TextEditingController passwordController = TextEditingController(text: "password");
+  final TextEditingController usernameController =
+      TextEditingController(text: "username");
+  final TextEditingController passwordController =
+      TextEditingController(text: "password");
 
   SignInPage({super.key});
   final _formKey = GlobalKey<FormState>();
@@ -45,7 +47,11 @@ class SignInPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/image.png', width: 240, height: 252,),
+                Image.asset(
+                  'assets/images/image1.png',
+                  width: 240,
+                  height: 252,
+                ),
                 const SizedBox(height: 40),
                 TextFormField(
                   controller: usernameController,
@@ -56,8 +62,7 @@ class SignInPage extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
-                    prefixIcon:
-                        const Icon(Icons.person),
+                    prefixIcon: const Icon(Icons.person),
                   ),
                   keyboardType: TextInputType.text,
                   validator: (value) {
@@ -119,11 +124,14 @@ class SignInPage extends StatelessWidget {
                       // Sign in button logic
                       if (!_formKey.currentState!.validate()) return;
                       _formKey.currentState!.save();
-                      var response = await context.read<AuthProvider>().signin(username: username, password: password);
+                      var response = await context
+                          .read<AuthProvider>()
+                          .signin(username: username, password: password);
                       print(response);
                       if (response['errors'] != null) {
                         for (var error in response['errors']) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error['message'])));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(error['message'])));
                         }
                       } else {
                         // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sign in successfully")));
@@ -157,10 +165,9 @@ class SignInPage extends StatelessWidget {
                       child: const Text(
                         " Register",
                         style: TextStyle(
-                          color: Colors.white, 
+                          color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-
                         ),
                       ),
                     ),
