@@ -76,7 +76,12 @@ class _HomePageState extends State<HomePage> {
                           leading: const Icon(Icons.person),
                           title: Text(_getGreeting(), style: const TextStyle(fontSize: 10, color: Color.fromRGBO(1, 104, 170, 1)),),
                           subtitle: Text(context.read<AuthProvider>().user?.username ?? "User", style: const TextStyle(fontSize: 20, color: Color.fromRGBO(1, 104, 170, 1), fontWeight: FontWeight.bold),),
-                          trailing: const Icon(Icons.notifications),
+                          trailing: IconButton(
+                            onPressed: () {
+                              context.push('/transactions');
+                            },
+                            icon: const Icon(Icons.notifications)
+                          ),
                         ),
                       ),
                               

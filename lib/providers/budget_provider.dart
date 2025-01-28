@@ -16,7 +16,7 @@ class BudgetProvider extends ChangeNotifier {
         var response = await BudgetServices().getBudget();
         budget = response["budget"];
         spent = response["spent"];
-        print(spent);
+        // print(spent);
       }
       // print(budget);
       return budget;

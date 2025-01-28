@@ -17,6 +17,7 @@ import 'package:frontend/pages/signin_page.dart';
 import 'package:frontend/pages/steps_page.dart';
 import 'package:frontend/pages/students_form.dart';
 import 'package:frontend/pages/targets_page.dart';
+import 'package:frontend/pages/transaction_page.dart';
 import 'package:frontend/pages/transfer_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/budget_provider.dart';
@@ -102,7 +103,7 @@ class MainApp extends StatelessWidget {
           path: '/cardDetails', builder: (context, state) => CardDetailsPage(card: state.extra as VCard,)),
       GoRoute(
           path: '/student_form',
-          builder: (context, state) => UniversitySelectionPage()),
+          builder: (context, state) => const UniversitySelectionPage()),
       GoRoute(
         path: '/setupBudget',
         builder: (context, state) => SetupBudgetPage(edit: state.extra as bool,),
@@ -130,6 +131,10 @@ class MainApp extends StatelessWidget {
       GoRoute(
         path: '/main',
         builder: (context, state) => MainPage(),
+      ),
+      GoRoute(
+        path: '/transactions',
+        builder: (context, state) => TransactionPage(),
       ),
       // GoRoute(
       //   path: '/main',

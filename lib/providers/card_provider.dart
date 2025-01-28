@@ -7,6 +7,7 @@ import 'package:frontend/services/cards.dart';
 class VCardsProvider extends ChangeNotifier {
   List<VCard> cards = [];
   List<Transaction> transactions = [];
+  List<Transaction> allTransactions = [];
 
   Future<List<VCard>> getVCards() async {
     // print("getting cards");
@@ -55,6 +56,23 @@ class VCardsProvider extends ChangeNotifier {
     try {
       // await AuthProvider().initAuth();
       transactions = await DioClient().getTransactions(card);
+      // print(transactions[0].category);
+      // print(cards[0].name);
+      // print(cards[0].expiryDate);
+    } on Exception catch (_) {
+      rethrow;
+    }
+    if (transactions.isEmpty) throw("No transactions");
+
+    return transactions;
+  }
+
+  Future<List<Transaction>> getAllTransactions() async {
+    // print("getting cards");
+    // print(cards[0].isExpired);
+    try {
+      // await AuthProvider().initAuth();
+      allTransactions = await DioClient().getAllTransactions();
       // print(transactions[0].category);
       // print(cards[0].name);
       // print(cards[0].expiryDate);
