@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/models/offer.dart';
 import 'package:frontend/providers/extra_provider.dart';
+import 'package:frontend/widgets/gift_drop.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -22,78 +23,77 @@ class LoyaltyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-                'assets/images/background.png'
-              ),
-            fit: BoxFit.cover,
+      body: GiftDropAnimation(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.png'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: const Stack(
-          children: [
-            SingleChildScrollView(
-              child: Padding(
-                padding:
-                    EdgeInsets.only(top: 50.0, left: 16.0, right: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Center(
-                      child: Text(
-                        'Loyalty',
+          child: const Stack(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 50.0, left: 16.0, right: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Center(
+                        child: Text(
+                          'Loyalty',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 32,
+                            color: Color(0xFF0168aa),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Exclusive Offers',
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w700,
-                          fontSize: 32,
+                          fontSize: 28,
                           color: Color(0xFF0168aa),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Exclusive Offers',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 28,
-                        color: Color(0xFF0168aa),
+                      const SizedBox(height: 10),
+                      const ExclusiveOffersSection(),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Part-Time Job Offers',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 28,
+                          color: Color(0xFF0168aa),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    const ExclusiveOffersSection(),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Part-Time Job Offers',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 28,
-                        color: Color(0xFF0168aa),
-                      ),
-                    ),
-                    // const SizedBox(height: 10),
-                    const PartTimeJobOffersSection(),
-                    const SizedBox(height: 20),
-                    // const Text(
-                    //   'Upcoming Events',
-                    //   style: TextStyle(
-                    //     fontFamily: 'Inter',
-                    //     fontWeight: FontWeight.w700,
-                    //     fontSize: 28,
-                    //     color: Color(0xFF0168aa),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 10),
-                    // UpcomingEventsSection(),
-                  ],
+                      // const SizedBox(height: 10),
+                      const PartTimeJobOffersSection(),
+                      const SizedBox(height: 20),
+                      // const Text(
+                      //   'Upcoming Events',
+                      //   style: TextStyle(
+                      //     fontFamily: 'Inter',
+                      //     fontWeight: FontWeight.w700,
+                      //     fontSize: 28,
+                      //     color: Color(0xFF0168aa),
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 10),
+                      // UpcomingEventsSection(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -160,10 +160,10 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
           child: Opacity(
             opacity: _animation.value,
             child: FutureBuilder(
-              future: context.read<ExtraProvider>().getOffers(),
-              builder: (context, dataSnapshot) {
-                return Consumer<ExtraProvider>(
-                  builder: (context, provider, _) {
+                future: context.read<ExtraProvider>().getOffers(),
+                builder: (context, dataSnapshot) {
+                  return Consumer<ExtraProvider>(
+                      builder: (context, provider, _) {
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -172,10 +172,8 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
                             .toList(),
                       ),
                     );
-                  }
-                );
-              }
-            ),
+                  });
+                }),
           ),
         );
       },
@@ -208,7 +206,9 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
               topRight: Radius.circular(20),
             ),
             child: Image.asset(
-              (offer.discount == 10) ? 'assets/images/diet.jpeg' : 'assets/images/oxygen.jpeg',
+              (offer.discount == 10)
+                  ? 'assets/images/diet.jpeg'
+                  : 'assets/images/oxygen.jpeg',
               width: 254,
               height: 128,
               fit: BoxFit.cover,
@@ -223,48 +223,53 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
                 TextButton(
                   onPressed: () async {
                     await showDialog(
-                      context: context,
-                      barrierDismissible: false, 
-                      builder: (BuildContext context) {
-                        return SimpleDialog(
-                          title: const Text('Offer Details', style: TextStyle(fontSize: 30),),
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text(
-                                '1. How to use it\n'
-                                'Use your card in one of the shops to claim the offer immediately\n\n'
-                                '2. Expires in: '
-                                ' 30/1/2025',
-                              ),
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return SimpleDialog(
+                            title: const Text(
+                              'Offer claimed',
+                              style: TextStyle(fontSize: 30),
                             ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 10),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  // elevation: 12,
-                                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                                  backgroundColor: const Color.fromRGBO(1, 104, 170, 1),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                ),  
-                                child: const Text("Dismiss", style: TextStyle(color: Colors.white, fontSize: 16),)
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Icon(Icons.check_circle_outline,
+                                    size: 100, color: Colors.green),
                               ),
-                            )
-                          ],
-                        );
-                      }
-                    );
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      // elevation: 12,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 50, vertical: 15),
+                                      backgroundColor:
+                                          const Color.fromRGBO(1, 104, 170, 1),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      "Dismiss",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 16),
+                                    )),
+                              )
+                            ],
+                          );
+                        });
                     // context.read<ExtraProvider>().offers.remove(offer);
                     // print(context.read<ExtraProvider>().offers.length);
                     // setState(() {});
                   },
                   child: const Text(
-                    'info',
+                    'Claim',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18,
@@ -305,48 +310,41 @@ class PartTimeJobOffersSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: context.read<ExtraProvider>().getJobs(),
-      builder: (context, dataSnapshot) {
-        return Consumer<ExtraProvider>(
-          builder: (context, provider, _) {
+        future: context.read<ExtraProvider>().getJobs(),
+        builder: (context, dataSnapshot) {
+          return Consumer<ExtraProvider>(builder: (context, provider, _) {
             return Container(
               height: 310,
               child: ListView.builder(
-                // shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: provider.jobs.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    // mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildJobCard(
-                        index: index,
-                        image:
-                            'assets/images/image.png',
-                        title: provider.jobs[index].titleJob,
-                        details: provider.jobs[index].description,
-                        context: context
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-                  );
-                }
-              ),
+                  // shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: provider.jobs.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      // mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildJobCard(
+                            index: index,
+                            image: 'assets/images/mini_logo.png',
+                            title: provider.jobs[index].titleJob,
+                            details: provider.jobs[index].description,
+                            context: context),
+                        const SizedBox(height: 16),
+                      ],
+                    );
+                  }),
             );
-          }
-        );
-      }
-    );
+          });
+        });
   }
 
-  Widget _buildJobCard({
-    required int index,
-    required String image,
-    required String title,
-    required String details,
-    required BuildContext context
-  }) {
+  Widget _buildJobCard(
+      {required int index,
+      required String image,
+      required String title,
+      required String details,
+      required BuildContext context}) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -395,7 +393,6 @@ class PartTimeJobOffersSection extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               GoRouter.of(context).push('/jobDetails', extra: index);
-              // Navigator.push(context, route)
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF0168aa),

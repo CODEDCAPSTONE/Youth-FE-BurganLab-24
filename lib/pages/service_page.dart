@@ -9,203 +9,195 @@ class ServicePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFEFEEEE),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Background pattern
-            Positioned.fill(
-              child: Image.asset(
-                'assets/images/background.png',
-                fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          // Background pattern
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/background.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Column(
+            children: [
+              // Services title
+              const Padding(
+                padding: EdgeInsets.only(top: 50),
+                // child: Text(
+                //   'Services',
+                //   style: TextStyle(
+                //     fontSize: 24,
+                //     fontWeight: FontWeight.w700,
+                //     color: Color(0xFF0168AA),
+                //     fontFamily: 'Inter',
+                //   ),
+                // ),
               ),
-            ),
-            Column(
-              children: [
-                // Services title
-                const Padding(
-                  padding: EdgeInsets.only(top: 50),
-                  child: Text(
-                    'Services',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF0168AA),
-                      fontFamily: 'Inter',
+
+              // Grid of services
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 173 / 210,
+                  children: [
+                    // Transfer Card
+                    ServiceCard(
+                      backgroundColor: const Color(0x40000000),
+                      icon: 'assets/images/transfer.png',
+                      title: 'Transfer',
+                      subtitle: 'between accounts',
+                      titleColor: Colors.black,
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => TransferModal(),
+                        );
+                      },
                     ),
-                  ),
-                ),
 
-                // Grid of services
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: GridView.count(
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                    childAspectRatio: 173 / 210,
-                    children: [
-                      // Transfer Card
-                      ServiceCard(
-                        backgroundColor: const Color(0x40000000),
-                        icon:
-                            'assets/images/transfer.png',
-                        title: 'Transfer',
-                        subtitle: 'between accounts',
-                        titleColor: Colors.black,
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => TransferModal(),
-                          );
-                        },
-                      ),
+                    // Budget Card
+                    ServiceCard(
+                      backgroundColor: const Color(0x401593E4),
+                      icon: 'assets/images/budget.png',
+                      title: 'Budget',
+                      titleColor: const Color(0xFF1593E4),
+                      onTap: () {
+                        // Handle Budget card tap
+                        context.push('/budgetDetails');
+                      },
+                    ),
 
-                      // Budget Card
-                      ServiceCard(
-                        backgroundColor: const Color(0x401593E4),
-                        icon: 'assets/images/budget.png',
-                        title: 'Budget',
-                        titleColor: const Color(0xFF1593E4),
-                        onTap: () {
-                          // Handle Budget card tap
-                          context.push('/budgetDetails');
-                        },
-                      ),
-
-                      // Referral Card
-                      ServiceCard(
-                        backgroundColor: const Color(0x409E59FF),
-                        icon:
-                            'assets/images/friend.png',
-                        title: 'Get 10 KD by\nreferring a friend',
-                        titleColor: const Color(0xFF9E59FF),
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Referral QR Code'),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/qrcode.png',
-                                      width: 200,
-                                      height: 200,
-                                    ),
-                                    const SizedBox(height: 16),
-                                    const Text('Let your friend scan it'),
-                                  ],
+                    // Referral Card
+                    ServiceCard(
+                      backgroundColor: const Color(0x409E59FF),
+                      icon: 'assets/images/friend.png',
+                      title: 'Get 10 KD by\nreferring a friend',
+                      titleColor: const Color(0xFF9E59FF),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Referral QR Code'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/qrcode.png',
+                                    width: 200,
+                                    height: 200,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  const Text('Let your friend scan it'),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Close'),
                                 ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('Close'),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+
+                    // Contact Card
+                    ServiceCard(
+                      backgroundColor: const Color(0x40F78F1E),
+                      icon: 'assets/images/contact.png',
+                      title: 'Contact us',
+                      titleColor: const Color(0xFFF78F1E),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Contact Us'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        'Phone: 1804080',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.copy),
+                                        onPressed: () {
+                                          Clipboard.setData(const ClipboardData(
+                                              text: '1804080'));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text(
+                                                    'Phone number copied')),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        'Email: info@burgan.com',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.copy),
+                                        onPressed: () {
+                                          Clipboard.setData(const ClipboardData(
+                                              text: 'info@burgan.com'));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text('Email copied')),
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-
-                      // Contact Card
-                      ServiceCard(
-                        backgroundColor: const Color(0x40F78F1E),
-                        icon:
-                            'assets/images/contact.png',
-                        title: 'Contact us',
-                        titleColor: const Color(0xFFF78F1E),
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Contact Us'),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text(
-                                          'Phone: 1804080',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(Icons.copy),
-                                          onPressed: () {
-                                            Clipboard.setData(
-                                                const ClipboardData(
-                                                    text: '1804080'));
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      'Phone number copied')),
-                                            );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text(
-                                          'Email: info@burgan.com',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(Icons.copy),
-                                          onPressed: () {
-                                            Clipboard.setData(
-                                                const ClipboardData(
-                                                    text: 'info@burgan.com'));
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                  content:
-                                                      Text('Email copied')),
-                                            );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Close'),
                                 ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('Close'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
