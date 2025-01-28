@@ -38,138 +38,180 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     // print(appliedJobs[0].id ?? "Nothing");
     return Scaffold(
       backgroundColor: const Color.fromRGBO(239, 238, 238, 1),
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/background.png'),
-            fit: BoxFit.cover
-          )
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // const SizedBox(height: 100,),
-                  AppBar(
-                    forceMaterialTransparency: true,
-                    title: Text(
-                          job.titleJob,
-                          style: const TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromRGBO(1, 104, 170, 1),
+      body: SizedBox(
+        height: double.maxFinite,
+        width: double.maxFinite,
+        child: DecoratedBox(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.png'),
+              fit: BoxFit.cover
+            )
+          ),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // const SizedBox(height: 100,),
+                    AppBar(
+                      forceMaterialTransparency: true,
+                      title: Text(
+                            job.titleJob,
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromRGBO(1, 104, 170, 1),
+                            ),
                           ),
-                        ),
-                    // actions: [
-                    //   IconButton(onPressed: () => context.push('/setupBudget'), icon: const Icon(Icons.edit))
-                    // ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Container(
-                          // margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                          padding: const EdgeInsets.all(50),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16)
-                          ),
-                          child: Image.asset(
-                            'assets/images/burgan-bank-logo.png',
-                            height: 200,
-                            width: 200,
-                          ),
-                        ),
-                        const SizedBox(height: 10,),
-                        Card(
-                          elevation: 5,
-                          child: Container(
+                      // actions: [
+                      //   IconButton(onPressed: () => context.push('/setupBudget'), icon: const Icon(Icons.edit))
+                      // ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Container(
                             // margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                            width: double.maxFinite,
+                            padding: const EdgeInsets.all(50),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              
+                              borderRadius: BorderRadius.circular(16)
                             ),
-                            child: const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text("Description:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
-                                SizedBox(height: 100,)
-                              ],
-                            )
+                            child: Image.asset(
+                              'assets/images/burgan-bank-logo.png',
+                              height: 200,
+                              width: 200,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10,),
-                        // createInput(title: "Name", hintText: "name", controller: nameController),
-                        // createPhoneNumberForm(title: "PhoneNumber", subtitle: "XXXXXXX", input: "XXXXXXX", controller: phoneController),
-                        // const Row(
-                        //   children: [
-                        //     const Text(
-                        //       "Resume",  //title  'What\'s your name?'
-                        //       style: TextStyle(
-                        //         fontSize: 16,
-                        //         fontWeight: FontWeight.w500,
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        // const SizedBox(height: 10,),
-                        // TextButton(
-                        //   style: TextButton.styleFrom(
-                        //     backgroundColor: Colors.white,
-                        //     shape: RoundedRectangleBorder(
-                        //       side: const BorderSide(color: Colors.black),
-                        //       borderRadius: BorderRadius.circular(12.0),
-                        //     ), 
-                        //   ),
-                        //   onPressed: () {}, 
-                        //   child: const Padding(
-                        //     padding: EdgeInsets.all(8.0),
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //       children: [
-                        //         Text("Upload Resume", style: TextStyle(color: Colors.black),),
-                        //         Icon(Icons.upload, color: Colors.black,)
-                        //       ],
-                        //     ),
-                        //   )
-                        // ),
-                        const SizedBox(height: 50,),
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: (!applied) ? ElevatedButton(
-                            onPressed: () async {
-                              final response = await Provider.of<ExtraProvider>(context, listen: false).applyJob(jobId: job.id!);
-                              await Provider.of<ExtraProvider>(context, listen: false).getAppliedJobs();
-                              // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response as String)));
-                              setState(() {applied = true;});
-                              context.pop();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              // elevation: 12,
-                              padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 15),
-                              backgroundColor: const Color.fromRGBO(1, 104, 170, 1),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
+                          const SizedBox(height: 10,),
+                          Card(
+                            elevation: 5,
+                            child: Container(
+                              // margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                              width: double.maxFinite,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                
                               ),
-                            ), 
-                            child: const Text("Apply", style: TextStyle(color: Colors.white, fontSize: 16),)
-                          ) 
-                          : const Text("Already applied")
-                        ),
-                      ],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const Text("Description:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
+                                  const SizedBox(height: 10,),
+                                  Text(job.description, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),),
+                                  const SizedBox(height: 100,)
+                                ],
+                              )
+                            ),
+                          ),
+                          const SizedBox(height: 10,),
+                          // createInput(title: "Name", hintText: "name", controller: nameController),
+                          // createPhoneNumberForm(title: "PhoneNumber", subtitle: "XXXXXXX", input: "XXXXXXX", controller: phoneController),
+                          // const Row(
+                          //   children: [
+                          //     const Text(
+                          //       "Resume",  //title  'What\'s your name?'
+                          //       style: TextStyle(
+                          //         fontSize: 16,
+                          //         fontWeight: FontWeight.w500,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          // const SizedBox(height: 10,),
+                          // TextButton(
+                          //   style: TextButton.styleFrom(
+                          //     backgroundColor: Colors.white,
+                          //     shape: RoundedRectangleBorder(
+                          //       side: const BorderSide(color: Colors.black),
+                          //       borderRadius: BorderRadius.circular(12.0),
+                          //     ), 
+                          //   ),
+                          //   onPressed: () {}, 
+                          //   child: const Padding(
+                          //     padding: EdgeInsets.all(8.0),
+                          //     child: Row(
+                          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //       children: [
+                          //         Text("Upload Resume", style: TextStyle(color: Colors.black),),
+                          //         Icon(Icons.upload, color: Colors.black,)
+                          //       ],
+                          //     ),
+                          //   )
+                          // ),
+                          const SizedBox(height: 50,),
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: (!applied) ? ElevatedButton(
+                              onPressed: () async {
+                                final response = await Provider.of<ExtraProvider>(context, listen: false).applyJob(jobId: job.id!);
+                                await Provider.of<ExtraProvider>(context, listen: false).getAppliedJobs();
+                                await showDialog(
+                                  context: context,
+                                  barrierDismissible: false, 
+                                  builder: (BuildContext context) {
+                                    return SimpleDialog(
+                                      title: const Text('Job Applied', style: TextStyle(fontSize: 30),),
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.all(10),
+                                          child: Icon(Icons.check_circle_outline, size: 100, color: Colors.green),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(10),
+                                          child: Text("We will contact you when possible"),
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              // elevation: 12,
+                                              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                                              backgroundColor: const Color.fromRGBO(1, 104, 170, 1),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12.0),
+                                              ),
+                                            ),  
+                                            child: const Text("Dismiss", style: TextStyle(color: Colors.white, fontSize: 16),)
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  }
+                                );
+                                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response as String)));
+                                setState(() {applied = true;});
+                                context.pop();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                // elevation: 12,
+                                padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 15),
+                                backgroundColor: const Color.fromRGBO(1, 104, 170, 1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                              ), 
+                              child: const Text("Apply", style: TextStyle(color: Colors.white, fontSize: 16),)
+                            ) 
+                            : const Text("Already applied")
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              )
+                  ],
+                )
+                ),
               ),
             ),
-          ),
+      ),
         );
   }
 }

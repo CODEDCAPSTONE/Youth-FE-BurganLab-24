@@ -19,7 +19,7 @@ class TransactionPage extends StatelessWidget {
       appBar: AppBar(
         forceMaterialTransparency: true,
         title: const Text(
-          "Transactions Details",
+          "Transactions",
           style: TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.bold,

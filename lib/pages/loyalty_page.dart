@@ -369,7 +369,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                (title.length > 20) ? title.substring(0, 20) : title,
                 style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 16,
@@ -379,7 +379,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                details,
+                (details.length > 20) ? details.substring(0, 20) : details,
                 style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 14,

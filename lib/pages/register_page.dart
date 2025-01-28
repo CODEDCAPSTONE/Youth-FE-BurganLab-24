@@ -27,7 +27,7 @@ class RegisterPage extends StatelessWidget{
               padding: const EdgeInsets.all(24.0),
               child: Center(
                 child: Image.asset(
-                  'assets/images/image.png',
+                  'assets/images/image1.png',
                   width: 200,
                 ),
               ),

@@ -60,67 +60,6 @@ class _HomePageState extends State<HomePage> {
                     image: AssetImage('assets/images/background.png'),
                     fit: BoxFit.cover)),
             child: SafeArea(
-
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    // crossAxisAlignment: CrossAxisAlignment.stretch,
-                    // ignore: sort_child_properties_last
-                    children: [
-                      //app bar
-                      Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: ListTile(
-                          leading: const Icon(Icons.person),
-                          title: Text(_getGreeting(), style: const TextStyle(fontSize: 10, color: Color.fromRGBO(1, 104, 170, 1)),),
-                          subtitle: Text(context.read<AuthProvider>().user?.username ?? "User", style: const TextStyle(fontSize: 20, color: Color.fromRGBO(1, 104, 170, 1), fontWeight: FontWeight.bold),),
-                          trailing: IconButton(
-                            onPressed: () {
-                              context.push('/transactions');
-                            },
-                            icon: const Icon(Icons.notifications)
-                          ),
-                        ),
-                      ),
-                              
-                      // Balance Card
-                      SizedBox(
-                        height: 200,
-                        width: double.infinity,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5.0,),
-                          child: FutureBuilder(
-                            future: context.read<VCardsProvider>().getVCards(),
-                            builder: (context, dataSnapshot) {
-                              if (dataSnapshot.connectionState == ConnectionState.waiting) return const CircularProgressIndicator();
-                              return Consumer<VCardsProvider>(
-                                builder: (context, provider, _) {
-                                  if (provider.cards.isEmpty) {
-                                    return const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text("No Cards found"),
-                                    );
-                                  }
-                                  return Scrollbar(
-                                    child: PageView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      // itemExtent: 430,
-                                      // shrinkWrap: true,
-                                      itemCount: provider.cards.length,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            // Handle balance card tap here
-                                            // print(provider.cards[0].cardNumber);
-                                            // await Provider.of<VCardsProvider>(context, listen: false).getTransactions(card: provider.cards[0]);
-                                            GoRouter.of(context).push('/cardDetails', extra: provider.cards[index]);
-                                          },
-                                          child: Card(
-                                            elevation: 5,
-                                            margin: const EdgeInsets.symmetric(horizontal: 32),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30),
-=======
                 child: SingleChildScrollView(
                     child: Center(
                         child: Column(
