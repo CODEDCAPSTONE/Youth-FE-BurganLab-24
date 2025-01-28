@@ -3,6 +3,8 @@ import 'package:frontend/pages/form_ready.dart';
 import 'package:go_router/go_router.dart';
 
 class UniversitySelectionPage extends StatefulWidget {
+  const UniversitySelectionPage({super.key});
+
   @override
   _UniversitySelectionPageState createState() =>
       _UniversitySelectionPageState();
@@ -73,14 +75,14 @@ class _UniversitySelectionPageState extends State<UniversitySelectionPage> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+                  icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
                   onPressed: () => context.pop(),
                 ),
               ),
 
               // Title
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.0),
                 child: Text(
                   'Select university',
                   style: TextStyle(
@@ -105,7 +107,7 @@ class _UniversitySelectionPageState extends State<UniversitySelectionPage> {
                         searchQuery = value;
                       });
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Search',
                       prefixIcon: Icon(Icons.search, color: Colors.black54),
                       border: InputBorder.none,
@@ -121,7 +123,7 @@ class _UniversitySelectionPageState extends State<UniversitySelectionPage> {
               // Universities List
               Expanded(
                 child: ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: filteredUniversities.length,
                   itemBuilder: (context, index) {
                     final university = filteredUniversities[index];
@@ -138,7 +140,7 @@ class _UniversitySelectionPageState extends State<UniversitySelectionPage> {
                                     universityName: university['name']!),
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
-                              var begin = Offset(1.0, 0.0);
+                              var begin = const Offset(1.0, 0.0);
                               var end = Offset.zero;
                               var curve = Curves.ease;
                               var tween = Tween(begin: begin, end: end)
@@ -169,11 +171,11 @@ class UniversityCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const UniversityCard({
-    Key? key,
+    super.key,
     required this.name,
     required this.logo,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +187,7 @@ class UniversityCard extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(15),
           child: Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.2),
               borderRadius: BorderRadius.circular(15),
@@ -196,7 +198,7 @@ class UniversityCard extends StatelessWidget {
                 Container(
                   width: 50,
                   height: 50,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
@@ -205,23 +207,23 @@ class UniversityCard extends StatelessWidget {
                         ? Image.asset(
                             logo,
                             errorBuilder: (context, error, stackTrace) {
-                              return Icon(Icons.school, color: Colors.blue);
+                              return const Icon(Icons.school, color: Colors.blue);
                             },
                           )
                         : Image.network(
                             logo,
                             errorBuilder: (context, error, stackTrace) {
-                              return Icon(Icons.school, color: Colors.blue);
+                              return const Icon(Icons.school, color: Colors.blue);
                             },
                           ),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 // University Name
                 Expanded(
                   child: Text(
                     name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Colors.black87,

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/main.dart';
+import 'package:frontend/providers/card_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class FormReadyPage extends StatefulWidget {
   final String universityName;
@@ -143,8 +146,10 @@ class _FormReadyPageState extends State<FormReadyPage>
                         child: FadeTransition(
                           opacity: _fadeInAnimation,
                           child: ElevatedButton.icon(
-                            onPressed: () {
-                              context.go("/main");
+                            onPressed: () async {
+                              await context.read<VCardsProvider>().updateStatus();
+                              context.read<VCardsProvider>().cards = [];
+                              context.pushReplacement("/main");
                             },
                             icon: const Icon(Icons.home, color: Colors.white),
                             label: const Text('Go to Home'),

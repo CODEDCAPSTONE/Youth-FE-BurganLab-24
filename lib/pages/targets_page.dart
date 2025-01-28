@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/budget_provider.dart';
 import 'package:frontend/providers/goals_provider.dart';
 import 'package:frontend/providers/targets_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -75,6 +76,7 @@ class TargetsPage extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.only(left: 16, top: 16, bottom: 40),
                                         child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               target.targetName,
@@ -83,6 +85,34 @@ class TargetsPage extends StatelessWidget {
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.white,
                                               ),
+                                            ),
+                                            CloseButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context, 
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      title: const Text("Cancel Target"),
+                                                      content: const Text("Are you sure?"),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () async {
+                                                            await context.read<TargetsProvider>().deleteTarget(target.id!);
+                                                            Navigator.pop(context);
+                                                          }, 
+                                                          child: const Text("Yes")
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(context);
+                                                          }, 
+                                                          child: const Text("No")
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }
+                                                );
+                                              },
                                             ),
                                           ],
                                         ),
@@ -95,8 +125,8 @@ class TargetsPage extends StatelessWidget {
                                               title: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  const Text("Balance", style: TextStyle(fontSize: 12),),
-                                                  Text('${(target.totalAmount/target.balanceTarget * 100).toStringAsFixed(2)}%', style: const TextStyle(fontSize: 12),),
+                                                  const Text("Balance", style: TextStyle(fontSize: 14),),
+                                                  Text('${(target.totalAmount/target.balanceTarget * 100).toStringAsFixed(2)}%', style: const TextStyle(fontSize: 14),),
                                                 ],
                                               ),
                                               subtitle: Column(
@@ -131,35 +161,9 @@ class TargetsPage extends StatelessWidget {
                                               ),
                                             ),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
-                                                CloseButton(
-                                                  onPressed: () {
-                                                    showDialog(
-                                                      context: context, 
-                                                      builder: (context) {
-                                                        return AlertDialog(
-                                                          title: const Text("Cancel Target"),
-                                                          content: const Text("Are you sure?"),
-                                                          actions: [
-                                                            TextButton(
-                                                              onPressed: () {
-                                                                Navigator.pop(context);
-                                                              }, 
-                                                              child: const Text("Yes")
-                                                            ),
-                                                            TextButton(
-                                                              onPressed: () {
-                                                                Navigator.pop(context);
-                                                              }, 
-                                                              child: const Text("No")
-                                                            ),
-                                                          ],
-                                                        );
-                                                      }
-                                                    );
-                                                  },
-                                                ),
+                                                
                                                 Text('${target.monthlyDeduction?.round()} KWD/mo', style: const TextStyle(fontWeight: FontWeight.bold),),
                                               ],
                                             ),

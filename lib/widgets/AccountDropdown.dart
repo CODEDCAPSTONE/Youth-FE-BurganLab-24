@@ -16,7 +16,7 @@ class _AccountDropdownState extends State<AccountDropdown> with SingleTickerProv
   late AnimationController _controller;
   late Animation<double> _animation;
 
-  final List<Map<String, String>> accounts = [
+  List<Map<String, String>> accounts = [
     {'name': 'Current account', 'number': '12346758927489', 'balance': '1000.00 KD'},
     // {'name': 'Savings account', 'number': '98765432101234', 'balance': '5000.00 KD'},
     // {'name': 'Business account', 'number': '11223344556677', 'balance': '7500.00 KD'},
@@ -51,7 +51,13 @@ class _AccountDropdownState extends State<AccountDropdown> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    final VCard card = context.read<VCardsProvider>().cards[0];
+    final List<VCard> cards = context.read<VCardsProvider>().cards;
+    accounts = cards.map((card) {
+      return {'name': 'Current account', 'number': card.cardNumber.toString(), 'balance': '${card.balance.toStringAsFixed(3)} KD'};
+    }).toList();
+    if (accounts.length > 1) {
+      accounts[1]['name'] = 'second';
+    }
     return Stack(
       children: [
         if (isOpen)
@@ -108,7 +114,7 @@ class _AccountDropdownState extends State<AccountDropdown> with SingleTickerProv
                                 ),
                               ),
                               Text(
-                                card.cardNumber.toString(),
+                                accounts[0]['number']!,
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Color(0xFF868484),
@@ -121,7 +127,7 @@ class _AccountDropdownState extends State<AccountDropdown> with SingleTickerProv
                       Row(
                         children: [
                           Text(
-                            card.balance!.toStringAsFixed(3),
+                            accounts[0]['balance']!,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,

@@ -11,7 +11,7 @@ class BudgetProvider extends ChangeNotifier {
 
   Future getBudget() async {
     try {
-      if (budget == null) {
+      if (budget == null || true) {
         await AuthProvider().initAuth();
         var response = await BudgetServices().getBudget();
         budget = response["budget"];
@@ -46,5 +46,10 @@ class BudgetProvider extends ChangeNotifier {
     } on Exception catch (_) {
       rethrow;
     }
+  }
+
+  void clear() {
+    budget = null;
+    spent = null;
   }
 }

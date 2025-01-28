@@ -145,7 +145,7 @@ class _StepsPageState extends State<StepsPage> with SingleTickerProviderStateMix
                           height: 56,
                           child: ElevatedButton(
                             onPressed: () async {
-                              if (index == forms(context).length-1) GoRouter.of(context).go('/home');
+                              if (index == forms(context).length-1) GoRouter.of(context).go('/main');
                               if (!formKey.currentState!.validate()) return;
                               formKey.currentState!.save();
                               // inputController.clear();
@@ -193,11 +193,13 @@ class _StepsPageState extends State<StepsPage> with SingleTickerProviderStateMix
 
                                 var response = await context.read<AuthProvider>().signup(submitedInfo);
                                 print(response);
-                                if (response['error'] != null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['error']!)));
+                                if (response['errors'] != null) {
+                                  for (var error in response['errors']) {
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error['message'])));
+                                  }
                                 } else {
                                   await context.read<AuthProvider>().initAuth();
-                                  await context.read<VCardsProvider>().createVCard(VCard(name: 'Main', cardNumber: 123, expiryDate: "", cvv: 0));
+                                  // await context.read<VCardsProvider>().createVCard(VCard(name: 'Main', cardNumber: 123, expiryDate: "", cvv: 0));
                                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Sign up successfully")));
                                 }
                               }
@@ -351,6 +353,7 @@ Widget createInfo(BuildContext context) {
           initialValue: false,
           builder: (FormFieldState<bool> state) { 
             return CheckboxListTile(
+              activeColor: Colors.black,
               dense: state.hasError,
               title: Row(
                 children: [
@@ -418,6 +421,7 @@ Widget createPhoneNumberForm({required String title, required String subtitle, r
         const SizedBox(height: 8),
         TextFormField(
           controller: phoneController,
+          maxLength: 8,
           decoration: InputDecoration(
             hintText: input,
             // filled: true,
@@ -541,6 +545,7 @@ Widget createPasswordForm() {
         const SizedBox(height: 8),
         TextFormField(
           controller: passwordController,
+          obscureText: true,
           decoration: InputDecoration(
             hintText: 'Password',
             // filled: true,
@@ -562,6 +567,7 @@ Widget createPasswordForm() {
         const SizedBox(height: 16),
         TextFormField(
           controller: confirmPasswordController,
+          obscureText: true,
           decoration: InputDecoration(
             hintText: 'Confirm password',  //'Name'
             // filled: true,
@@ -573,8 +579,9 @@ Widget createPasswordForm() {
           ),
           keyboardType: TextInputType.text,
           validator: (value) {
-            if (value!.isEmpty) return "fill the blank";
-            else if (value != passwordController.text) return "Password does not match";
+            if (value!.isEmpty) {
+              return "fill the blank";
+            } else if (value != passwordController.text) return "Password does not match";
             return null;
           },
           onSaved: (newValue) {

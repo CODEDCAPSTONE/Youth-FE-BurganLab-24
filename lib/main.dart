@@ -91,7 +91,7 @@ class MainApp extends StatelessWidget {
       ),
       GoRoute(
         path: '/addTarget',
-        builder: (context, state) => AddTargetPage(),
+        builder: (context, state) => const AddTargetPage(),
       ),
       GoRoute(path: '/service', builder: (context, state) => const ServicePage()),
       GoRoute(path: '/more', builder: (context, state) => const SettingsPage()),

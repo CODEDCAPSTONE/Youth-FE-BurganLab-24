@@ -27,7 +27,7 @@ class TargetServices {
       var data = {
         "targetName": target.targetName,
         "balanceTarget": target.balanceTarget,
-        // "totalAmount": target.totalAmount,
+        "totalAmount": target.totalAmount,
         "duration": target.duration,
         // "income": int.parse(target.income),
         // "amount": card.amount,
@@ -40,6 +40,27 @@ class TargetServices {
       print(error);
     }
     return retrievedTarget; 
+  }
+
+  Future deleteTarget(String targetId) async {
+    // late Target retrievedTarget;
+    try {
+      // var data = {
+      //   "targetName": target.targetName,
+      //   "balanceTarget": target.balanceTarget,
+      //   "totalAmount": target.totalAmount,
+      //   "duration": target.duration,
+      //   // "income": int.parse(target.income),
+      //   // "amount": card.amount,
+      // };
+      // print(data.fields);
+      Response response = await Client.dio.post('/targets/cancel/$targetId');
+      // print(response.data);
+      // retrievedTarget = Target.fromJson(response.data);
+    } on DioException catch (error) {
+      print(error);
+    }
+    // return retrievedTarget; 
   }
 
 }

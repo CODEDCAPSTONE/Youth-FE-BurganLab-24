@@ -86,4 +86,12 @@ class DioClient {
     }
     return transactions;
   }
+
+  Future<void> updateStatus() async {
+    try {
+      await Client.dio.post('/cards/student');
+    } on DioException catch (error) {
+      print(error);
+    }
+  }
 }

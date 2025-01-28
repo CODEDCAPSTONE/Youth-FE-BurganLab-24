@@ -16,6 +16,9 @@ class RegisterPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+      ),
       backgroundColor: const Color(0xFF2B69C7),
       body: Column(
         children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/main_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/budget_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -8,12 +9,18 @@ import 'package:provider/provider.dart';
 class SetupBudgetPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController incomeController = TextEditingController();
-  List<TextEditingController> budgetControllers = List.generate(6, (index) => TextEditingController(text: "0"));
+  List<TextEditingController> budgetControllers = List.generate(4, (index) => TextEditingController(text: "0"));
   bool edit;
 
   SetupBudgetPage({super.key, this.edit = false});
   @override
     Widget build(BuildContext context) {
+      if (edit) {
+        budgetControllers[0].text = context.read<BudgetProvider>().budget["onlineShopping"].toString();
+        budgetControllers[1].text = context.read<BudgetProvider>().budget["dining"].toString();
+        budgetControllers[2].text = context.read<BudgetProvider>().budget["fuel"].toString();
+        budgetControllers[3].text = context.read<BudgetProvider>().budget["entertainment"].toString();
+      }
     return Scaffold(
       backgroundColor: const Color.fromRGBO(239, 238, 238, 1),
       body: DecoratedBox(
@@ -100,14 +107,12 @@ class SetupBudgetPage extends StatelessWidget {
                                 if (edit) {
                                   print('editing budget');
                                   response = await context.read<BudgetProvider>().editBudget(output);
-                                  context.read<BudgetProvider>().budget = null;
-                                  context.pop();
                                 } else {
                                   response = await context.read<BudgetProvider>().setBudget(output);
-                                  context.pop();
                                 }
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['message'])));
-                                context.pop();
+                                Provider.of<BudgetProvider>(context, listen: false).budget = output;
+                                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response['message'])));
+                                context.pushReplacement('/main');
                               },
                               style: ElevatedButton.styleFrom(
                                 // elevation: 12,

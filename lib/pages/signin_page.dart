@@ -146,13 +146,22 @@ class SignInPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Text(
+                      "Don't have an account?",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                     GestureDetector(
                       onTap: () {
-                        context.go('/register');
+                        context.push('/register');
                       },
                       child: const Text(
-                        "Don't have an account?",
-                        style: TextStyle(color: Colors.white),
+                        " Register",
+                        style: TextStyle(
+                          color: Colors.white, 
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+
+                        ),
                       ),
                     ),
                     // GestureDetector(

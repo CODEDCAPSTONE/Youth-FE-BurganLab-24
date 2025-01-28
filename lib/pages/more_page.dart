@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/pages/home_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/providers/budget_provider.dart';
+import 'package:frontend/providers/card_provider.dart';
+import 'package:frontend/providers/extra_provider.dart';
+import 'package:frontend/providers/targets_provider.dart';
 import 'package:frontend/services/auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -96,10 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
           image: DecorationImage(
             image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.white54, // Adjusted opacity for 20% more visibility
-              BlendMode.lighten,
-            ),
+          
           ),
         ),
         child: SingleChildScrollView(
@@ -126,7 +127,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                   showArrow: true,
                 ),
-                const Divider(color: Color(0xFFE8E8E8)),
+                const Divider(color: Colors.grey),
                 const SizedBox(height: 15),
                 const Text(
                   'Settings',
@@ -145,7 +146,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     setState(() => isDarkMode = value);
                   },
                 ),
-                const Divider(color: Color(0xFFE8E8E8)),
+                const Divider(color: Colors.grey),
                 _buildSwitchItem(
                   'Biometric Login',
                   value: isBiometricEnabled,
@@ -153,7 +154,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     setState(() => isBiometricEnabled = value);
                   },
                 ),
-                const Divider(color: Color(0xFFE8E8E8)),
+                const Divider(color: Colors.grey),
                 _buildNavigationItem(
                   'Income',
                   onTap: () {
@@ -161,18 +162,22 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                   showArrow: true,
                 ),
-                const Divider(color: Color(0xFFE8E8E8)),
+                const Divider(color: Colors.grey),
                 _buildLanguageSelector(),
-                const Divider(color: Color(0xFFE8E8E8)),
+                const Divider(color: Colors.grey),
                 _buildNavigationItem(
                   'Terms and conditions',
                   onTap: _showTermsAndConditions,
                   showArrow: true,
                 ),
-                const Divider(color: Color(0xFFE8E8E8)),
+                const Divider(color: Colors.grey),
                 InkWell(
                   onTap: () {
                     context.read<AuthProvider>().logout();
+                    context.read<BudgetProvider>().clear();
+                    context.read<VCardsProvider>().clear();
+                    context.read<ExtraProvider>().clear();
+                    context.read<TargetsProvider>().clear();
                     context.go('/signin');
                   },
                   child: const Padding(

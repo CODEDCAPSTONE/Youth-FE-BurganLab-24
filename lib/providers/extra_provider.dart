@@ -64,4 +64,11 @@ class ExtraProvider extends ChangeNotifier {
       rethrow;
     }
   }
+
+  void clear() {
+    offers = [];
+    jobs = [];
+    appliedJobs = [];
+    already = false;
+  }
 }

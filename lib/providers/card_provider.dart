@@ -44,6 +44,11 @@ class VCardsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateStatus() async {
+    await DioClient().updateStatus();
+    notifyListeners();
+  }
+
   Future<List<Transaction>> getTransactions({required VCard card}) async {
     // print("getting cards");
     // print(cards[0].isExpired);
@@ -59,5 +64,10 @@ class VCardsProvider extends ChangeNotifier {
     if (transactions.isEmpty) throw("No transactions");
 
     return transactions;
+  }
+
+  void clear() {
+    cards = [];
+    transactions = [];
   }
 }

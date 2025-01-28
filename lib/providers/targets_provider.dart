@@ -23,4 +23,13 @@ class TargetsProvider extends ChangeNotifier {
     notifyListeners(); 
   }
 
+  Future<void> deleteTarget(String targetId) async {
+    await TargetServices().deleteTarget(targetId);
+    targets = [];
+    notifyListeners(); 
+  }
+
+  void clear() {
+    targets = [];
+  }
 }

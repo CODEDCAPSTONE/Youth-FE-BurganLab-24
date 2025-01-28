@@ -2,10 +2,10 @@ class Target {
   String? id;
   String targetName;
   int balanceTarget;
-  double totalAmount;
+  dynamic totalAmount;
   int duration;
   // String? income;
-  double? monthlyDeduction;
+  dynamic monthlyDeduction;
 
   Target({
     this.id,
@@ -21,8 +21,8 @@ class Target {
     : id = json['_id'] as String?,
       targetName = json['targetName'] as String,
       balanceTarget = json['balanceTarget'] as int,
-      totalAmount = json['totalAmount'] as double,
+      totalAmount = json['totalAmount'] as dynamic,
       duration = json['duration'] as int,
       // income = json['income'] as String,
-      monthlyDeduction = json['monthlyDeduction'] as double;
+      monthlyDeduction = json['monthlyDeduction'] as dynamic;
 }

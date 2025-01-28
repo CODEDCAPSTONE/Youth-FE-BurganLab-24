@@ -84,7 +84,7 @@ class BudgetDetails extends StatelessWidget {
                                         initialAngleInDegree: 0,
                                         chartType: ChartType.ring,
                                         ringStrokeWidth: 32,
-                                        centerText: "Budget",
+                                        // centerText: "Budget",
                                         legendOptions: const LegendOptions(
                                           showLegendsInRow: false,
                                           legendPosition: LegendPosition.right,

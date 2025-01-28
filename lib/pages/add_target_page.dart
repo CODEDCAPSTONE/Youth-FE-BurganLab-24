@@ -25,7 +25,7 @@ class _AddTargetPageState extends State<AddTargetPage> {
 
   int selectedDuration = 12;
 
-  int monthlyDeduction = 0;
+  String monthlyDeduction = "0";
 
   String? selectedCategory = 'None';
 
@@ -104,7 +104,7 @@ class _AddTargetPageState extends State<AddTargetPage> {
                             const Row(
                               children: [
                                 Text(
-                                  'Duration',
+                                  'Duration in Months',
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                                 ),
                               ],
@@ -124,7 +124,7 @@ class _AddTargetPageState extends State<AddTargetPage> {
                                       onSelected: (selected) {
                                         setState(() {
                                           selectedDuration = durations[index];
-                                          monthlyDeduction = (int.parse(amountController.text) / selectedDuration).round();
+                                          monthlyDeduction = (int.parse(amountController.text) / selectedDuration).toStringAsFixed(3);
                                         });
                                       },
                                       backgroundColor: Colors.grey[200],
@@ -231,25 +231,25 @@ class _AddTargetPageState extends State<AddTargetPage> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   if (!_formKey.currentState!.validate()) return;
-                                  var output = {
-                                    'targetName': nameController.text,
-                                    'salary': incomeController.text,
-                                    'totalAmount': amountController.text,
-                                    'duration': selectedDuration,
-                                    'category': selectedCategory
-                                  };
+                                  // var output = {
+                                  //   'targetName': nameController.text,
+                                  //   'salary': incomeController.text,
+                                  //   'totalAmount': amountController.text,
+                                  //   'duration': selectedDuration,
+                                  //   'category': selectedCategory
+                                  // };
                                   // print(output);
                                   await context.read<TargetsProvider>().createTarget(
                                     Target(
                                       targetName: nameController.text,
                                       balanceTarget: int.parse(amountController.text), 
-                                      totalAmount: 0, 
+                                      totalAmount: 0.0, 
                                       duration: selectedDuration, 
                                       // income: incomeController.text
                                     )
                                   );
                                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Target Created successfully")));
-                                  context.pop();
+                                  context.pushReplacement('/main');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   // elevation: 12,

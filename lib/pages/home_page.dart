@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/setup_budget_page.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/budget_provider.dart';
 import 'package:frontend/providers/card_provider.dart';
@@ -45,6 +46,12 @@ class _HomePageState extends State<HomePage> {
     Color titleTextColor = (isDarkMode) ? Colors.white : Colors.black;
     return Scaffold(
         backgroundColor: const Color.fromRGBO(239, 238, 238, 1),
+        // appBar: ListTile(
+        //   leading: const Icon(Icons.person),
+        //   title: Text(_getGreeting(), style: const TextStyle(fontSize: 10, color: Color.fromRGBO(1, 104, 170, 1)),),
+        //   subtitle: Text(context.read<AuthProvider>().user?.username ?? "User", style: const TextStyle(fontSize: 20, color: Color.fromRGBO(1, 104, 170, 1), fontWeight: FontWeight.bold),),
+        //   trailing: const Icon(Icons.notifications),
+        // ),
         body: Container(
           height: double.maxFinite,
           width: double.maxFinite,
@@ -186,6 +193,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(height: 16),
+
                       // Heading for Budget
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -250,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                                   initialAngleInDegree: 0,
                                   chartType: ChartType.ring,
                                   ringStrokeWidth: 32,
-                                  centerText: "Budget",
+                                  // centerText: "Budget",
                                   legendOptions: const LegendOptions(
                                     showLegendsInRow: false,
                                     legendPosition: LegendPosition.right,

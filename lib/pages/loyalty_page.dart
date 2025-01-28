@@ -227,11 +227,16 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
                       barrierDismissible: false, 
                       builder: (BuildContext context) {
                         return SimpleDialog(
-                          title: const Text('Offer claimed', style: TextStyle(fontSize: 30),),
+                          title: const Text('Offer Details', style: TextStyle(fontSize: 30),),
                           children: [
                             const Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Icon(Icons.check_circle_outline, size: 100, color: Colors.green),
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                '1. How to use it\n'
+                                'Use your card in one of the shops to claim the offer immediately\n\n'
+                                '2. Expires in: '
+                                ' 30/1/2025',
+                              ),
                             ),
                             Container(
                               margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -259,7 +264,7 @@ class _ExclusiveOffersSectionState extends State<ExclusiveOffersSection>
                     // setState(() {});
                   },
                   child: const Text(
-                    'Claim',
+                    'info',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18,
@@ -318,7 +323,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
                       _buildJobCard(
                         index: index,
                         image:
-                            'assets/images/mini_logo.png',
+                            'assets/images/image.png',
                         title: provider.jobs[index].titleJob,
                         details: provider.jobs[index].description,
                         context: context
@@ -390,6 +395,7 @@ class PartTimeJobOffersSection extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               GoRouter.of(context).push('/jobDetails', extra: index);
+              // Navigator.push(context, route)
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF0168aa),

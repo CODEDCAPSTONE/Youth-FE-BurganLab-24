@@ -6,10 +6,15 @@ import 'package:frontend/providers/extra_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class JobDetailsPage extends StatelessWidget {
+class JobDetailsPage extends StatefulWidget {
   int index;
   JobDetailsPage({super.key, required this.index});
 
+  @override
+  State<JobDetailsPage> createState() => _JobDetailsPageState();
+}
+
+class _JobDetailsPageState extends State<JobDetailsPage> {
   Map<String, double> dataMap = {
     "Online Shopping": 3,
     "Dining": 3,
@@ -18,19 +23,19 @@ class JobDetailsPage extends StatelessWidget {
   };
 
   final TextEditingController nameController = TextEditingController();
+
   final TextEditingController phoneController = TextEditingController();
-  
-  
+
   @override
     Widget build(BuildContext context) {
     // var brightness = View.of(context).platformDispatcher.platformBrightness;
     // bool isDarkMode = brightness == Brightness.dark;
     // // print(isDarkMode);
     // Color titleTextColor = (isDarkMode) ? Colors.white : Colors.black;
-    Job job = context.read<ExtraProvider>().jobs[index];
+    Job job = context.read<ExtraProvider>().jobs[widget.index];
     List<Job> appliedJobs = context.read<ExtraProvider>().appliedJobs;
     bool applied = appliedJobs.any((element) => element.id == job.id);
-    print(appliedJobs[0].id ?? "Nothing");
+    // print(appliedJobs[0].id ?? "Nothing");
     return Scaffold(
       backgroundColor: const Color.fromRGBO(239, 238, 238, 1),
       body: DecoratedBox(
@@ -102,45 +107,47 @@ class JobDetailsPage extends StatelessWidget {
                         const SizedBox(height: 10,),
                         // createInput(title: "Name", hintText: "name", controller: nameController),
                         // createPhoneNumberForm(title: "PhoneNumber", subtitle: "XXXXXXX", input: "XXXXXXX", controller: phoneController),
-                        const Row(
-                          children: [
-                            const Text(
-                              "Resume",  //title  'What\'s your name?'
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10,),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ), 
-                          ),
-                          onPressed: () {}, 
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Upload Resume", style: TextStyle(color: Colors.black),),
-                                Icon(Icons.upload, color: Colors.black,)
-                              ],
-                            ),
-                          )
-                        ),
+                        // const Row(
+                        //   children: [
+                        //     const Text(
+                        //       "Resume",  //title  'What\'s your name?'
+                        //       style: TextStyle(
+                        //         fontSize: 16,
+                        //         fontWeight: FontWeight.w500,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        // const SizedBox(height: 10,),
+                        // TextButton(
+                        //   style: TextButton.styleFrom(
+                        //     backgroundColor: Colors.white,
+                        //     shape: RoundedRectangleBorder(
+                        //       side: const BorderSide(color: Colors.black),
+                        //       borderRadius: BorderRadius.circular(12.0),
+                        //     ), 
+                        //   ),
+                        //   onPressed: () {}, 
+                        //   child: const Padding(
+                        //     padding: EdgeInsets.all(8.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text("Upload Resume", style: TextStyle(color: Colors.black),),
+                        //         Icon(Icons.upload, color: Colors.black,)
+                        //       ],
+                        //     ),
+                        //   )
+                        // ),
                         const SizedBox(height: 50,),
                         Padding(
                           padding: const EdgeInsets.all(16),
                           child: (!applied) ? ElevatedButton(
                             onPressed: () async {
                               final response = await Provider.of<ExtraProvider>(context, listen: false).applyJob(jobId: job.id!);
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response as String)));
+                              await Provider.of<ExtraProvider>(context, listen: false).getAppliedJobs();
+                              // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response as String)));
+                              setState(() {applied = true;});
                               context.pop();
                             },
                             style: ElevatedButton.styleFrom(
