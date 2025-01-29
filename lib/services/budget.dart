@@ -6,7 +6,7 @@ class BudgetServices {
   Future getBudget() async {
     try {
       Response response = await Client.dio.get('/budget');
-      // print(response.data[0]);
+      print(response.data);
       return response.data;
 
     } on DioException catch (_) {

@@ -25,7 +25,7 @@ class TargetsProvider extends ChangeNotifier {
 
   Future<void> deleteTarget(String targetId) async {
     await TargetServices().deleteTarget(targetId);
-    targets = [];
+    targets.remove(targets.firstWhere((element) => element.id == targetId,));
     notifyListeners(); 
   }
 

@@ -14,7 +14,7 @@ class BudgetProvider extends ChangeNotifier {
       if (budget == null || true) {
         await AuthProvider().initAuth();
         var response = await BudgetServices().getBudget();
-        budget = response["budget"];
+        budget = response["budget"][0];
         spent = response["spent"];
         // print(spent);
       }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/main.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/providers/card_provider.dart';
 import 'package:frontend/widgets/AccountDropdown.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 final _formKey = GlobalKey<FormState>();
@@ -14,6 +13,8 @@ class WamdPage extends StatelessWidget {
   final TextEditingController amountController = TextEditingController();
 
   final dropdown = AccountDropdown();
+
+  WamdPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +114,9 @@ class WamdPage extends StatelessWidget {
                             onPressed: () async {
                               if (!_formKey.currentState!.validate()) return;
                               var output = {
-                                'fromPhoneNumber': 12345678,
-                                'toPhoneNumber': numberController.text,
+                                // 'fromPhoneNumber': 12345678,
+                                // 'toPhoneNumber': numberController.text,
+                                'fromCardId': context.read<VCardsProvider>().cards[0].id,
                                 'amount': double.parse(amountController.text),
                               };
                               print(output);
@@ -126,16 +128,9 @@ class WamdPage extends StatelessWidget {
                                   return SimpleDialog(
                                     title: const Text('Success', style: TextStyle(fontSize: 30),),
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: Lottie.network(
-                                          'https://assets10.lottiefiles.com/packages/lf20_xlkxtmul.json',
-                                          width: 250,
-                                          height: 250,
-                                          fit: BoxFit.cover,
-                                          repeat: false,
-                                        ),
-                                        // Icon(Icons.check_circle_outline, size: 100, color: Colors.green),
+                                      const Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Icon(Icons.check_circle_outline, size: 100, color: Colors.green),
                                       ),
                                       Container(
                                         margin: const EdgeInsets.symmetric(horizontal: 10),

@@ -7,12 +7,12 @@ class SignInPage extends StatelessWidget {
   final TextEditingController usernameController =
       TextEditingController(text: "username");
   final TextEditingController passwordController =
-      TextEditingController(text: "password");
+      TextEditingController();
 
   SignInPage({super.key});
   final _formKey = GlobalKey<FormState>();
   String username = "username";
-  String password = "password";
+  String password = "";
 
   @override
   Widget build(BuildContext context) {

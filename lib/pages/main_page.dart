@@ -91,22 +91,31 @@ class _MainPageState extends State<MainPage> {
                       onPressed: () {
                         context.push('/transfer');
                         Navigator.pop(context);
-                      }, 
-                      child: const Text("Transfer")
+                      },
+                      style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue
+                                  ), 
+                      child: const Text("Transfer", style: TextStyle(color: Colors.white),)
                     ),
                     ElevatedButton(
                       onPressed: () {
                         context.push('/link');
                         Navigator.pop(context);
-                      }, 
-                      child: const Text("Request Link")
+                      },
+                      style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue
+                                  ), 
+                      child: const Text("Request Link", style: TextStyle(color: Colors.white),)
                     ),
                     ElevatedButton(
                       onPressed: () {
                         context.push('/wamd');
                         Navigator.pop(context);
-                      }, 
-                      child: const Text("WAMD")
+                      },
+                      style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue
+                                  ), 
+                      child: const Text("WAMD", style: TextStyle(color: Colors.white),)
                     ),
                     const SizedBox(height: 150,),
                   ],
